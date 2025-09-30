@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<VBox xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      stylesheets="@estilos.css">
+
+    <TabPane tabClosingPolicy="UNAVAILABLE"  fx:id="mainTabPane" styleClass="custom-tab-pane">
+        <Tab text="Menu" styleClass="menu-tab">
+            <StackPane style="-fx-background-color: white;">
+                <VBox alignment="CENTER" spacing="20" style="-fx-background-color: white; -fx-padding: 50;">
+                    <Label text="Bienvenido a Chagas/Dengue" styleClass="content-label"/>
+                    <!-- Logo desde archivo -->
+                    <ImageView fitWidth="200" fitHeight="200" preserveRatio="true">
+                        <Image url="@animal.png" />
+                    </ImageView>
+                </VBox>
+            </StackPane>
+        </Tab>
+        <Tab text="Viaje" styleClass="viaje-tab">
+            <VBox>
+                <TabPane tabClosingPolicy="UNAVAILABLE" styleClass="custom-subtab-pane">
+                    <Tab text="Destino"  styleClass="submenu-tab">
+                        <StackPane style="-fx-background-color: white;">
+                            <VBox alignment="CENTER" spacing="20" style="-fx-background-color: white; -fx-padding: 50;">
+                                <Label text="Ventana de destino y fecha" styleClass="content-label"/>
+                            </VBox>
+                        </StackPane>
+                    </Tab>
+                    <Tab text="Elementos"  styleClass="submenu-tab">
+                        <StackPane style="-fx-background-color: white;">
+                            <VBox alignment="CENTER" spacing="20" style="-fx-background-color: white; -fx-padding: 50;">
+                                <Label text="Ventana de asignar elementos" styleClass="content-label"/>
+                            </VBox>
+                        </StackPane>
+                    </Tab>
+                </TabPane>
+            </VBox>
+        </Tab>
+    </TabPane>
+
+</VBox>
