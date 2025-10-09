@@ -49,10 +49,10 @@
 
                                     <children>
                                         <!-- Contenedor principal para alinear verticalmente -->
-                                        <VBox spacing="10" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                        <VBox alignment="CENTER" spacing="10" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
                                             <!-- Labels arriba del Accordion -->
-                                            <HBox alignment="CENTER_LEFT" spacing="20">
+                                            <HBox spacing="20">
                                                 <Label prefHeight="39.0" prefWidth="78.0" text="  Viaje">
                                                     <font>
                                                         <Font size="27" />
@@ -64,6 +64,11 @@
                                                     </font>
                                                 </Label>
                                             </HBox>
+                                 <Label text="Seleccione una pestaña para añadir elementos">
+                                    <font>
+                                       <Font size="19.0" />
+                                    </font>
+                                 </Label>
 
                                             <!-- Accordion ocupa todo el espacio restante -->
                                             <Accordion fx:id="accordion" VBox.vgrow="ALWAYS">
@@ -170,7 +175,7 @@
                                                     </TitledPane>
                                                 </panes>
                                             </Accordion>
-                                 <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="44.0" prefWidth="812.0" text="Guardar" />
+                                 <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Guardar" />
                                         </VBox>
                                     </children>
                                 </AnchorPane>
