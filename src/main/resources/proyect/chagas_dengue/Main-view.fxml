@@ -1,49 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
-<VBox xmlns="http://javafx.com/javafx/11.0.1"
-      xmlns:fx="http://javafx.com/fxml/1"
-      stylesheets="@estilos.css">
 
-    <TabPane tabClosingPolicy="UNAVAILABLE"  fx:id="mainTabPane" styleClass="custom-tab-pane">
-        <Tab text="Menu" styleClass="menu-tab">
-            <StackPane style="-fx-background-color: white;">
-                <VBox alignment="CENTER" spacing="20" style="-fx-background-color: white; -fx-padding: 50;">
-                    <Label text="Bienvenido a Chagas/Dengue" styleClass="content-label"/>
-                    <!-- Logo desde archivo -->
-                    <ImageView fitWidth="200" fitHeight="200" preserveRatio="true">
-                        <Image url="@animal.png" />
-                    </ImageView>
-                </VBox>
-            </StackPane>
-        </Tab>
-        <Tab text="Viaje" styleClass="viaje-tab">
-            <VBox>
-                <TabPane tabClosingPolicy="UNAVAILABLE" styleClass="custom-subtab-pane">
-                    <Tab text="Destino"  styleClass="submenu-tab">
-                        <StackPane style="-fx-background-color: white;">
-                            <VBox alignment="CENTER" spacing="20" style="-fx-background-color: white; -fx-padding: 50;">
-                                <Label text="Ventana de destino y fecha" styleClass="content-label"/>
-                            </VBox>
-                        </StackPane>
-                    </Tab>
-                    <Tab text="Elementos"  styleClass="submenu-tab">
-                        <StackPane style="-fx-background-color: white;">
-                            <VBox alignment="CENTER" spacing="20" style="-fx-background-color: white; -fx-padding: 50;">
-                                <Label text="Ventana de asignar elementos" styleClass="content-label"/>
-                            </VBox>
-                        </StackPane>
-                    </Tab>
-                </TabPane>
-            </VBox>
-        </Tab>
-    </TabPane>
-
-</VBox>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="433.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyect.chagas_dengue.ControladorPrincipal">
+   <top>
+      <AnchorPane prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #8c8ca0;" BorderPane.alignment="CENTER">
+         <children>
+            <Button layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onAction="#mostrarPaneDestino" text="Preparar viaje" />
+         </children>
+      </AnchorPane>
+   </top>
+   <center>
+      <StackPane fx:id="stackPanePrepViaje" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Pane fx:id="paneDestino" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #BDD0D9;">
+               <children>
+                  <Button fx:id="buttonSiguientePaneDestPrepViaje" layoutX="275.0" layoutY="290.0" mnemonicParsing="false" onAction="#mostrarPaneElementos" prefHeight="25.0" prefWidth="150.0" text="Siguiente" />
+                  <Button fx:id="buttonCancelarPaneDestinoPrepViaje" layoutX="275.0" layoutY="338.0" mnemonicParsing="false" onAction="#mostrarPaneInicio" prefHeight="25.0" prefWidth="150.0" text="Cancelar" />
+                  <Label layoutX="84.0" layoutY="105.0" prefHeight="28.0" prefWidth="75.0" text="Destino:" />
+                  <ChoiceBox fx:id="chBoxPaneDestPrepViaje" layoutX="164.0" layoutY="106.0" prefWidth="150.0" />
+                  <Label layoutX="84.0" layoutY="169.0" prefHeight="28.0" prefWidth="75.0" text="Fecha:" />
+                  <DatePicker fx:id="datPckPaneDestinoPrepViaje" layoutX="157.0" layoutY="171.0" />
+               </children>
+            </Pane>
+            <Pane fx:id="paneInicio" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2b2b2b;">
+               <children>
+                  <Label alignment="CENTER" layoutX="294.0" layoutY="180.0" prefHeight="18.0" prefWidth="100.0" text="Pane Inicio" textAlignment="CENTER" textFill="WHITE" />
+               </children>
+            </Pane>
+            <Pane fx:id="paneListado" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #89BDD6;">
+               <children>
+                  <ListView layoutX="197.0" layoutY="60.0" prefHeight="297.0" prefWidth="306.0" />
+                  <Label alignment="CENTER" layoutX="247.0" layoutY="26.0" prefHeight="17.0" prefWidth="196.0" text="Listado de elementos seleccionados" />
+               </children>
+            </Pane>
+            <Pane fx:id="paneElementos" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #4AA6D4;">
+               <children>
+                  <HBox prefHeight="394.0" prefWidth="700.0" spacing="10.0">
+                     <children>
+                        <VBox prefHeight="394.0" prefWidth="260.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="21.0" prefWidth="262.0" text="Disponibles" />
+                              <ListView prefHeight="381.0" prefWidth="257.0" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="TOP_CENTER" prefHeight="394.0" prefWidth="168.0">
+                           <children>
+                              <Pane prefHeight="142.0" prefWidth="165.0">
+                                 <children>
+                                    <Label alignment="CENTER" layoutX="25.0" layoutY="28.0" prefHeight="89.0" prefWidth="117.0" text="Asignar elementos a viaje" textAlignment="CENTER" wrapText="true" />
+                                 </children>
+                              </Pane>
+                              <Pane prefHeight="132.0" prefWidth="165.0">
+                                 <children>
+                                    <Button fx:id="buttonAgregarSelPaneElmPrepViaje" layoutX="68.0" layoutY="83.0" mnemonicParsing="false" text="-&gt;" />
+                                    <Button fx:id="buttonQuitarSelPaneElmPrepViaje" layoutX="68.0" layoutY="41.0" mnemonicParsing="false" text="&lt;-" />
+                                    <Label alignment="CENTER" layoutX="-2.0" layoutY="66.0" prefHeight="17.0" prefWidth="169.0" text="Icono" />
+                                 </children>
+                              </Pane>
+                              <Pane prefHeight="121.0" prefWidth="165.0">
+                                 <children>
+                                    <Button fx:id="buttonSiguientePaneElmPrepViaje" layoutX="50.0" layoutY="21.0" mnemonicParsing="false" onAction="#mostrarPaneListado" text="Siguiente" />
+                                    <Button fx:id="buttonCancelarPaneElmPrepViaje" layoutX="52.0" layoutY="70.0" mnemonicParsing="false" onAction="#mostrarPaneInicio" text="Cancelar" />
+                                 </children>
+                              </Pane>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="394.0" prefWidth="260.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="17.0" prefWidth="277.0" text="Seleccionados" />
+                              <ListView prefHeight="376.0" prefWidth="258.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </Pane>
+         </children>
+      </StackPane>
+   </center>
+</BorderPane>
