@@ -57,14 +57,13 @@ public class ControladorPrincipal {
     }
 
     private void inicializarDatos() {
-        objetos.put("Guantes de seguridad", 5);
-        objetos.put("Máscaras protectoras", 2);
-        objetos.put("Trampas para insectos", 4);
-        objetos.put("Insecticida", 1);
-        objetos.put("Jeringas", 3);
-        objetos.put("Tubos de ensayo", 7);
-        objetos.put("Termómetros", 2);
-        objetos.put("Maquina Pulverizadora", 1);
+        // esto se debe de generar dinamicamente segun los elementos asignados
+        objetos.put("Camioneta", 1);
+        objetos.put("Cipermetrina", 2);
+        objetos.put("Permetrina", 2);
+        objetos.put("Irritante", 2);
+        objetos.put("Maquina Manual", 1);
+        objetos.put("Maquina Motomocjila", 1);
     }
 
     @FXML
