@@ -39,54 +39,60 @@
         <Tab styleClass="viaje-tab" text="Viaje">
             <VBox>
                 <TabPane fx:id="tabPanePrepViaje" styleClass="custom-subtab-pane" tabClosingPolicy="UNAVAILABLE">
+
+                    <!-- ######################## Destino ##################### -->
+
                     <Tab fx:id="tabDestPrepViaje" styleClass="submenu-tab" text="Destino">
                         <StackPane style="-fx-background-color: white;">
-                     <Pane>
-                        <children>
-                           <Label layoutX="197.0" layoutY="162.0" text="Destino:">
-                              <font>
-                                 <Font size="18.0" />
-                              </font>
-                           </Label>
-                           <Label layoutX="212.0" layoutY="229.0" text="Fecha:">
-                              <font>
-                                 <Font size="18.0" />
-                              </font>
-                           </Label>
-                           <DatePicker fx:id="datePnDestPrepViaje" layoutX="277.0" layoutY="230.0" />
-                           <Button fx:id="btnSigPnDestPrepViaje" layoutX="358.0" layoutY="411.0" mnemonicParsing="false" onAction="#mostrarPanelElementos" text="Siguiente">
-                              <font>
-                                 <Font size="18.0" />
-                              </font>
-                           </Button>
-                           <Label alignment="CENTER" layoutX="257.0" layoutY="34.0" prefHeight="90.0" prefWidth="301.0" text="Seleccione destino, fecha y tipo de viaje" textAlignment="CENTER" wrapText="true">
-                              <font>
-                                 <Font size="24.0" />
-                              </font>
-                           </Label>
-                           <Label layoutX="212.0" layoutY="303.0" text="Tipo:">
-                              <font>
-                                 <Font size="18.0" />
-                              </font>
-                           </Label>
-                           <RadioButton fx:id="radbtnDiaPaneDestPrepViaje" layoutX="277.0" layoutY="303.0" mnemonicParsing="false" text="Diario">
-                              <font>
-                                 <Font size="18.0" />
-                              </font>
-                              <toggleGroup>
-                                 <ToggleGroup fx:id="tipoViajeOpcs" />
-                              </toggleGroup>
-                           </RadioButton>
-                           <RadioButton fx:id="radbtnBarrPaneDestPrepViaje" layoutX="434.0" layoutY="303.0" mnemonicParsing="false" text="Barrido" toggleGroup="$tipoViajeOpcs">
-                              <font>
-                                 <Font size="18.0" />
-                              </font>
-                           </RadioButton>
-                           <ChoiceBox fx:id="chBoxDestPnDestPrepViaje" layoutX="277.0" layoutY="163.0" prefWidth="150.0" />
-                        </children>
-                     </Pane>
+                            <Pane>
+                                <children>
+                                    <Label layoutX="197.0" layoutY="162.0" text="Destino:">
+                                        <font>
+                                            <Font size="18.0" />
+                                        </font>
+                                    </Label>
+                                    <Label layoutX="212.0" layoutY="229.0" text="Fecha:">
+                                        <font>
+                                            <Font size="18.0" />
+                                        </font>
+                                    </Label>
+                                    <DatePicker fx:id="datePnDestPrepViaje" layoutX="277.0" layoutY="230.0" />
+                                    <Button fx:id="btnSigPnDestPrepViaje" layoutX="358.0" layoutY="411.0" mnemonicParsing="false" onAction="#mostrarPanelElementos" text="Siguiente">
+                                        <font>
+                                            <Font size="18.0" />
+                                        </font>
+                                    </Button>
+                                    <Label alignment="CENTER" layoutX="257.0" layoutY="34.0" prefHeight="90.0" prefWidth="301.0" text="Seleccione destino, fecha y tipo de viaje" textAlignment="CENTER" wrapText="true">
+                                        <font>
+                                            <Font size="24.0" />
+                                        </font>
+                                    </Label>
+                                    <Label layoutX="212.0" layoutY="303.0" text="Tipo:">
+                                        <font>
+                                            <Font size="18.0" />
+                                        </font>
+                                    </Label>
+                                    <RadioButton fx:id="radbtnDiaPaneDestPrepViaje" layoutX="277.0" layoutY="303.0" mnemonicParsing="false" text="Diario">
+                                        <font>
+                                            <Font size="18.0" />
+                                        </font>
+                                        <toggleGroup>
+                                            <ToggleGroup fx:id="tipoViajeOpcs" />
+                                        </toggleGroup>
+                                    </RadioButton>
+                                    <RadioButton fx:id="radbtnBarrPaneDestPrepViaje" layoutX="434.0" layoutY="303.0" mnemonicParsing="false" text="Barrido" toggleGroup="$tipoViajeOpcs">
+                                        <font>
+                                            <Font size="18.0" />
+                                        </font>
+                                    </RadioButton>
+                                    <ChoiceBox fx:id="chBoxDestPnDestPrepViaje" layoutX="277.0" layoutY="163.0" prefWidth="150.0" />
+                                </children>
+                            </Pane>
                         </StackPane>
                     </Tab>
+
+                    <!-- ######################## Elementos ##################### -->
+
                     <Tab fx:id="tabElmsPrepViaje" styleClass="submenu-tab" text="Elementos">
                         <content>
                             <!-- ScrollPane para permitir desplazamiento vertical -->
@@ -110,11 +116,11 @@
                                                     </font>
                                                 </Label>
                                             </HBox>
-                                 <Label text="Seleccione una pestaña para añadir elementos">
-                                    <font>
-                                       <Font size="19.0" />
-                                    </font>
-                                 </Label>
+                                            <Label text="Seleccione una pestaña para añadir elementos">
+                                                <font>
+                                                    <Font size="19.0" />
+                                                </font>
+                                            </Label>
 
                                             <!-- Accordion ocupa todo el espacio restante -->
                                             <Accordion fx:id="accordion" VBox.vgrow="ALWAYS">
@@ -221,148 +227,169 @@
                                                     </TitledPane>
                                                 </panes>
                                             </Accordion>
-                                 <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Guardar" />
+                                            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Guardar" />
                                         </VBox>
                                     </children>
                                 </AnchorPane>
 
                                 <!--                                <AnchorPane fx:id="anchorElementos" prefHeight="560.0" prefWidth="800.0" style="-fx-background-color: white;">-->
 
-<!--                                    <children>-->
-<!--                                        <Accordion layoutY="73.0" AnchorPane.bottomAnchor="-73.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="73.0">-->
-<!--                                            <panes>-->
+                                <!--                                    <children>-->
+                                <!--                                        <Accordion layoutY="73.0" AnchorPane.bottomAnchor="-73.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="73.0">-->
+                                <!--                                            <panes>-->
 
-<!--                                                &lt;!&ndash; Elementos de seguridad &ndash;&gt;-->
-<!--                                                <TitledPane animated="false" text="Elementos de seguridad">-->
-<!--                                                    <content>-->
-<!--                                                        <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">-->
-<!--                                                            <Label text="Elementos de seguridad">-->
-<!--                                                                <font>-->
-<!--                                                                    <Font size="20" />-->
-<!--                                                                </font>-->
-<!--                                                            </Label>-->
+                                <!--                                                &lt;!&ndash; Elementos de seguridad &ndash;&gt;-->
+                                <!--                                                <TitledPane animated="false" text="Elementos de seguridad">-->
+                                <!--                                                    <content>-->
+                                <!--                                                        <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">-->
+                                <!--                                                            <Label text="Elementos de seguridad">-->
+                                <!--                                                                <font>-->
+                                <!--                                                                    <Font size="20" />-->
+                                <!--                                                                </font>-->
+                                <!--                                                            </Label>-->
 
-<!--                                                            <TableView fx:id="tableSeguridad" prefHeight="200" prefWidth="650">-->
-<!--                                                                <columns>-->
-<!--                                                                    <TableColumn prefWidth="75" text="C1" />-->
-<!--                                                                    <TableColumn prefWidth="75" text="C2" />-->
-<!--                                                                </columns>-->
-<!--                                                            </TableView>-->
+                                <!--                                                            <TableView fx:id="tableSeguridad" prefHeight="200" prefWidth="650">-->
+                                <!--                                                                <columns>-->
+                                <!--                                                                    <TableColumn prefWidth="75" text="C1" />-->
+                                <!--                                                                    <TableColumn prefWidth="75" text="C2" />-->
+                                <!--                                                                </columns>-->
+                                <!--                                                            </TableView>-->
 
-<!--                                                            <HBox alignment="CENTER" spacing="10">-->
-<!--                                                                <Button prefWidth="100" text="Agregar..." />-->
-<!--                                                                <Button prefWidth="100" text="Editar..." />-->
-<!--                                                            </HBox>-->
-<!--                                                        </VBox>-->
-<!--                                                    </content>-->
-<!--                                       <font>-->
-<!--                                          <Font size="30.0" />-->
-<!--                                       </font>-->
-<!--                                                </TitledPane>-->
+                                <!--                                                            <HBox alignment="CENTER" spacing="10">-->
+                                <!--                                                                <Button prefWidth="100" text="Agregar..." />-->
+                                <!--                                                                <Button prefWidth="100" text="Editar..." />-->
+                                <!--                                                            </HBox>-->
+                                <!--                                                        </VBox>-->
+                                <!--                                                    </content>-->
+                                <!--                                       <font>-->
+                                <!--                                          <Font size="30.0" />-->
+                                <!--                                       </font>-->
+                                <!--                                                </TitledPane>-->
 
-<!--                                                &lt;!&ndash; Productos Químicos &ndash;&gt;-->
-<!--                                                <TitledPane animated="false" text="Productos Químicos">-->
-<!--                                                    <content>-->
-<!--                                                        <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">-->
-<!--                                                            <Label text="Producto(s) químico(s)">-->
-<!--                                                                <font>-->
-<!--                                                                    <Font size="20" />-->
-<!--                                                                </font>-->
-<!--                                                            </Label>-->
+                                <!--                                                &lt;!&ndash; Productos Químicos &ndash;&gt;-->
+                                <!--                                                <TitledPane animated="false" text="Productos Químicos">-->
+                                <!--                                                    <content>-->
+                                <!--                                                        <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">-->
+                                <!--                                                            <Label text="Producto(s) químico(s)">-->
+                                <!--                                                                <font>-->
+                                <!--                                                                    <Font size="20" />-->
+                                <!--                                                                </font>-->
+                                <!--                                                            </Label>-->
 
-<!--                                                            <TableView fx:id="tableQuimicos" prefHeight="200" prefWidth="650">-->
-<!--                                                                <columns>-->
-<!--                                                                    <TableColumn prefWidth="75" text="C1" />-->
-<!--                                                                    <TableColumn prefWidth="75" text="C2" />-->
-<!--                                                                </columns>-->
-<!--                                                            </TableView>-->
+                                <!--                                                            <TableView fx:id="tableQuimicos" prefHeight="200" prefWidth="650">-->
+                                <!--                                                                <columns>-->
+                                <!--                                                                    <TableColumn prefWidth="75" text="C1" />-->
+                                <!--                                                                    <TableColumn prefWidth="75" text="C2" />-->
+                                <!--                                                                </columns>-->
+                                <!--                                                            </TableView>-->
 
-<!--                                                            <HBox alignment="CENTER" spacing="10">-->
-<!--                                                                <Button prefWidth="100" text="Agregar..." />-->
-<!--                                                                <Button prefWidth="100" text="Editar..." />-->
-<!--                                                            </HBox>-->
-<!--                                                        </VBox>-->
-<!--                                                    </content>-->
-<!--                                       <font>-->
-<!--                                          <Font size="30.0" />-->
-<!--                                       </font>-->
-<!--                                                </TitledPane>-->
+                                <!--                                                            <HBox alignment="CENTER" spacing="10">-->
+                                <!--                                                                <Button prefWidth="100" text="Agregar..." />-->
+                                <!--                                                                <Button prefWidth="100" text="Editar..." />-->
+                                <!--                                                            </HBox>-->
+                                <!--                                                        </VBox>-->
+                                <!--                                                    </content>-->
+                                <!--                                       <font>-->
+                                <!--                                          <Font size="30.0" />-->
+                                <!--                                       </font>-->
+                                <!--                                                </TitledPane>-->
 
-<!--                                                &lt;!&ndash; Camionetas &ndash;&gt;-->
-<!--                                                <TitledPane animated="false" text="Camionetas">-->
-<!--                                                    <content>-->
-<!--                                                        <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">-->
-<!--                                                            <Label text="Camioneta(s)">-->
-<!--                                                                <font>-->
-<!--                                                                    <Font size="20" />-->
-<!--                                                                </font>-->
-<!--                                                            </Label>-->
+                                <!--                                                &lt;!&ndash; Camionetas &ndash;&gt;-->
+                                <!--                                                <TitledPane animated="false" text="Camionetas">-->
+                                <!--                                                    <content>-->
+                                <!--                                                        <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">-->
+                                <!--                                                            <Label text="Camioneta(s)">-->
+                                <!--                                                                <font>-->
+                                <!--                                                                    <Font size="20" />-->
+                                <!--                                                                </font>-->
+                                <!--                                                            </Label>-->
 
-<!--                                                            <TableView fx:id="tableCamionetas" prefHeight="200" prefWidth="650">-->
-<!--                                                                <columns>-->
-<!--                                                                    <TableColumn prefWidth="75" text="C1" />-->
-<!--                                                                    <TableColumn prefWidth="75" text="C2" />-->
-<!--                                                                </columns>-->
-<!--                                                            </TableView>-->
+                                <!--                                                            <TableView fx:id="tableCamionetas" prefHeight="200" prefWidth="650">-->
+                                <!--                                                                <columns>-->
+                                <!--                                                                    <TableColumn prefWidth="75" text="C1" />-->
+                                <!--                                                                    <TableColumn prefWidth="75" text="C2" />-->
+                                <!--                                                                </columns>-->
+                                <!--                                                            </TableView>-->
 
-<!--                                                            <HBox alignment="CENTER" spacing="10">-->
-<!--                                                                <Button prefWidth="100" text="Agregar..." />-->
-<!--                                                                <Button prefWidth="100" text="Editar..." />-->
-<!--                                                            </HBox>-->
-<!--                                                        </VBox>-->
-<!--                                                    </content>-->
-<!--                                       <font>-->
-<!--                                          <Font size="30.0" />-->
-<!--                                       </font>-->
-<!--                                                </TitledPane>-->
+                                <!--                                                            <HBox alignment="CENTER" spacing="10">-->
+                                <!--                                                                <Button prefWidth="100" text="Agregar..." />-->
+                                <!--                                                                <Button prefWidth="100" text="Editar..." />-->
+                                <!--                                                            </HBox>-->
+                                <!--                                                        </VBox>-->
+                                <!--                                                    </content>-->
+                                <!--                                       <font>-->
+                                <!--                                          <Font size="30.0" />-->
+                                <!--                                       </font>-->
+                                <!--                                                </TitledPane>-->
 
-<!--                                                &lt;!&ndash; Maquinas &ndash;&gt;-->
-<!--                                                <TitledPane animated="false" text="Maquinas">-->
-<!--                                                    <content>-->
-<!--                                                        <VBox alignment="TOP_CENTER" prefHeight="629.0" prefWidth="798.0" spacing="10">-->
-<!--                                                            <Label text="Máquina(s)">-->
-<!--                                                                <font>-->
-<!--                                                                    <Font size="20" />-->
-<!--                                                                </font>-->
-<!--                                                            </Label>-->
+                                <!--                                                &lt;!&ndash; Maquinas &ndash;&gt;-->
+                                <!--                                                <TitledPane animated="false" text="Maquinas">-->
+                                <!--                                                    <content>-->
+                                <!--                                                        <VBox alignment="TOP_CENTER" prefHeight="629.0" prefWidth="798.0" spacing="10">-->
+                                <!--                                                            <Label text="Máquina(s)">-->
+                                <!--                                                                <font>-->
+                                <!--                                                                    <Font size="20" />-->
+                                <!--                                                                </font>-->
+                                <!--                                                            </Label>-->
 
-<!--                                                            <TableView fx:id="tableMaquinas" prefHeight="200" prefWidth="650">-->
-<!--                                                                <columns>-->
-<!--                                                                    <TableColumn prefWidth="75" text="C1" />-->
-<!--                                                                    <TableColumn prefWidth="75" text="C2" />-->
-<!--                                                                </columns>-->
-<!--                                                            </TableView>-->
+                                <!--                                                            <TableView fx:id="tableMaquinas" prefHeight="200" prefWidth="650">-->
+                                <!--                                                                <columns>-->
+                                <!--                                                                    <TableColumn prefWidth="75" text="C1" />-->
+                                <!--                                                                    <TableColumn prefWidth="75" text="C2" />-->
+                                <!--                                                                </columns>-->
+                                <!--                                                            </TableView>-->
 
-<!--                                                            <HBox alignment="CENTER" spacing="10">-->
-<!--                                                                <Button prefWidth="100" text="Agregar..." />-->
-<!--                                                                <Button prefWidth="100" text="Editar..." />-->
-<!--                                                            </HBox>-->
-<!--                                                        </VBox>-->
-<!--                                                    </content>-->
-<!--                                       <font>-->
-<!--                                          <Font size="30.0" />-->
-<!--                                       </font>-->
-<!--                                                </TitledPane>-->
+                                <!--                                                            <HBox alignment="CENTER" spacing="10">-->
+                                <!--                                                                <Button prefWidth="100" text="Agregar..." />-->
+                                <!--                                                                <Button prefWidth="100" text="Editar..." />-->
+                                <!--                                                            </HBox>-->
+                                <!--                                                        </VBox>-->
+                                <!--                                                    </content>-->
+                                <!--                                       <font>-->
+                                <!--                                          <Font size="30.0" />-->
+                                <!--                                       </font>-->
+                                <!--                                                </TitledPane>-->
 
-<!--                                            </panes>-->
-<!--                                        </Accordion>-->
-<!--                                        <Label layoutX="14.0" layoutY="14.0" prefHeight="39.0" prefWidth="65.0" text="Viaje">-->
-<!--                                            <font>-->
-<!--                                                <Font size="27.0" />-->
-<!--                                            </font>-->
-<!--                                        </Label>-->
+                                <!--                                            </panes>-->
+                                <!--                                        </Accordion>-->
+                                <!--                                        <Label layoutX="14.0" layoutY="14.0" prefHeight="39.0" prefWidth="65.0" text="Viaje">-->
+                                <!--                                            <font>-->
+                                <!--                                                <Font size="27.0" />-->
+                                <!--                                            </font>-->
+                                <!--                                        </Label>-->
 
-<!--                                        <Label layoutX="86.0" layoutY="14.0" text="ViajeID">-->
-<!--                                            <font>-->
-<!--                                                <Font name="System Bold" size="27.0" />-->
-<!--                                            </font>-->
-<!--                                        </Label>-->
+                                <!--                                        <Label layoutX="86.0" layoutY="14.0" text="ViajeID">-->
+                                <!--                                            <font>-->
+                                <!--                                                <Font name="System Bold" size="27.0" />-->
+                                <!--                                            </font>-->
+                                <!--                                        </Label>-->
 
-<!--                                    </children>-->
+                                <!--                                    </children>-->
 
-<!--                                </AnchorPane>-->
+                                <!--                                </AnchorPane>-->
                             </ScrollPane>
                         </content>
+                    </Tab>
+
+                    <!-- ######################## Listar ##################### -->
+
+                    <Tab fx:id="tabListPrepViaje" styleClass="submenu-tab" text="Listar">
+                        <VBox style="-fx-background-color: white; -fx-padding: 20;" spacing="15">
+                            <Label text="Lista de Elementos del Viaje (Ejemplo)" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #363535;"/>
+
+                            <!-- Lista de objetos -->
+                            <VBox fx:id="listaContainer" spacing="8" styleClass="ListarCont" >
+                            </VBox>
+
+                            <!-- Botón para generar PDF -->
+                            <HBox spacing="20" alignment="CENTER">
+                                <Button fx:id="btnGenerarPDF" text="Generar PDF" onAction="#generarPDF" styleClass="Btngenerar"/>
+                                <Button fx:id="btnActualizarLista" text="Actualizar Lista" onAction="#actualizarLista" styleClass="BtnActualizar"/>
+                            </HBox>
+
+                            <!-- Mensaje de confirmación -->
+                            <Label fx:id="lblMensajePDF" text="" style="-fx-font-size: 14px; -fx-text-fill: #28a745;"/>
+                        </VBox>
                     </Tab>
                 </TabPane>
             </VBox>
