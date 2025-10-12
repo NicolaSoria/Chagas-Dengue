@@ -24,14 +24,14 @@ public class CamionetaDAO {
     }
 
     public List<Camioneta> listarDisponibles() throws SQLException {
-        String sql = "SELECT patente, estado FROM Camionetas WHERE estado = 'Operativa'";
+        String sql = "SELECT patente, estado FROM proychagas.camionetas WHERE estado = 'Operativa'";
         Connection conn = ConexionBD.getInstancia().getConexion();
         List<Camioneta> lista = new ArrayList<>();
 
         try (PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                lista.add(new Camioneta(rs.getString("patente"), rs.getString("estado")));
+                lista.add(new Camioneta(rs.getString("patente"), rs.getString("estado"),rs.getString("CCod")));
             }
         }
         return lista;
