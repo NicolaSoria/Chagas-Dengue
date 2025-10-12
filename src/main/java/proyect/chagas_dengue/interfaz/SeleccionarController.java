@@ -6,7 +6,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
+import proyect.chagas_dengue.dao.CamionetaDAO;
+import proyect.chagas_dengue.modelos.Camioneta;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.function.Function;
 
@@ -64,6 +67,19 @@ public class SeleccionarController {
     private void cerrar() {
         if (stage != null) {
             stage.close();
+        }
+    }
+
+    private void cargarCamionetas() throws SQLException {
+        CamionetaDAO dao = new CamionetaDAO();
+        List<Camioneta> camionetas = dao.listarDisponibles();
+
+        for (Camioneta c : camionetas) {
+            listItems.getItems().add(
+                    "Código: " + c.getCodigo() +
+                            " | Patente: " + c.getPatente() +
+                            " | Estado: " + c.getEstado()
+            );
         }
     }
 }

@@ -2,10 +2,19 @@ package proyect.chagas_dengue;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import proyect.chagas_dengue.dao.CamionetaDAO;
+import proyect.chagas_dengue.interfaz.SeleccionarController;
+import proyect.chagas_dengue.modelos.Camioneta;
 
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 public class ControladorPrincipal {
 
@@ -51,4 +60,43 @@ public class ControladorPrincipal {
             System.out.println("No hay ninguna opción seleccionada");
         }
     }*/
+
+    @FXML
+    private Button btnAñadirCamioneta;
+
+    @FXML
+    private void onAñadirCamioneta() {
+        try {
+            // Obtener camionetas reales desde la base de datos
+            CamionetaDAO dao = new CamionetaDAO();
+            List<Camioneta> camionetas = dao.listarDisponibles(); // o el método equivalente que tengas
+
+            // Cargar FXML del popup
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/proyect/chagas_dengue/interfaz/Seleccionar1.fxml"));
+            Parent root = loader.load();
+
+            // Obtener controlador y configurar datos
+            SeleccionarController controller = loader.getController();
+            controller.configurar("Seleccionar Camioneta", camionetas, Object::toString);
+
+            // Crear ventana popup
+            Stage stage = new Stage();
+            controller.setStage(stage);
+            stage.initOwner(btnAñadirCamioneta.getScene().getWindow()); // ventana padre
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+
+            // Obtener elemento seleccionado
+            Object seleccionado = controller.getSeleccionado();
+            if (seleccionado != null) {
+                System.out.println("Camioneta seleccionada: " + seleccionado);
+                // acá agregás a la tabla o donde necesites
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
+
