@@ -32,6 +32,13 @@ public class ConexionBD {
     }
 
     public Connection getConexion() {
+        try {
+            if(conexion == null || conexion.isClosed()){
+                conexion = DriverManager.getConnection(URL,USER,PASSWORD);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
         return conexion;
     }
 }
