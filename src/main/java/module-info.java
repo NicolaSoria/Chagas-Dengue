@@ -3,7 +3,6 @@ module proyect.chagas_dengue {
     requires javafx.fxml;
     requires java.desktop;
     requires java.sql;
-    requires proyect.chagas_dengue;
 
 
     opens proyect.chagas_dengue to javafx.fxml;
