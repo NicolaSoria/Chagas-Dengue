@@ -154,7 +154,7 @@
                                                                 </TableView>
 
                                                                 <HBox alignment="CENTER" spacing="10">
-                                                                    <Button prefWidth="100" text="Agregar..." />
+                                                                    <Button fx:id="btnAñadirProducto" onAction="#onAñadirProducto" prefWidth="100" text="Agregar..." />
                                                                     <Button prefWidth="100" text="Editar..." />
                                                                 </HBox>
                                                             </VBox>
@@ -162,7 +162,7 @@
                                                     </TitledPane>
 
                                                     <!-- Camionetas -->
-                                                    <TitledPane animated="false" text="Camionetas">
+                                                    <TitledPane animated="false" expanded="false" text="Camionetas">
                                                         <content>
                                                             <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">
                                                                 <Label text="Camioneta(s)">
@@ -207,7 +207,7 @@
                                                                 </TableView>
 
                                                                 <HBox alignment="CENTER" spacing="10">
-                                                                    <Button prefWidth="100" text="Agregar..." />
+                                                                    <Button fx:id="btnAñadirMaquina" onAction="#onAñadirMaquina" prefWidth="100" text="Agregar..." />
                                                                     <Button prefWidth="100" text="Editar..." />
                                                                 </HBox>
                                                             </VBox>
@@ -227,21 +227,21 @@
                     <!-- ######################## Listar ##################### -->
 
                     <Tab fx:id="tabListPrepViaje" styleClass="submenu-tab" text="Listar">
-                        <VBox style="-fx-background-color: white; -fx-padding: 20;" spacing="15">
-                            <Label text="Lista de Elementos del Viaje (Ejemplo)" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #363535;"/>
+                        <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20;">
+                            <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #363535;" text="Lista de Elementos del Viaje (Ejemplo)" />
 
                             <!-- Lista de objetos -->
-                            <VBox fx:id="listaContainer" spacing="8" styleClass="ListarCont" >
+                            <VBox fx:id="listaContainer" spacing="8" styleClass="ListarCont">
                             </VBox>
 
                             <!-- Botón para generar PDF -->
-                            <HBox spacing="20" alignment="CENTER">
-                                <Button fx:id="btnGenerarPDF" text="Generar PDF" onAction="#generarPDF" styleClass="Btngenerar"/>
-                                <Button fx:id="btnActualizarLista" text="Actualizar Lista" onAction="#actualizarLista" styleClass="BtnActualizar"/>
+                            <HBox alignment="CENTER" spacing="20">
+                                <Button fx:id="btnGenerarPDF" onAction="#generarPDF" styleClass="Btngenerar" text="Generar PDF" />
+                                <Button fx:id="btnActualizarLista" onAction="#actualizarLista" styleClass="BtnActualizar" text="Actualizar Lista" />
                             </HBox>
 
                             <!-- Mensaje de confirmación -->
-                            <Label fx:id="lblMensajePDF" text="" style="-fx-font-size: 14px; -fx-text-fill: #28a745;"/>
+                            <Label fx:id="lblMensajePDF" style="-fx-font-size: 14px; -fx-text-fill: #28a745;" text="" />
                         </VBox>
                     </Tab>
                 </TabPane>

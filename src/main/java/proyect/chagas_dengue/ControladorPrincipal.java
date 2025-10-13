@@ -1,5 +1,6 @@
 package proyect.chagas_dengue;
 
+
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.stage.Modality;
@@ -68,9 +70,11 @@ public class ControladorPrincipal {
         actualizarListaVisual();
         mostrarPaneIncio();
         configurarColumnas();
-        cargarDatos();
+//        cargarDatos();
         cargarZonasChoiceBox();
         fechasCont();
+        // Asignar la lista observable a la tabla
+        tableCamionetas.setItems(listaCamionetas);
     }
 
     private void fechasCont(){
@@ -100,8 +104,7 @@ public class ControladorPrincipal {
         //configurar para boton Ingresar viaje onAction="#clearZonasChoiceBox"
         //llamar nuevamente cargarZonasChoiceBox() tras actualizacion
 
-        // Asignar la lista observable a la tabla
-        tableCamionetas.setItems(listaCamionetas);
+
 
     }
 
@@ -193,7 +196,7 @@ public class ControladorPrincipal {
             contentStream.setFont(PDType1Font.HELVETICA, 12);
             contentStream.beginText();
             contentStream.newLineAtOffset(margin, yPosition);
-            contentStream.showText("Generado: " + java.time.LocalDateTime.now());
+            contentStream.showText("Generado: " + LocalDateTime.now());
             contentStream.endText();
 
             yPosition -= lineHeight * 2;
@@ -353,6 +356,7 @@ public class ControladorPrincipal {
             tableCamionetas.getItems().setAll(new CamionetaDAO().listarDisponibles());
             tableQuimicos.getItems().setAll(new ProductoDAO().listarTodos());
             tableMaquinas.getItems().setAll(new MaquinaDAO().listarTodos());
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -406,5 +410,88 @@ public class ControladorPrincipal {
         }
 
     }
+
+    @FXML
+    private Button btnAñadirProducto;
+
+    @FXML
+    private void onAñadirProducto() {
+        try {
+            ProductoDAO dao = new ProductoDAO();
+            List<ProductoQuimico> productos = dao.listarTodos();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/proyect/chagas_dengue/interfaz/Seleccionar1.fxml"));
+            Parent root = loader.load();
+
+            SeleccionarController controller = loader.getController();
+            controller.configurar(
+                    "Seleccionar Producto",
+                    productos,
+                    p -> {
+                        ProductoQuimico prod = (ProductoQuimico)p;
+                        return prod.getNombre() + " | Marca: " + prod.getMarca();
+                    }
+            );
+
+            Stage stage = new Stage();
+            controller.setStage(stage);
+            stage.initOwner(btnAñadirProducto.getScene().getWindow());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+
+            Object seleccionadoObj = controller.getSeleccionado();
+            if (seleccionadoObj != null) {
+                ProductoQuimico seleccionado = (ProductoQuimico) seleccionadoObj;
+                tableQuimicos.getItems().add(seleccionado);
+                System.out.println("Producto seleccionado: " + seleccionado.getNombre());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private Button btnAñadirMaquina;
+
+    @FXML
+    private void onAñadirMaquina() {
+        try {
+            MaquinaDAO dao = new MaquinaDAO();
+            List<Maquina> maquinas = dao.listarTodos();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/proyect/chagas_dengue/interfaz/Seleccionar1.fxml"));
+            Parent root = loader.load();
+
+            SeleccionarController controller = loader.getController();
+            controller.configurar(
+                    "Seleccionar Máquina",
+                    maquinas,
+                    m -> {
+                        Maquina maq = (Maquina)m;
+                        return maq.getMarca() + " | Modelo: " + maq.getModelo();
+                    }
+            );
+
+            Stage stage = new Stage();
+            controller.setStage(stage);
+            stage.initOwner(btnAñadirMaquina.getScene().getWindow());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+
+            Object seleccionadoObj = controller.getSeleccionado();
+            if (seleccionadoObj != null) {
+                Maquina seleccionado = (Maquina) seleccionadoObj;
+                tableMaquinas.getItems().add(seleccionado);
+                System.out.println("Máquina seleccionada: " + seleccionado.getMarca() + " " + seleccionado.getModelo());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
