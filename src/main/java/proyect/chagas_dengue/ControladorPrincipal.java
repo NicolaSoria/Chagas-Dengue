@@ -1,6 +1,8 @@
 package proyect.chagas_dengue;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -52,6 +54,8 @@ public class ControladorPrincipal {
     @FXML private VBox listaContainer;
     @FXML private Label lblMensajePDF;
 
+    private ObservableList<Camioneta> listaCamionetas = FXCollections.observableArrayList();
+
     // Datos de ejemplo para la lista
     private Map<String, Integer> objetos = new HashMap<>();
 
@@ -61,6 +65,10 @@ public class ControladorPrincipal {
         mostrarPaneIncio();
         configurarColumnas();
         cargarDatos();
+
+        // Asignar la lista observable a la tabla
+        tableCamionetas.setItems(listaCamionetas);
+
     }
 
     @FXML public void mostrarPaneIncio(){
@@ -288,6 +296,7 @@ public class ControladorPrincipal {
 
     private void configurarColumnas() {
         // Camionetas
+
         colCamionetaCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         colCamionetaPatente.setCellValueFactory(new PropertyValueFactory<>("patente"));
         colCamionetaEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
@@ -322,6 +331,7 @@ public class ControladorPrincipal {
     @FXML
     private void onAñadirCamioneta() {
 
+
         try {
             CamionetaDAO dao = new CamionetaDAO();
             List<Camioneta> camionetas = dao.listarDisponibles();
@@ -329,11 +339,14 @@ public class ControladorPrincipal {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/proyect/chagas_dengue/interfaz/Seleccionar1.fxml"));
             Parent root = loader.load();
 
-            SeleccionarController<Camioneta> controller = loader.getController();
+            SeleccionarController controller = loader.getController();
             controller.configurar(
                     "Seleccionar Camioneta",
                     camionetas,
-                    c -> "Patente: " + c.getPatente() + " | Estado: " + c.getEstado()
+                    c -> {
+                        Camioneta cam = (Camioneta)c;
+                        return "Patente: " + cam.getPatente() + " | Estado: " + cam.getEstado();
+                    }
             );
 
             Stage stage = new Stage();
@@ -343,54 +356,20 @@ public class ControladorPrincipal {
             stage.setScene(new Scene(root));
             stage.showAndWait();
 
-            Camioneta seleccionado = controller.getSeleccionado();
-            if (seleccionado != null) {
-                tableCamionetas.getItems().add(seleccionado);
-                System.out.println("Tabla Camionetas: " + tableCamionetas);
-                System.out.println("Seleccionado: " + seleccionado);
-                System.out.println("Camioneta agregada a la tabla: " + seleccionado.getPatente());
+            // Obtener el objeto real
+            Object seleccionadoObj = controller.getSeleccionado();
+            if (seleccionadoObj != null) {
+                Camioneta seleccionado = (Camioneta) seleccionadoObj;
+
+                listaCamionetas.add(seleccionado); // agregar a la lista observable
+
+//                tableCamionetas.getItems().add(seleccionado);
+                System.out.println("Camioneta seleccionada: " + seleccionado.getPatente());
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-//        try {
-//            CamionetaDAO dao = new CamionetaDAO();
-//            List<Camioneta> camionetas = dao.listarDisponibles();
-//
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/proyect/chagas_dengue/interfaz/Seleccionar1.fxml"));
-//            Parent root = loader.load();
-//
-//            SeleccionarController controller = loader.getController();
-//            controller.configurar(
-//                    "Seleccionar Camioneta",
-//                    camionetas,
-//                    c -> {
-//                        Camioneta cam = (Camioneta)c;
-//                        return "Patente: " + cam.getPatente() + " | Estado: " + cam.getEstado();
-//                    }
-//            );
-//
-//            Stage stage = new Stage();
-//            controller.setStage(stage);
-//            stage.initOwner(btnAñadirCamioneta.getScene().getWindow());
-//            stage.initModality(Modality.APPLICATION_MODAL);
-//            stage.setScene(new Scene(root));
-//            stage.showAndWait();
-//
-//            // Obtener el objeto real
-//            Object seleccionadoObj = controller.getSeleccionado();
-//            if (seleccionadoObj != null) {
-//                Camioneta seleccionado = (Camioneta) seleccionadoObj;
-//                tableCamionetas.getItems().add(seleccionado);
-//                System.out.println("Camioneta seleccionada: " + seleccionado.getPatente());
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
 
     }
 }
