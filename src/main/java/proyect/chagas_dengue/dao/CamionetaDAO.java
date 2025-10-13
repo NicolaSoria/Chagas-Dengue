@@ -23,17 +23,42 @@ public class CamionetaDAO {
         }
     }
 
+//    public List<Camioneta> listarDisponibles() throws SQLException {
+//        String sql = "SELECT patente, estado FROM proychagas.camionetas WHERE estado = 'Operativa'";
+//        Connection conn = ConexionBD.getInstancia().getConexion();
+//        List<Camioneta> lista = new ArrayList<>();
+//
+//        List<String> camionetas = new ArrayList<>();
+//
+//        try (PreparedStatement ps = conn.prepareStatement(sql);
+//             ResultSet rs = ps.executeQuery()) {
+//            while (rs.next()) {
+//                camionetas.add(rs.getString("patente"));
+////                lista.add(new Camioneta(rs.getString("patente"), rs.getString("estado")));
+//            }
+//        }
+//        return lista;
+//    }
     public List<Camioneta> listarDisponibles() throws SQLException {
-        String sql = "SELECT patente, estado FROM proychagas.camionetas WHERE estado = 'Operativa'";
+        String sql = "SELECT CCod, patente, estado FROM proychagas.camionetas WHERE estado = 'Operativa'";
         Connection conn = ConexionBD.getInstancia().getConexion();
         List<Camioneta> lista = new ArrayList<>();
 
         try (PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                lista.add(new Camioneta(rs.getString("patente"), rs.getString("estado"),rs.getString("CCod")));
+                // Crear objeto Camioneta completo y agregarlo a la lista
+                Camioneta c = new Camioneta(
+                        rs.getString("patente"),
+                        rs.getString("estado"),
+                        rs.getInt("CCod")
+                );
+                lista.add(c);
             }
         }
         return lista;
     }
+
+
+
 }

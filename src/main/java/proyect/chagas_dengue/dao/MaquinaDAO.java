@@ -13,6 +13,9 @@ public class MaquinaDAO implements interfaceDAO<Maquina,Integer>{
 
     public MaquinaDAO(Connection conexion){this.conexion= ConexionBD.getInstancia().getConexion();}
 
+    public MaquinaDAO() {
+        this.conexion = ConexionBD.getInstancia().getConexion();
+    }
 
     @Override
     public void insertar(Maquina objeto) {

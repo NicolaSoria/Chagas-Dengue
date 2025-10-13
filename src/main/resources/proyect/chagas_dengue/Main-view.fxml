@@ -146,8 +146,10 @@
 
                                                                 <TableView fx:id="tableQuimicos" prefHeight="200" prefWidth="650">
                                                                     <columns>
-                                                                        <TableColumn prefWidth="75" text="C1" />
-                                                                        <TableColumn prefWidth="75" text="C2" />
+                                                                        <TableColumn fx:id="colProdCodigo" prefWidth="100" text="Código" />
+                                                                        <TableColumn fx:id="colProdNombre" prefWidth="150" text="Nombre" />
+                                                                        <TableColumn fx:id="colProdMarca" prefWidth="150" text="Marca" />
+                                                                        <TableColumn fx:id="colProdPresentacion" prefWidth="150" text="Presentación (L)" />
                                                                     </columns>
                                                                 </TableView>
 
@@ -171,8 +173,9 @@
 
                                                                 <TableView fx:id="tableCamionetas" prefHeight="200" prefWidth="650">
                                                                     <columns>
-                                                                        <TableColumn prefWidth="75" text="C1" />
-                                                                        <TableColumn prefWidth="75" text="C2" />
+                                                                        <TableColumn fx:id="colCamionetaCodigo" prefWidth="100" text="Código" />
+                                                                        <TableColumn fx:id="colCamionetaPatente" prefWidth="150" text="Patente" />
+                                                                        <TableColumn fx:id="colCamionetaEstado" prefWidth="150" text="Estado" />
                                                                     </columns>
                                                                 </TableView>
 
@@ -196,8 +199,10 @@
 
                                                                 <TableView fx:id="tableMaquinas" prefHeight="200" prefWidth="650">
                                                                     <columns>
-                                                                        <TableColumn prefWidth="75" text="C1" />
-                                                                        <TableColumn prefWidth="75" text="C2" />
+                                                                        <TableColumn fx:id="colMaqCodigo" prefWidth="100" text="Código" />
+                                                                        <TableColumn fx:id="colMaqMarca" prefWidth="150" text="Marca" />
+                                                                        <TableColumn fx:id="colMaqModelo" prefWidth="150" text="Modelo" />
+                                                                        <TableColumn fx:id="colMaqTipo" prefWidth="150" text="Tipo" />
                                                                     </columns>
                                                                 </TableView>
 
@@ -215,141 +220,6 @@
                                     </children>
                                 </AnchorPane>
 
-                                <!--                                <AnchorPane fx:id="anchorElementos" prefHeight="560.0" prefWidth="800.0" style="-fx-background-color: white;">-->
-
-                                <!--                                    <children>-->
-                                <!--                                        <Accordion layoutY="73.0" AnchorPane.bottomAnchor="-73.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="73.0">-->
-                                <!--                                            <panes>-->
-
-                                <!--                                                &lt;!&ndash; Elementos de seguridad &ndash;&gt;-->
-                                <!--                                                <TitledPane animated="false" text="Elementos de seguridad">-->
-                                <!--                                                    <content>-->
-                                <!--                                                        <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">-->
-                                <!--                                                            <Label text="Elementos de seguridad">-->
-                                <!--                                                                <font>-->
-                                <!--                                                                    <Font size="20" />-->
-                                <!--                                                                </font>-->
-                                <!--                                                            </Label>-->
-
-                                <!--                                                            <TableView fx:id="tableSeguridad" prefHeight="200" prefWidth="650">-->
-                                <!--                                                                <columns>-->
-                                <!--                                                                    <TableColumn prefWidth="75" text="C1" />-->
-                                <!--                                                                    <TableColumn prefWidth="75" text="C2" />-->
-                                <!--                                                                </columns>-->
-                                <!--                                                            </TableView>-->
-
-                                <!--                                                            <HBox alignment="CENTER" spacing="10">-->
-                                <!--                                                                <Button prefWidth="100" text="Agregar..." />-->
-                                <!--                                                                <Button prefWidth="100" text="Editar..." />-->
-                                <!--                                                            </HBox>-->
-                                <!--                                                        </VBox>-->
-                                <!--                                                    </content>-->
-                                <!--                                       <font>-->
-                                <!--                                          <Font size="30.0" />-->
-                                <!--                                       </font>-->
-                                <!--                                                </TitledPane>-->
-
-                                <!--                                                &lt;!&ndash; Productos Químicos &ndash;&gt;-->
-                                <!--                                                <TitledPane animated="false" text="Productos Químicos">-->
-                                <!--                                                    <content>-->
-                                <!--                                                        <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">-->
-                                <!--                                                            <Label text="Producto(s) químico(s)">-->
-                                <!--                                                                <font>-->
-                                <!--                                                                    <Font size="20" />-->
-                                <!--                                                                </font>-->
-                                <!--                                                            </Label>-->
-
-                                <!--                                                            <TableView fx:id="tableQuimicos" prefHeight="200" prefWidth="650">-->
-                                <!--                                                                <columns>-->
-                                <!--                                                                    <TableColumn prefWidth="75" text="C1" />-->
-                                <!--                                                                    <TableColumn prefWidth="75" text="C2" />-->
-                                <!--                                                                </columns>-->
-                                <!--                                                            </TableView>-->
-
-                                <!--                                                            <HBox alignment="CENTER" spacing="10">-->
-                                <!--                                                                <Button prefWidth="100" text="Agregar..." />-->
-                                <!--                                                                <Button prefWidth="100" text="Editar..." />-->
-                                <!--                                                            </HBox>-->
-                                <!--                                                        </VBox>-->
-                                <!--                                                    </content>-->
-                                <!--                                       <font>-->
-                                <!--                                          <Font size="30.0" />-->
-                                <!--                                       </font>-->
-                                <!--                                                </TitledPane>-->
-
-                                <!--                                                &lt;!&ndash; Camionetas &ndash;&gt;-->
-                                <!--                                                <TitledPane animated="false" text="Camionetas">-->
-                                <!--                                                    <content>-->
-                                <!--                                                        <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">-->
-                                <!--                                                            <Label text="Camioneta(s)">-->
-                                <!--                                                                <font>-->
-                                <!--                                                                    <Font size="20" />-->
-                                <!--                                                                </font>-->
-                                <!--                                                            </Label>-->
-
-                                <!--                                                            <TableView fx:id="tableCamionetas" prefHeight="200" prefWidth="650">-->
-                                <!--                                                                <columns>-->
-                                <!--                                                                    <TableColumn prefWidth="75" text="C1" />-->
-                                <!--                                                                    <TableColumn prefWidth="75" text="C2" />-->
-                                <!--                                                                </columns>-->
-                                <!--                                                            </TableView>-->
-
-                                <!--                                                            <HBox alignment="CENTER" spacing="10">-->
-                                <!--                                                                <Button prefWidth="100" text="Agregar..." />-->
-                                <!--                                                                <Button prefWidth="100" text="Editar..." />-->
-                                <!--                                                            </HBox>-->
-                                <!--                                                        </VBox>-->
-                                <!--                                                    </content>-->
-                                <!--                                       <font>-->
-                                <!--                                          <Font size="30.0" />-->
-                                <!--                                       </font>-->
-                                <!--                                                </TitledPane>-->
-
-                                <!--                                                &lt;!&ndash; Maquinas &ndash;&gt;-->
-                                <!--                                                <TitledPane animated="false" text="Maquinas">-->
-                                <!--                                                    <content>-->
-                                <!--                                                        <VBox alignment="TOP_CENTER" prefHeight="629.0" prefWidth="798.0" spacing="10">-->
-                                <!--                                                            <Label text="Máquina(s)">-->
-                                <!--                                                                <font>-->
-                                <!--                                                                    <Font size="20" />-->
-                                <!--                                                                </font>-->
-                                <!--                                                            </Label>-->
-
-                                <!--                                                            <TableView fx:id="tableMaquinas" prefHeight="200" prefWidth="650">-->
-                                <!--                                                                <columns>-->
-                                <!--                                                                    <TableColumn prefWidth="75" text="C1" />-->
-                                <!--                                                                    <TableColumn prefWidth="75" text="C2" />-->
-                                <!--                                                                </columns>-->
-                                <!--                                                            </TableView>-->
-
-                                <!--                                                            <HBox alignment="CENTER" spacing="10">-->
-                                <!--                                                                <Button prefWidth="100" text="Agregar..." />-->
-                                <!--                                                                <Button prefWidth="100" text="Editar..." />-->
-                                <!--                                                            </HBox>-->
-                                <!--                                                        </VBox>-->
-                                <!--                                                    </content>-->
-                                <!--                                       <font>-->
-                                <!--                                          <Font size="30.0" />-->
-                                <!--                                       </font>-->
-                                <!--                                                </TitledPane>-->
-
-                                <!--                                            </panes>-->
-                                <!--                                        </Accordion>-->
-                                <!--                                        <Label layoutX="14.0" layoutY="14.0" prefHeight="39.0" prefWidth="65.0" text="Viaje">-->
-                                <!--                                            <font>-->
-                                <!--                                                <Font size="27.0" />-->
-                                <!--                                            </font>-->
-                                <!--                                        </Label>-->
-
-                                <!--                                        <Label layoutX="86.0" layoutY="14.0" text="ViajeID">-->
-                                <!--                                            <font>-->
-                                <!--                                                <Font name="System Bold" size="27.0" />-->
-                                <!--                                            </font>-->
-                                <!--                                        </Label>-->
-
-                                <!--                                    </children>-->
-
-                                <!--                                </AnchorPane>-->
                             </ScrollPane>
                         </content>
                     </Tab>

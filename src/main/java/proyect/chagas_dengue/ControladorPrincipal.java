@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -17,13 +18,18 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import proyect.chagas_dengue.dao.CamionetaDAO;
+import proyect.chagas_dengue.dao.MaquinaDAO;
+import proyect.chagas_dengue.dao.ProductoDAO;
 import proyect.chagas_dengue.interfaz.SeleccionarController;
 import proyect.chagas_dengue.modelos.Camioneta;
+import proyect.chagas_dengue.modelos.Maquina;
+import proyect.chagas_dengue.modelos.ProductoQuimico;
 
 import java.awt.event.ActionEvent;
 import java.util.List;
@@ -53,6 +59,8 @@ public class ControladorPrincipal {
         inicializarDatos();
         actualizarListaVisual();
         mostrarPaneIncio();
+        configurarColumnas();
+        cargarDatos();
     }
 
     @FXML public void mostrarPaneIncio(){
@@ -258,42 +266,132 @@ public class ControladorPrincipal {
         }
     }*/
 
+    // ========== CAMIONETAS ==========
+    @FXML private TableView<Camioneta> tableCamionetas;
+    @FXML private TableColumn<Camioneta, Integer> colCamionetaCodigo;
+    @FXML private TableColumn<Camioneta, String> colCamionetaPatente;
+    @FXML private TableColumn<Camioneta, String> colCamionetaEstado;
+
+    // ========== PRODUCTOS ==========
+    @FXML private TableView<ProductoQuimico> tableQuimicos;
+    @FXML private TableColumn<ProductoQuimico, Integer> colProdCodigo;
+    @FXML private TableColumn<ProductoQuimico, String> colProdNombre;
+    @FXML private TableColumn<ProductoQuimico, String> colProdMarca;
+    @FXML private TableColumn<ProductoQuimico, Double> colProdPresentacion;
+
+    // ========== MAQUINAS ==========
+    @FXML private TableView<Maquina> tableMaquinas;
+    @FXML private TableColumn<Maquina, Integer> colMaqCodigo;
+    @FXML private TableColumn<Maquina, String> colMaqMarca;
+    @FXML private TableColumn<Maquina, String> colMaqModelo;
+    @FXML private TableColumn<Maquina, Maquina.TipoM> colMaqTipo;
+
+    private void configurarColumnas() {
+        // Camionetas
+        colCamionetaCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+        colCamionetaPatente.setCellValueFactory(new PropertyValueFactory<>("patente"));
+        colCamionetaEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
+
+        // Productos
+        colProdCodigo.setCellValueFactory(new PropertyValueFactory<>("PCod"));
+        colProdNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        colProdMarca.setCellValueFactory(new PropertyValueFactory<>("marca"));
+        colProdPresentacion.setCellValueFactory(new PropertyValueFactory<>("presentacion"));
+
+        // Máquinas
+        colMaqCodigo.setCellValueFactory(new PropertyValueFactory<>("MCod"));
+        colMaqMarca.setCellValueFactory(new PropertyValueFactory<>("marca"));
+        colMaqModelo.setCellValueFactory(new PropertyValueFactory<>("modelo"));
+        colMaqTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+    }
+
+    private void cargarDatos() {
+        try {
+            tableCamionetas.getItems().setAll(new CamionetaDAO().listarDisponibles());
+            tableQuimicos.getItems().setAll(new ProductoDAO().listarTodos());
+            tableMaquinas.getItems().setAll(new MaquinaDAO().listarTodos());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @FXML
     private Button btnAñadirCamioneta;
 
     @FXML
     private void onAñadirCamioneta() {
-        try {
-            // Obtener camionetas reales desde la base de datos
-            CamionetaDAO dao = new CamionetaDAO();
-            List<Camioneta> camionetas = dao.listarDisponibles(); // o el método equivalente que tengas
 
-            // Cargar FXML del popup
+        try {
+            CamionetaDAO dao = new CamionetaDAO();
+            List<Camioneta> camionetas = dao.listarDisponibles();
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/proyect/chagas_dengue/interfaz/Seleccionar1.fxml"));
             Parent root = loader.load();
 
-            // Obtener controlador y configurar datos
-            SeleccionarController controller = loader.getController();
-            controller.configurar("Seleccionar Camioneta", camionetas, Object::toString);
+            SeleccionarController<Camioneta> controller = loader.getController();
+            controller.configurar(
+                    "Seleccionar Camioneta",
+                    camionetas,
+                    c -> "Patente: " + c.getPatente() + " | Estado: " + c.getEstado()
+            );
 
-            // Crear ventana popup
             Stage stage = new Stage();
             controller.setStage(stage);
-            stage.initOwner(btnAñadirCamioneta.getScene().getWindow()); // ventana padre
+            stage.initOwner(btnAñadirCamioneta.getScene().getWindow());
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
             stage.showAndWait();
 
-            // Obtener elemento seleccionado
-            Object seleccionado = controller.getSeleccionado();
+            Camioneta seleccionado = controller.getSeleccionado();
             if (seleccionado != null) {
-                System.out.println("Camioneta seleccionada: " + seleccionado);
-                // acá agregás a la tabla o donde necesites
+                tableCamionetas.getItems().add(seleccionado);
+                System.out.println("Tabla Camionetas: " + tableCamionetas);
+                System.out.println("Seleccionado: " + seleccionado);
+                System.out.println("Camioneta agregada a la tabla: " + seleccionado.getPatente());
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
+//        try {
+//            CamionetaDAO dao = new CamionetaDAO();
+//            List<Camioneta> camionetas = dao.listarDisponibles();
+//
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/proyect/chagas_dengue/interfaz/Seleccionar1.fxml"));
+//            Parent root = loader.load();
+//
+//            SeleccionarController controller = loader.getController();
+//            controller.configurar(
+//                    "Seleccionar Camioneta",
+//                    camionetas,
+//                    c -> {
+//                        Camioneta cam = (Camioneta)c;
+//                        return "Patente: " + cam.getPatente() + " | Estado: " + cam.getEstado();
+//                    }
+//            );
+//
+//            Stage stage = new Stage();
+//            controller.setStage(stage);
+//            stage.initOwner(btnAñadirCamioneta.getScene().getWindow());
+//            stage.initModality(Modality.APPLICATION_MODAL);
+//            stage.setScene(new Scene(root));
+//            stage.showAndWait();
+//
+//            // Obtener el objeto real
+//            Object seleccionadoObj = controller.getSeleccionado();
+//            if (seleccionadoObj != null) {
+//                Camioneta seleccionado = (Camioneta) seleccionadoObj;
+//                tableCamionetas.getItems().add(seleccionado);
+//                System.out.println("Camioneta seleccionada: " + seleccionado.getPatente());
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
     }
 }
 

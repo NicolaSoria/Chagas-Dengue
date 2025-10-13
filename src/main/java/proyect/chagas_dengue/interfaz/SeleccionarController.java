@@ -1,5 +1,6 @@
 package proyect.chagas_dengue.interfaz;
 
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -39,21 +40,43 @@ public class SeleccionarController {
 
         btnSeleccionar.setOnAction(e -> {
             seleccionado = listItems.getSelectionModel().getSelectedItem();
+            System.out.println("Seleccionado en popup: " + seleccionado);
             cerrar();
         });
     }
 
     public void configurar(String titulo, List<?> elementos, Function<Object, String> mostrar) {
+
         lblTitulo.setText(titulo);
+
+        // Agregar los objetos reales al ListView
         listItems.getItems().setAll(elementos);
 
+        System.out.println("ListView cargado con: " + listItems.getItems());
+
+        // Configurar cómo se muestra cada elemento
         listItems.setCellFactory(list -> new ListCell<>() {
             @Override
             protected void updateItem(Object item, boolean empty) {
                 super.updateItem(item, empty);
-                setText(empty || item == null ? "" : mostrar.apply(item));
+                if (empty || item == null) {
+                    setText("");
+                } else {
+                    setText(mostrar.apply(item)); // mostrar texto bonito
+                }
             }
         });
+
+//        lblTitulo.setText(titulo);
+//        listItems.getItems().setAll(elementos);
+//
+//        listItems.setCellFactory(list -> new ListCell<>() {
+//            @Override
+//            protected void updateItem(Object item, boolean empty) {
+//                super.updateItem(item, empty);
+//                setText(empty || item == null ? "" : mostrar.apply(item));
+//            }
+//        });
     }
 
     public Object getSeleccionado() {
@@ -75,11 +98,15 @@ public class SeleccionarController {
         List<Camioneta> camionetas = dao.listarDisponibles();
 
         for (Camioneta c : camionetas) {
-            listItems.getItems().add(
-                    "Código: " + c.getCodigo() +
-                            " | Patente: " + c.getPatente() +
-                            " | Estado: " + c.getEstado()
-            );
+
+            listItems.getItems().add(c); // <-- objeto Camioneta real
+
+
+//            listItems.getItems().add(
+//                    "Código: " + c.getCodigo() +
+//                            " | Patente: " + c.getPatente() +
+//                            " | Estado: " + c.getEstado()
+//            );
         }
     }
 }
