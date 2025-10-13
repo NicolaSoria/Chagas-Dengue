@@ -274,6 +274,11 @@ public class ControladorPrincipal {
         }
     }*/
 
+    TableColumn<Camioneta, Void> colAcciones = new TableColumn<>("Acciones");
+
+    
+
+
     // ========== CAMIONETAS ==========
     @FXML private TableView<Camioneta> tableCamionetas;
     @FXML private TableColumn<Camioneta, Integer> colCamionetaCodigo;
@@ -312,6 +317,39 @@ public class ControladorPrincipal {
         colMaqMarca.setCellValueFactory(new PropertyValueFactory<>("marca"));
         colMaqModelo.setCellValueFactory(new PropertyValueFactory<>("modelo"));
         colMaqTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+
+        colAcciones.setCellFactory(param -> new TableCell<>() {
+            private final Button btnEliminar = new Button("Eliminar");
+
+            {
+                btnEliminar.setOnAction(event -> {
+                    Camioneta camioneta = getTableView().getItems().get(getIndex());
+                    // Confirmación opcional
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                            "¿Seguro que querés eliminar la camioneta " + camioneta.getPatente() + "?",
+                            ButtonType.YES, ButtonType.NO);
+                    alert.showAndWait().ifPresent(response -> {
+                        if (response == ButtonType.YES) {
+                            getTableView().getItems().remove(camioneta);
+                        }
+                    });
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(btnEliminar);
+                }
+            }
+        });
+
+        tableCamionetas.getColumns().add(colAcciones);
+
+
     }
 
     private void cargarDatos() {
