@@ -19,6 +19,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.stage.Modality;
@@ -26,10 +27,12 @@ import javafx.stage.Stage;
 import proyect.chagas_dengue.dao.CamionetaDAO;
 import proyect.chagas_dengue.dao.MaquinaDAO;
 import proyect.chagas_dengue.dao.ProductoDAO;
+import proyect.chagas_dengue.dao.ZonaDAO;
 import proyect.chagas_dengue.interfaz.SeleccionarController;
 import proyect.chagas_dengue.modelos.Camioneta;
 import proyect.chagas_dengue.modelos.Maquina;
 import proyect.chagas_dengue.modelos.ProductoQuimico;
+import proyect.chagas_dengue.modelos.Zona;
 
 import java.awt.event.ActionEvent;
 import java.util.List;
@@ -45,12 +48,14 @@ public class ControladorPrincipal {
     @FXML private TabPane mainTabPane;
     @FXML private Tab tabDestPrepViaje;
     @FXML private Tab tabElmsPrepViaje;
-    @FXML private ChoiceBox chBoxDestPnDestPrepViaje;
+    @FXML private ChoiceBox<String> chBoxDestPnDestPrepViaje;
     @FXML private DatePicker datePnDestPrepViaje;
     @FXML private Button btnSigPnDestPrepViaje;
     @FXML private TabPane tabPanePrepViaje;
     @FXML private VBox listaContainer;
     @FXML private Label lblMensajePDF;
+
+    private ZonaDAO zonaDAO = new ZonaDAO();
 
     // Datos de ejemplo para la lista
     private Map<String, Integer> objetos = new HashMap<>();
@@ -61,6 +66,36 @@ public class ControladorPrincipal {
         mostrarPaneIncio();
         configurarColumnas();
         cargarDatos();
+        cargarZonasChoiceBox();
+        fechasCont();
+    }
+
+    private void fechasCont(){
+        datePnDestPrepViaje.setDayCellFactory(picker -> new DateCell(){
+            @Override
+            public void updateItem(LocalDate date, boolean empty){
+                super.updateItem(date,empty);
+                if (date.isBefore(LocalDate.now())){
+                    setDisable(true);
+                    setStyle("-fx-background-color: #ffcccc;");
+                }
+            }
+        });
+    }
+
+    @FXML private void cargarZonasChoiceBox(){
+        List<Zona> zonas = zonaDAO.listarTodos();
+
+        for(Zona z : zonas){
+            chBoxDestPnDestPrepViaje.getItems().add(z.getNombre());
+        }
+    }
+
+    @FXML private void clearZonasChoiceBox(){
+        chBoxDestPnDestPrepViaje.getItems().clear();
+        chBoxDestPnDestPrepViaje.setValue(null);
+        //configurar para boton Ingresar viaje onAction="#clearZonasChoiceBox"
+        //llamar nuevamente cargarZonasChoiceBox() tras actualizacion
     }
 
     @FXML public void mostrarPaneIncio(){

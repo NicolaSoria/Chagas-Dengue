@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.function.Function;
 
-public class SeleccionarController {
+public class SeleccionarController<Object> {
 
     @FXML
     private Label lblTitulo;
@@ -45,7 +45,7 @@ public class SeleccionarController {
         });
     }
 
-    public void configurar(String titulo, List<?> elementos, Function<Object, String> mostrar) {
+    public void configurar(String titulo, List<Object> elementos, Function<Object, String> mostrar) {
 
         lblTitulo.setText(titulo);
 
@@ -99,7 +99,7 @@ public class SeleccionarController {
 
         for (Camioneta c : camionetas) {
 
-            listItems.getItems().add(c); // <-- objeto Camioneta real
+            listItems.getItems().add((Object) c); // <-- objeto Camioneta real
 
 
 //            listItems.getItems().add(

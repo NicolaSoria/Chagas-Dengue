@@ -11,7 +11,7 @@ public class ZonaDAO implements interfaceDAO<Zona,String>{
 
     private Connection conexion;
 
-    public ZonaDAO(Connection conexion){
+    public ZonaDAO(){
         this.conexion = ConexionBD.getInstancia().getConexion();
     }
 

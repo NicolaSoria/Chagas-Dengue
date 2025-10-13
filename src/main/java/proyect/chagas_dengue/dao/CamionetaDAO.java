@@ -55,6 +55,8 @@ public class CamionetaDAO {
                 );
                 lista.add(c);
             }
+        }catch (SQLException e){
+            e.printStackTrace();
         }
         return lista;
     }
