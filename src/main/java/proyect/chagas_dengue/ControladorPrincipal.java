@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.stage.Modality;
@@ -492,6 +493,32 @@ public class ControladorPrincipal {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private Button btnGuardarElementos;
+
+    @FXML
+    private void onGuardar() {
+        // Crear una lista general
+        List<Object> listaGeneral = new ArrayList<>();
+
+        // Agregar todos los elementos de cada tabla
+        listaGeneral.addAll(tableCamionetas.getItems());
+        listaGeneral.addAll(tableQuimicos.getItems());
+        listaGeneral.addAll(tableMaquinas.getItems());
+
+        // Mostrar en consola (para probar)
+        System.out.println("Elementos guardados:");
+        for (Object obj : listaGeneral) {
+            System.out.println(" - " + obj);
+        }
+
+        // Aquí podés hacer lo que necesites con la lista:
+        // ✅ Guardarla en base de datos
+        // ✅ Pasarla a otro controlador
+        // ✅ Usarla para generar un informe
+    }
+
 
 }
 

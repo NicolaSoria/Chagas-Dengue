@@ -28,5 +28,12 @@ public class ProductoQuimico {
     public String getNombre() { return nombre; }
     public String getMarca() { return marca; }
     public double getPresentacion() { return presentacion; }
+
+    @Override
+    public String toString() {
+        return "Producto: " + nombre + " | Marca: " + marca + " | Presentación: " + presentacion;
+    }
+
 }
+
 
