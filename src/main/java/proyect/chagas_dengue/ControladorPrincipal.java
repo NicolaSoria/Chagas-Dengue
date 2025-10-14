@@ -25,9 +25,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import proyect.chagas_dengue.conexion.ConexionBD;
@@ -36,7 +35,6 @@ import proyect.chagas_dengue.interfaz.SeleccionarController;
 import proyect.chagas_dengue.modelos.*;
 
 import java.awt.event.ActionEvent;
-import java.util.List;
 
 public class ControladorPrincipal {
 
@@ -133,7 +131,7 @@ public class ControladorPrincipal {
         Map<String, Integer> contCamionetas = new HashMap<>(); // Para camionetas
         Map<String, Integer> contMaquinas = new HashMap<>();   // Para máquinas
 
-        // 1. PROCESAR PRODUCTOS QUÍMICOS
+        // PRODUCTOS QUÍMICOS
         ObservableList<ProductoQuimico> todosLosProductos = tableQuimicos.getItems();
         List<ProductoQuimico> listaProductos = new ArrayList<>(todosLosProductos);
 
@@ -248,7 +246,49 @@ public class ControladorPrincipal {
         }
     }
                     // ############## ARREGLAR ######################
-    /*@FXML
+
+    // Método nuevo para actualizar el mapa de objetos para el PDF
+    private void actualizarMapaObjetos() {
+        objetos.clear(); // Limpiar el mapa existente
+
+        // 1. AGREGAR PRODUCTOS QUÍMICOS
+        ObservableList<ProductoQuimico> todosLosProductos = tableQuimicos.getItems();
+        List<ProductoQuimico> listaProductos = new ArrayList<>(todosLosProductos);
+
+        for (ProductoQuimico producto : listaProductos) {
+            String clave = "PRODUCTO: " + producto.getNombre();
+            objetos.put(clave, objetos.getOrDefault(clave, 0) + 1);
+        }
+
+        // 2. AGREGAR ELEMENTOS DE SEGURIDAD
+        if (tableElementos != null) {
+            ObservableList<ElementoDeSeguridad> todosElementosSeguridad = tableElementos.getItems();
+            for (ElementoDeSeguridad elemento : todosElementosSeguridad) {
+                String clave = "SEGURIDAD: " + elemento.getDescripcion();
+                objetos.put(clave, objetos.getOrDefault(clave, 0) + 1);
+            }
+        }
+
+        // 3. AGREGAR CAMIONETAS
+        if (tableCamionetas != null) {
+            ObservableList<Camioneta> todasCamionetas = tableCamionetas.getItems();
+            for (Camioneta camioneta : todasCamionetas) {
+                String clave = "CAMIONETA: " + camioneta.getPatente();
+                objetos.put(clave, objetos.getOrDefault(clave, 0) + 1);
+            }
+        }
+
+        // 4. AGREGAR MÁQUINAS
+        if (tableMaquinas != null) {
+            ObservableList<Maquina> todasMaquinas = tableMaquinas.getItems();
+            for (Maquina maquina : todasMaquinas) {
+                String clave = "MÁQUINA: " + maquina.getTipo() + " - " + maquina.getModelo();
+                objetos.put(clave, objetos.getOrDefault(clave, 0) + 1);
+            }
+        }
+    }
+
+    @FXML
     private void generarPDF() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Guardar PDF");
@@ -260,6 +300,8 @@ public class ControladorPrincipal {
         File file = fileChooser.showSaveDialog(null);
         if (file != null) {
             try {
+                // Asegurarse de que el mapa objetos esté actualizado
+                actualizarMapaObjetos();
                 generarPDFConPDFBox(file);
                 lblMensajePDF.setText("PDF generado exitosamente: " + file.getName());
                 lblMensajePDF.setStyle("-fx-text-fill: #28a745;");
@@ -269,134 +311,165 @@ public class ControladorPrincipal {
                 lblMensajePDF.setStyle("-fx-text-fill: #dc3545;");
             }
         }
-    }*/
+    }
 
-    /*private void generarPDFConPDFBox(File file) throws IOException {
+    private void generarPDFConPDFBox(File file) throws IOException {
         try (PDDocument document = new PDDocument()) {
-
             PDPage page = new PDPage();
             document.addPage(page);
-
             PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
-            float margin = 50;
-            float yPosition = 750;
-            float lineHeight = 20;
+            try {
+                float margin = 50;
+                float yPosition = 750;
+                float lineHeight = 20;
 
-            // ====== Título ======
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 18);
-            contentStream.beginText();
-            contentStream.newLineAtOffset(margin, yPosition);
-            contentStream.showText("Elementos de viaje");
-            contentStream.endText();
-
-            yPosition -= lineHeight * 2;
-
-            // ====== Fecha ======
-            contentStream.setFont(PDType1Font.HELVETICA, 12);
-            contentStream.beginText();
-            contentStream.newLineAtOffset(margin, yPosition);
-            contentStream.showText("Generado: " + LocalDateTime.now());
-            contentStream.endText();
-
-            yPosition -= lineHeight * 2;
-
-            // ====== Línea separadora ======
-            contentStream.moveTo(margin, yPosition);
-            contentStream.lineTo(margin + 500, yPosition);
-            contentStream.stroke();
-
-            yPosition -= lineHeight;
-
-            // ====== Encabezados ======
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
-            contentStream.beginText();
-            contentStream.newLineAtOffset(margin, yPosition);
-            contentStream.showText("Nº");
-            contentStream.endText();
-
-            contentStream.beginText();
-            contentStream.newLineAtOffset(margin + 30, yPosition);
-            contentStream.showText("ELEMENTO");
-            contentStream.endText();
-
-            contentStream.beginText();
-            contentStream.newLineAtOffset(margin + 350, yPosition);
-            contentStream.showText("CANTIDAD");
-            contentStream.endText();
-
-            yPosition -= lineHeight;
-
-            contentStream.moveTo(margin, yPosition);
-            contentStream.lineTo(margin + 500, yPosition);
-            contentStream.stroke();
-
-            yPosition -= lineHeight;
-
-            // ====== Contenido dinámico ======
-            contentStream.setFont(PDType1Font.HELVETICA, 12);
-            int contador = 1;
-
-            for (Map.Entry<String, Integer> entry : objetos.entrySet()) {
-                // Verificar si se necesita una nueva página
-                if (yPosition < margin + 50) {
-                    // Cerrar el contentStream actual
-                    contentStream.close();
-
-                    // Crear nueva página
-                    PDPage newPage = new PDPage();
-                    document.addPage(newPage);
-                    contentStream = new PDPageContentStream(document, newPage);
-                    contentStream.setFont(PDType1Font.HELVETICA, 12);
-
-                    yPosition = 750;
-                }
-
-                // Número
+                // ====== Título ======
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 18);
                 contentStream.beginText();
                 contentStream.newLineAtOffset(margin, yPosition);
-                contentStream.showText(contador + ".");
+                contentStream.showText("LISTA DE ELEMENTOS DEL VIAJE");
                 contentStream.endText();
 
-                // Nombre
+                yPosition -= lineHeight * 2;
+
+                // ====== Fecha ======
+                contentStream.setFont(PDType1Font.HELVETICA, 12);
+                contentStream.beginText();
+                contentStream.newLineAtOffset(margin, yPosition);
+                contentStream.showText("Generado: " + java.time.LocalDateTime.now());
+                contentStream.endText();
+
+                yPosition -= lineHeight * 2;
+
+                // ====== Línea separadora ======
+                contentStream.moveTo(margin, yPosition);
+                contentStream.lineTo(margin + 500, yPosition);
+                contentStream.stroke();
+
+                yPosition -= lineHeight;
+
+                // ====== Encabezados ======
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+                contentStream.beginText();
+                contentStream.newLineAtOffset(margin, yPosition);
+                contentStream.showText("Nº");
+                contentStream.endText();
+
                 contentStream.beginText();
                 contentStream.newLineAtOffset(margin + 30, yPosition);
-                contentStream.showText(entry.getKey());
+                contentStream.showText("ELEMENTO");
                 contentStream.endText();
 
-                // Cantidad
                 contentStream.beginText();
                 contentStream.newLineAtOffset(margin + 350, yPosition);
-                contentStream.showText("x" + entry.getValue());
+                contentStream.showText("CANTIDAD");
                 contentStream.endText();
 
                 yPosition -= lineHeight;
-                contador++;
+
+                // Línea bajo encabezados
+                contentStream.moveTo(margin, yPosition);
+                contentStream.lineTo(margin + 500, yPosition);
+                contentStream.stroke();
+
+                yPosition -= lineHeight;
+
+                // ====== Contenido dinámico ======
+                contentStream.setFont(PDType1Font.HELVETICA, 12);
+                int contador = 1;
+
+                for (Map.Entry<String, Integer> entry : objetos.entrySet()) {
+                    // Verificar si se necesita una nueva página
+                    if (yPosition < margin + 50) {
+                        contentStream.close();
+
+                        // Crear nueva página
+                        PDPage newPage = new PDPage();
+                        document.addPage(newPage);
+                        contentStream = new PDPageContentStream(document, newPage);
+                        contentStream.setFont(PDType1Font.HELVETICA, 12);
+
+                        yPosition = 750;
+
+                        // Volver a poner encabezados en nueva página
+                        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+                        contentStream.beginText();
+                        contentStream.newLineAtOffset(margin, yPosition);
+                        contentStream.showText("Nº");
+                        contentStream.endText();
+
+                        contentStream.beginText();
+                        contentStream.newLineAtOffset(margin + 30, yPosition);
+                        contentStream.showText("ELEMENTO");
+                        contentStream.endText();
+
+                        contentStream.beginText();
+                        contentStream.newLineAtOffset(margin + 350, yPosition);
+                        contentStream.showText("CANTIDAD");
+                        contentStream.endText();
+
+                        yPosition -= lineHeight;
+                        contentStream.moveTo(margin, yPosition);
+                        contentStream.lineTo(margin + 500, yPosition);
+                        contentStream.stroke();
+                        yPosition -= lineHeight;
+
+                        contentStream.setFont(PDType1Font.HELVETICA, 12);
+                    }
+
+                    // Número
+                    contentStream.beginText();
+                    contentStream.newLineAtOffset(margin, yPosition);
+                    contentStream.showText(contador + ".");
+                    contentStream.endText();
+
+                    // Nombre del elemento (recortar si es muy largo)
+                    String elemento = entry.getKey();
+                    if (elemento.length() > 40) {
+                        elemento = elemento.substring(0, 40) + "...";
+                    }
+
+                    contentStream.beginText();
+                    contentStream.newLineAtOffset(margin + 30, yPosition);
+                    contentStream.showText(elemento);
+                    contentStream.endText();
+
+                    // Cantidad
+                    contentStream.beginText();
+                    contentStream.newLineAtOffset(margin + 350, yPosition);
+                    contentStream.showText("x" + entry.getValue());
+                    contentStream.endText();
+
+                    yPosition -= lineHeight;
+                    contador++;
+                }
+
+                // ====== Línea final ======
+                yPosition -= lineHeight;
+                contentStream.moveTo(margin, yPosition);
+                contentStream.lineTo(margin + 500, yPosition);
+                contentStream.stroke();
+
+                yPosition -= lineHeight;
+
+                // ====== Total ======
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+                contentStream.beginText();
+                contentStream.newLineAtOffset(margin, yPosition);
+                int totalElementos = objetos.values().stream().mapToInt(Integer::intValue).sum();
+                contentStream.showText("TOTAL DE ELEMENTOS: " + totalElementos);
+                contentStream.endText();
+
+            } finally {
+                contentStream.close();
             }
-
-            // ====== Línea final ======
-            yPosition -= lineHeight;
-            contentStream.moveTo(margin, yPosition);
-            contentStream.lineTo(margin + 500, yPosition);
-            contentStream.stroke();
-
-            yPosition -= lineHeight;
-
-            // ====== Total ======
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
-            contentStream.beginText();
-            contentStream.newLineAtOffset(margin, yPosition);
-            int totalElementos = objetos.values().stream().mapToInt(Integer::intValue).sum();
-            contentStream.showText("TOTAL DE ELEMENTOS: " + totalElementos);
-            contentStream.endText();
-
-            // Cerrar el último contentStream
-            contentStream.close();
 
             // Guardar documento
             document.save(file);
         }
-    } */
+    }
+
 
 //    @FXML
 //    private void mostrarSeleccion() {
