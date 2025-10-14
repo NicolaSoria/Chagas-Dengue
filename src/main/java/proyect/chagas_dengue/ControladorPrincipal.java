@@ -519,6 +519,129 @@ public class ControladorPrincipal {
         // ✅ Usarla para generar un informe
     }
 
+//Borrar elementos de la tabla
+
+    @FXML
+    private Button btnEditar;
+
+    private boolean modoEdicion = false;
+
+    @FXML private Button btnEditarCamionetas;
+    @FXML private Button btnEditarQuimicos;
+    @FXML private Button btnEditarMaquinas;
+
+    private boolean editandoCamionetas = false;
+    private boolean editandoQuimicos = false;
+    private boolean editandoMaquinas = false;
+
+    @FXML
+    private void onEditarCamionetas() {
+        editandoCamionetas = !editandoCamionetas;
+        if (editandoCamionetas) {
+            btnEditarCamionetas.setText("Cancelar");
+            btnEditarCamionetas.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;"); // rojo
+            agregarColumnaBorrar(tableCamionetas);
+        } else {
+            btnEditarCamionetas.setText("Editar");
+            btnEditarCamionetas.setStyle("");
+            quitarColumnaBorrar(tableCamionetas);
+        }
+    }
+
+    @FXML
+    private void onEditarQuimicos() {
+        editandoQuimicos = !editandoQuimicos;
+        if (editandoQuimicos) {
+            btnEditarQuimicos.setText("Cancelar");
+            btnEditarQuimicos.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;"); // rojo
+            agregarColumnaBorrar(tableQuimicos);
+        } else {
+            btnEditarQuimicos.setText("Editar");
+            btnEditarQuimicos.setStyle("");
+            quitarColumnaBorrar(tableQuimicos);
+        }
+    }
+
+    @FXML
+    private void onEditarMaquinas() {
+        editandoMaquinas = !editandoMaquinas;
+        if (editandoMaquinas) {
+            btnEditarMaquinas.setText("Cancelar");
+            btnEditarMaquinas.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;"); // rojo
+            agregarColumnaBorrar(tableMaquinas);
+        } else {
+            btnEditarMaquinas.setText("Editar");
+            btnEditarMaquinas.setStyle("");
+            quitarColumnaBorrar(tableMaquinas);
+        }
+    }
+
+//    @FXML
+//    private void onEditar() {
+//        modoEdicion = !modoEdicion; // alternar entre editar / no editar
+//
+//        if (modoEdicion) {
+//            btnEditar.setText("Cancelar");
+//            agregarColumnaBorrar(tableCamionetas);
+//            agregarColumnaBorrar(tableQuimicos);
+//            agregarColumnaBorrar(tableMaquinas);
+//        } else {
+//            btnEditar.setText("Editar");
+//            quitarColumnaBorrar(tableCamionetas);
+//            quitarColumnaBorrar(tableQuimicos);
+//            quitarColumnaBorrar(tableMaquinas);
+//        }
+//    }
+
+    private <T> void agregarColumnaBorrar(TableView<T> tabla) {
+        // Evitar duplicar la columna si ya existe
+        for (TableColumn<T, ?> col : tabla.getColumns()) {
+            if ("Acciones".equals(col.getText())) {
+                return;
+            }
+        }
+
+        TableColumn<T, Void> colAccion = new TableColumn<>("Acciones");
+
+        colAccion.setCellFactory(tc -> new TableCell<>() {
+            private final Button btnBorrar = new Button("✖");
+
+            {
+                btnBorrar.setOnAction(e -> {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                            "¿Eliminar este elemento?", ButtonType.YES, ButtonType.NO);
+                    alert.showAndWait();
+
+                    if (alert.getResult() == ButtonType.YES) {
+                        T item = getTableView().getItems().get(getIndex());
+                        getTableView().getItems().remove(item);
+                        System.out.println("Eliminado: " + item);
+                    }
+//                    T item = getTableView().getItems().get(getIndex());
+//                    getTableView().getItems().remove(item);
+//                    System.out.println("Eliminado: " + item);
+                });
+
+                btnBorrar.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;");
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(btnBorrar);
+                }
+            }
+        });
+
+        tabla.getColumns().add(colAccion);
+    }
+
+    private <T> void quitarColumnaBorrar(TableView<T> tabla) {
+        tabla.getColumns().removeIf(col -> "Acciones".equals(col.getText()));
+    }
 
 }
 
