@@ -21,6 +21,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,15 +30,10 @@ import java.util.HashMap;
 import java.util.Map;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import proyect.chagas_dengue.dao.CamionetaDAO;
-import proyect.chagas_dengue.dao.MaquinaDAO;
-import proyect.chagas_dengue.dao.ProductoDAO;
-import proyect.chagas_dengue.dao.ZonaDAO;
+import proyect.chagas_dengue.conexion.ConexionBD;
+import proyect.chagas_dengue.dao.*;
 import proyect.chagas_dengue.interfaz.SeleccionarController;
-import proyect.chagas_dengue.modelos.Camioneta;
-import proyect.chagas_dengue.modelos.Maquina;
-import proyect.chagas_dengue.modelos.ProductoQuimico;
-import proyect.chagas_dengue.modelos.Zona;
+import proyect.chagas_dengue.modelos.*;
 
 import java.awt.event.ActionEvent;
 import java.util.List;
@@ -299,18 +295,39 @@ public class ControladorPrincipal {
         }
     }
 
-    /*@FXML
-    private void mostrarSeleccion() {
+//    @FXML
+//    private void mostrarSeleccion() {
+//        Toggle seleccionado = tipoViajeOpcs.getSelectedToggle();
+//
+//
+//        if (seleccionado == radbtnDiaPaneDestPrepViaje) {
+//            System.out.println("Seleccion: Opción Diario");
+//        } else if (seleccionado == radbtnBarrPaneDestPrepViaje) {
+//            System.out.println("Seleccion: Opción Barrido");
+//        } else {
+//            System.out.println("No hay ninguna opción seleccionada");
+//        }
+//    }
+
+    private String obtenerTipoViajeSeleccionado() {
         Toggle seleccionado = tipoViajeOpcs.getSelectedToggle();
 
         if (seleccionado == radbtnDiaPaneDestPrepViaje) {
-            System.out.println("Seleccion: Opción Diario");
+            return "Diario";
         } else if (seleccionado == radbtnBarrPaneDestPrepViaje) {
-            System.out.println("Seleccion: Opción Barrido");
+            return "Barrido";
         } else {
-            System.out.println("No hay ninguna opción seleccionada");
+            return null; // o "Ninguno"
         }
-    }*/
+    }
+
+    @FXML
+    private void onSiguiente(ActionEvent event) {
+
+    }
+
+
+//    private Connection conn;
 
     // ========== CAMIONETAS ==========
     @FXML private TableView<Camioneta> tableCamionetas;
@@ -332,6 +349,17 @@ public class ControladorPrincipal {
     @FXML private TableColumn<Maquina, String> colMaqModelo;
     @FXML private TableColumn<Maquina, Maquina.TipoM> colMaqTipo;
 
+    // ========== ELEMENTOS DE SEGURIDAD ==========
+
+    @FXML
+    private TableView<ElementoDeSeguridad> tableElementos;
+
+    @FXML
+    private TableColumn<ElementoDeSeguridad, String> colDescripcion;
+
+    @FXML
+    private TableColumn<ElementoDeSeguridad, String> colEstado;
+
     private void configurarColumnas() {
         // Camionetas
 
@@ -350,6 +378,11 @@ public class ControladorPrincipal {
         colMaqMarca.setCellValueFactory(new PropertyValueFactory<>("marca"));
         colMaqModelo.setCellValueFactory(new PropertyValueFactory<>("modelo"));
         colMaqTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+
+        //Elementos de seguridad
+
+        colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+        colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
     }
 
     private void cargarDatos() {
@@ -520,5 +553,59 @@ public class ControladorPrincipal {
     }
 
 
+//    @FXML
+//    private void onCargarElementos() {
+//        String tipoViaje = obtenerTipoViajeSeleccionado();
+//        if (tipoViaje != null) {
+//            cargarElementosSeguridad(tipoViaje);
+//            System.out.println("Cargando elementos para viaje: " + tipoViaje);
+//        } else {
+//            System.out.println("⚠ No se ha seleccionado ningún tipo de viaje");
+//        }
+//    }
+
+
+
+//    public void cargarElementosSeguridad(String tipoViaje) {
+//        try {
+//            ElementoSeguridadDAO dao = new ElementoSeguridadDAO(conn);
+//            tableElementos.getItems().setAll(dao.listarPorTipoViaje(tipoViaje));
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    public void onSiguiente(javafx.event.ActionEvent actionEvent) {
+        // Obtener el tipo de viaje
+        String tipoViaje = obtenerTipoViajeSeleccionado();
+
+        if (tipoViaje != null) {
+            try {
+                // 1️⃣ Crear la conexión (si tu clase no tiene métodos estáticos)
+
+                Connection conn = ConexionBD.getConexion();
+
+                // 2️⃣ Crear el DAO con esa conexión
+                ElementoSeguridadDAO dao = new ElementoSeguridadDAO(conn);
+
+                // 3️⃣ Obtener la lista de elementos según el tipo de viaje
+                List<ElementoDeSeguridad> lista = dao.listarPorTipoViaje(tipoViaje);
+
+                // 4️⃣ Cargar la lista en la tabla
+                tableElementos.getItems().setAll(lista);
+
+                System.out.println("✅ Se cargaron los elementos de seguridad para el viaje " + tipoViaje);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            System.out.println("⚠ No se ha seleccionado ningún tipo de viaje");
+        }
+
+        // Cambiar al panel de elementos
+        mostrarPanelElementos();
+    }
 }
 
