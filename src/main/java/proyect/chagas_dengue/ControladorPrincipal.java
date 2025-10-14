@@ -539,6 +539,8 @@ public class ControladorPrincipal {
         listaGeneral.addAll(tableCamionetas.getItems());
         listaGeneral.addAll(tableQuimicos.getItems());
         listaGeneral.addAll(tableMaquinas.getItems());
+        listaGeneral.addAll(tableElementos.getItems());
+
 
         // Mostrar en consola (para probar)
         System.out.println("Elementos guardados:");
