@@ -235,15 +235,19 @@
 
                     <Tab fx:id="tabListPrepViaje" styleClass="submenu-tab" text="Listar">
                         <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20;">
-                            <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #363535;" text="Lista de Elementos del Viaje (Ejemplo)" />
+                            <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #363535;"
+                                   text="Lista de Elementos del Viaje" />
 
-                            <!-- Lista de objetos -->
-                            <VBox fx:id="listaContainer" spacing="8" styleClass="ListarCont">
-                            </VBox>
+                            <!-- ScrollPane para la lista -->
+                            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                                        style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                                <VBox fx:id="listaContainer" spacing="8" styleClass="ListarCont">
+                                    <!-- Los labels se generarán automáticamente desde el controlador -->
+                                </VBox>
+                            </ScrollPane>
 
-                            <!-- Botón para generar PDF -->
                             <HBox alignment="CENTER" spacing="20">
-                                <Button fx:id="btnGenerarPDF" onAction="#generarPDF" styleClass="Btngenerar" text="Generar PDF" />
+                                <Button fx:id="btnGenerarPDF" styleClass="Btngenerar" text="Generar PDF"/>
                                 <Button fx:id="btnActualizarLista" onAction="#actualizarLista" styleClass="BtnActualizar" text="Actualizar Lista" />
                             </HBox>
 
