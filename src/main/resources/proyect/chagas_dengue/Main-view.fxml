@@ -154,7 +154,7 @@
 
                                                                 <HBox alignment="CENTER" spacing="10">
                                                                     <Button fx:id="btnAñadirProducto" onAction="#onAñadirProducto" prefWidth="100" text="Agregar..." />
-                                                                    <Button prefWidth="100" text="Editar..." />
+                                                                    <Button fx:id="btnEditarQuimicos" onAction="#onEditarQuimicos" prefWidth="100" text="Editar..." />
                                                                 </HBox>
                                                             </VBox>
                                                         </content>
@@ -180,7 +180,7 @@
 
                                                                 <HBox alignment="CENTER" spacing="10">
                                                                     <Button fx:id="btnAñadirCamioneta" onAction="#onAñadirCamioneta" prefWidth="100" text="Agregar..." />
-                                                                    <Button prefWidth="100" text="Editar..." />
+                                                                    <Button fx:id="btnEditarCamionetas" onAction="#onEditarCamionetas" prefWidth="100" text="Editar..." />
                                                                 </HBox>
                                                             </VBox>
                                                         </content>
@@ -207,7 +207,7 @@
 
                                                                 <HBox alignment="CENTER" spacing="10">
                                                                     <Button fx:id="btnAñadirMaquina" onAction="#onAñadirMaquina" prefWidth="100" text="Agregar..." />
-                                                                    <Button prefWidth="100" text="Editar..." />
+                                                                    <Button fx:id="btnEditarMaquinas" onAction="#onEditarMaquinas" prefWidth="100" text="Editar..." />
                                                                 </HBox>
                                                             </VBox>
                                                         </content>
