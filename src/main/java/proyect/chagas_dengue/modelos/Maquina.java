@@ -39,5 +39,12 @@ public abstract class Maquina {
     public TipoM getTipo() {return tipo;}
 
     public void setTipo(TipoM tipo) {this.tipo = tipo;}
+
+    @Override
+    public String toString() {
+        return "Máquina: " + marca + " | Modelo: " + modelo + " | Tipo: " + tipo;
+    }
+
+
 }
 

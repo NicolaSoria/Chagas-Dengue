@@ -84,7 +84,7 @@
 
                                     <children>
                                         <!-- Contenedor principal para alinear verticalmente -->
-                                        <VBox alignment="CENTER" spacing="10" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                        <VBox alignment="CENTER" layoutY="19.0" prefHeight="541.0" prefWidth="800.0" spacing="10" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="19.0">
 
                                             <!-- Labels arriba del Accordion -->
                                             <HBox spacing="20">
@@ -106,7 +106,7 @@
                                             </Label>
 
                                             <!-- Accordion ocupa todo el espacio restante -->
-                                            <Accordion fx:id="accordion" VBox.vgrow="ALWAYS">
+                                            <Accordion fx:id="accordion" prefHeight="406.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
 
                                                 <panes>
                                                     <!-- Elementos de seguridad -->
@@ -187,7 +187,7 @@
                                                     </TitledPane>
 
                                                     <!-- Maquinas -->
-                                                    <TitledPane animated="false" text="Maquinas">
+                                                    <TitledPane animated="false" expanded="false" prefHeight="343.0" prefWidth="800.0" text="Maquinas">
                                                         <content>
                                                             <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">
                                                                 <Label text="Máquina(s)">
@@ -214,7 +214,7 @@
                                                     </TitledPane>
                                                 </panes>
                                             </Accordion>
-                                            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Guardar" />
+                                            <Button fx:id="btnGuardarElementos" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onGuardar" text="Guardar" />
                                         </VBox>
                                     </children>
                                 </AnchorPane>
