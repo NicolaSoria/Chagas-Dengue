@@ -34,5 +34,9 @@ public class Zona {
     public String getLocalidad(){return localidad;}
     public String getDepartamento(){return departamento;}
 
+    public String toString(){
+        return nombre;
+    }
+
 }
 

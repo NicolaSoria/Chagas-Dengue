@@ -40,6 +40,8 @@ import java.util.List;
 
 public class ControladorPrincipal {
 
+    @FXML private ChoiceBox<Zona> chBoxDestPnDestPrepViaje2;
+    @FXML private ChoiceBox<Zona> chBoxDestPnDestPrepViaje3;
     @FXML private RadioButton radbtnDiaPaneDestPrepViaje;
     @FXML private RadioButton radbtnBarrPaneDestPrepViaje;
     @FXML private ToggleGroup tipoViajeOpcs;
@@ -49,7 +51,7 @@ public class ControladorPrincipal {
     @FXML private TabPane mainTabPane;
     @FXML private Tab tabDestPrepViaje;
     @FXML private Tab tabElmsPrepViaje;
-    @FXML private ChoiceBox<String> chBoxDestPnDestPrepViaje;
+    @FXML private ChoiceBox<Zona> chBoxDestPnDestPrepViaje;
     @FXML private DatePicker datePnDestPrepViaje;
     @FXML private Button btnSigPnDestPrepViaje;
     @FXML private TabPane tabPanePrepViaje;
@@ -89,15 +91,18 @@ public class ControladorPrincipal {
 
     @FXML private void cargarZonasChoiceBox(){
         List<Zona> zonas = zonaDAO.listarTodos();
-
-        for(Zona z : zonas){
-            chBoxDestPnDestPrepViaje.getItems().add(z.getNombre());
-        }
+        chBoxDestPnDestPrepViaje.getItems().setAll(zonas);
+        chBoxDestPnDestPrepViaje2.getItems().setAll(zonas);
+        chBoxDestPnDestPrepViaje3.getItems().setAll(zonas);
     }
 
     @FXML private void clearZonasChoiceBox(){
         chBoxDestPnDestPrepViaje.getItems().clear();
         chBoxDestPnDestPrepViaje.setValue(null);
+        chBoxDestPnDestPrepViaje2.getItems().clear();
+        chBoxDestPnDestPrepViaje2.setValue(null);
+        chBoxDestPnDestPrepViaje3.getItems().clear();
+        chBoxDestPnDestPrepViaje3.setValue(null);
         //configurar para boton Ingresar viaje onAction="#clearZonasChoiceBox"
         //llamar nuevamente cargarZonasChoiceBox() tras actualizacion
 
