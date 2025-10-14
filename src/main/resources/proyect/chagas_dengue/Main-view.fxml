@@ -40,7 +40,7 @@
                                         </font>
                                     </Label>
                                     <DatePicker fx:id="datePnDestPrepViaje" layoutX="277.0" layoutY="230.0" />
-                                    <Button fx:id="btnSigPnDestPrepViaje" layoutX="358.0" layoutY="411.0" mnemonicParsing="false" onAction="#mostrarPanelElementos" text="Siguiente">
+                                    <Button fx:id="btnSigPnDestPrepViaje" layoutX="358.0" layoutY="411.0" mnemonicParsing="false" onAction="#onSiguiente" text="Siguiente">
                                         <font>
                                             <Font size="18.0" />
                                         </font>
@@ -110,7 +110,7 @@
 
                                                 <panes>
                                                     <!-- Elementos de seguridad -->
-                                                    <TitledPane animated="false" text="Elementos de seguridad">
+                                                    <TitledPane animated="false" expanded="false" text="Elementos de seguridad">
                                                         <content>
                                                             <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">
                                                                 <Label text="Elementos de seguridad">
@@ -119,17 +119,16 @@
                                                                     </font>
                                                                 </Label>
 
-                                                                <TableView fx:id="tableSeguridad" prefHeight="200" prefWidth="650">
+                                                                <TableView fx:id="tableElementos" prefHeight="200" prefWidth="650">
                                                                     <columns>
-                                                                        <TableColumn prefWidth="75" text="C1" />
-                                                                        <TableColumn prefWidth="75" text="C2" />
+
+                                                                        <TableColumn fx:id="colEstado" prefWidth="100" text="Estado" />
+                                                                        <TableColumn fx:id="colDescripcion" prefWidth="150" text="Descripción" />
+
                                                                     </columns>
                                                                 </TableView>
 
-                                                                <HBox alignment="CENTER" spacing="10">
-                                                                    <Button prefWidth="100" text="Agregar..." />
-                                                                    <Button prefWidth="100" text="Editar..." />
-                                                                </HBox>
+                                                                <HBox alignment="CENTER" spacing="10" />
                                                             </VBox>
                                                         </content>
                                                     </TitledPane>

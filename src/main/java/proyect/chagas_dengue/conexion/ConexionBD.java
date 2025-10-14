@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class ConexionBD {
 
     private static ConexionBD instancia;
-    private Connection conexion;
+    private static Connection conexion;
 
     // Cambiá los valores según tu configuración
     private static final String URL = "jdbc:mysql://localhost:3306/proychagas";
@@ -31,7 +31,7 @@ public class ConexionBD {
         return instancia;
     }
 
-    public Connection getConexion() {
+    public static Connection getConexion() {
         try {
             if(conexion == null || conexion.isClosed()){
                 conexion = DriverManager.getConnection(URL,USER,PASSWORD);
