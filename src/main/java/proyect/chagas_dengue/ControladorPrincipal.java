@@ -180,6 +180,16 @@ public class ControladorPrincipal {
             destinoDAO.insertar(destino);
         }
 
+        ObservableList<Camioneta> camionetas = tableCamionetas.getItems();
+        if (camionetas.isEmpty()) {
+            mostrarAlerta("Aviso", "No se registró ninguna camioneta para este viaje.");
+        } else {
+            UsanDAO usanDAO = new UsanDAO();
+            for (Camioneta c : camionetas) {
+                usanDAO.insertar(new Usan(nuevo.getVCod(), c.getCCod()));
+            }
+        }
+
         clearZonas();
     }
 
@@ -606,7 +616,7 @@ public class ControladorPrincipal {
     private void configurarColumnas() {
         // Camionetas
 
-        colCamionetaCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+        colCamionetaCodigo.setCellValueFactory(new PropertyValueFactory<>("CCod"));
         colCamionetaPatente.setCellValueFactory(new PropertyValueFactory<>("patente"));
         colCamionetaEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
@@ -775,6 +785,28 @@ public class ControladorPrincipal {
 
     @FXML
     private void onGuardar() {
+
+        if (tableElementos.getItems().isEmpty()) {
+            mostrarAlerta("Error", "No se registró ningún elemento de seguridad.");
+            return;
+        }
+
+        if (tableQuimicos.getItems().isEmpty()) {
+            mostrarAlerta("Error", "No se registró ningún producto químico.");
+            return;
+        }
+
+        if (tableCamionetas.getItems().isEmpty()) {
+            mostrarAlerta("Error", "No se registró ninguna camioneta.");
+            return;
+        }
+
+        if (tableMaquinas.getItems().isEmpty()) {
+            mostrarAlerta("Error", "No se registró ninguna máquina.");
+            return;
+        }
+
+
         // Crear una lista general
         List<Object> listaGeneral = new ArrayList<>();
 
@@ -791,10 +823,9 @@ public class ControladorPrincipal {
             System.out.println(" - " + obj);
         }
 
-        // la lista generada permite:
-        // guardarla en base de datos
-        // pasarla a otro controlador
-        // usarla para generar el informe
+        mostrarAlerta("Éxito", "Elementos guardados correctamente");
+
+
     }
 
 //Borrar elementos de la tabla

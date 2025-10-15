@@ -1,28 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Accordion?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox stylesheets="@estilos.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyect.chagas_dengue.ControladorPrincipal">
+<VBox stylesheets="@estilos.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyect.chagas_dengue.ControladorPrincipal">
 
     <TabPane fx:id="mainTabPane" styleClass="custom-tab-pane" tabClosingPolicy="UNAVAILABLE">
         <Tab fx:id="tabMenu" styleClass="menu-tab" text="Menu">
@@ -118,7 +101,7 @@
 
                                                 <panes>
                                                     <!-- Elementos de seguridad -->
-                                                    <TitledPane animated="false" expanded="false" text="Elementos de seguridad">
+                                                    <TitledPane animated="false" text="Elementos de seguridad">
                                                         <content>
                                                             <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">
                                                                 <Label text="Elementos de seguridad">
@@ -131,7 +114,7 @@
                                                                     <columns>
 
                                                                         <TableColumn fx:id="colEstado" prefWidth="100" text="Estado" />
-                                                                        <TableColumn fx:id="colDescripcion" prefWidth="150" text="Descripción" />
+                                                                        <TableColumn fx:id="colDescripcion" prefWidth="266.0" text="Descripción" />
 
                                                                     </columns>
                                                                 </TableView>
