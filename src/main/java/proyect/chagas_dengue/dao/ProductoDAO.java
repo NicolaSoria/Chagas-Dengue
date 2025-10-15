@@ -77,7 +77,7 @@ public class ProductoDAO implements interfaceDAO<ProductoQuimico,Integer> {
     }
 
     @Override
-    public void eliminar(int id) {
+    public void eliminar(Integer id) {
         String sql = "DELETE FROM Productos WHERE PCod = ?";
 
         try (PreparedStatement ps = conexion.prepareStatement(sql)){

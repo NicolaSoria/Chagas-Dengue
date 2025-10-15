@@ -6,6 +6,6 @@ public interface interfaceDAO<T,ID> {
     void insertar(T objeto);
     T consultar(ID id);
     void actualizar(T objeto);
-    void eliminar(int id);
+    void eliminar(ID id);
     List<T> listarTodos();
 }

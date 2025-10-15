@@ -105,7 +105,7 @@ public class PulverizadoraDAO implements interfaceDAO<Pulverizadora, Integer>{
     }
 
     @Override
-    public void eliminar(int id) {
+    public void eliminar(Integer id) {
         String sql = "DELETE FROM Maquinas WHERE MCod = ?";
 
         try (PreparedStatement ps = conexion.prepareStatement(sql)) {
