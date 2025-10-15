@@ -38,6 +38,7 @@ import java.awt.event.ActionEvent;
 
 public class ControladorPrincipal {
 
+    @FXML private Button btnRegistrarViajePaneListar;
     @FXML private ChoiceBox<Zona> chBoxDestPnDestPrepViaje2;
     @FXML private ChoiceBox<Zona> chBoxDestPnDestPrepViaje3;
     @FXML private RadioButton radbtnDiaPaneDestPrepViaje;
@@ -93,13 +94,12 @@ public class ControladorPrincipal {
         chBoxDestPnDestPrepViaje3.getItems().setAll(zonas);
     }
 
-    @FXML private void clearZonasChoiceBox(){
-        chBoxDestPnDestPrepViaje.getItems().clear();
+    @FXML private void clearZonas(){
         chBoxDestPnDestPrepViaje.setValue(null);
-        chBoxDestPnDestPrepViaje2.getItems().clear();
         chBoxDestPnDestPrepViaje2.setValue(null);
-        chBoxDestPnDestPrepViaje3.getItems().clear();
         chBoxDestPnDestPrepViaje3.setValue(null);
+        datePnDestPrepViaje.setValue(null);
+        tipoViajeOpcs.selectToggle(null);
         //configurar para boton Ingresar viaje onAction="#clearZonasChoiceBox"
         //llamar nuevamente cargarZonasChoiceBox() tras actualizacion
     }
@@ -114,6 +114,73 @@ public class ControladorPrincipal {
             scrPaneElmsPrepViaje.setVvalue(0); // Vertical scroll al tope
             scrPaneElmsPrepViaje.setHvalue(0); // Horizontal scroll al inicio (opcional)
         });
+    }
+
+    private void mostrarAlerta(String titulo, String msj){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(msj);
+        alert.showAndWait();
+    }
+
+    @FXML private void ingresarViaje(){
+        LocalDate fechaInicio = datePnDestPrepViaje.getValue();
+
+        if (fechaInicio == null) {
+            mostrarAlerta("Error", "Fecha no seleccionada.");
+            return;
+        }
+
+        Viaje.Tipo tipo;
+        if (radbtnDiaPaneDestPrepViaje.isSelected()){
+            tipo = Viaje.Tipo.Diario;
+        }else if (radbtnBarrPaneDestPrepViaje.isSelected()){
+            tipo = Viaje.Tipo.Barrido;
+        }else {
+            mostrarAlerta("Error","Debes seleccionar un tipo de viaje.");
+            return;
+        }
+
+        Zona dest1 = chBoxDestPnDestPrepViaje.getValue();
+        Zona dest2 = chBoxDestPnDestPrepViaje2.getValue();
+        Zona dest3 = chBoxDestPnDestPrepViaje3.getValue();
+
+        if (dest1 == null && dest2 == null && dest3 == null) {
+            mostrarAlerta("Error","Debes seleccionar al menos un destino.");
+            return;
+        }
+
+        Set<Integer> idsDests = new HashSet<>();
+        if (dest1 != null){
+            idsDests.add(dest1.getZCod());
+        }if (dest2 != null){
+            if (!idsDests.add(dest2.getZCod())){
+                mostrarAlerta("Error", "Destino repetido en seleccion.");
+                return;
+            }
+        }
+        if (dest3 != null){
+            if (!idsDests.add(dest3.getZCod())){
+                mostrarAlerta("Error","Destino repetido en seleccion.");
+                return;
+            }
+        }
+
+        Viaje nuevo = new Viaje();
+        nuevo.setFechaInicio(fechaInicio);
+        nuevo.setTipo(tipo);
+
+        ViajeDAO dao = new ViajeDAO();
+        dao.insertar(nuevo);
+
+        DestinoDAO destinoDAO = new DestinoDAO();
+        for (Integer ZCod : idsDests){
+            Destino destino = new Destino(nuevo.getVCod(),ZCod);
+            destinoDAO.insertar(destino);
+        }
+
+        clearZonas();
     }
 
     @FXML
@@ -724,10 +791,10 @@ public class ControladorPrincipal {
             System.out.println(" - " + obj);
         }
 
-        // Aquí podés hacer lo que necesites con la lista:
-        // ✅ Guardarla en base de datos
-        // ✅ Pasarla a otro controlador
-        // ✅ Usarla para generar un informe
+        // la lista generada permite:
+        // guardarla en base de datos
+        // pasarla a otro controlador
+        // usarla para generar el informe
     }
 
 //Borrar elementos de la tabla
@@ -882,27 +949,26 @@ public class ControladorPrincipal {
 
         if (tipoViaje != null) {
             try {
-                // 1️⃣ Crear la conexión (si tu clase no tiene métodos estáticos)
-
+                // crear la conexión
                 Connection conn = ConexionBD.getConexion();
 
-                // 2️⃣ Crear el DAO con esa conexión
+                // DAO con conexion
                 ElementoSeguridadDAO dao = new ElementoSeguridadDAO(conn);
 
-                // 3️⃣ Obtener la lista de elementos según el tipo de viaje
+                //lista de elementos según el tipo de viaje
                 List<ElementoDeSeguridad> lista = dao.listarPorTipoViaje(tipoViaje);
 
-                // 4️⃣ Cargar la lista en la tabla
+                // Cargar la lista en la tabla
                 tableElementos.getItems().setAll(lista);
 
-                System.out.println("✅ Se cargaron los elementos de seguridad para el viaje " + tipoViaje);
+                System.out.println("se cargaron los elementos de seguridad para el viaje " + tipoViaje);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
         } else {
-            System.out.println("⚠ No se ha seleccionado ningún tipo de viaje");
+            System.out.println("No se ha seleccionado ningún tipo de viaje");
         }
 
         // Cambiar al panel de elementos

@@ -235,12 +235,10 @@
 
                     <Tab fx:id="tabListPrepViaje" styleClass="submenu-tab" text="Listar">
                         <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20;">
-                            <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #363535;"
-                                   text="Lista de Elementos del Viaje" />
+                            <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #363535;" text="Lista de Elementos del Viaje" />
 
                             <!-- ScrollPane para la lista -->
-                            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
-                                        style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="AS_NEEDED">
                                 <VBox fx:id="listaContainer" spacing="8" styleClass="ListarCont">
                                     <!-- Los labels se generarán automáticamente desde el controlador -->
                                 </VBox>
@@ -253,6 +251,11 @@
 
                             <!-- Mensaje de confirmación -->
                             <Label fx:id="lblMensajePDF" style="-fx-font-size: 14px; -fx-text-fill: #28a745;" text="" />
+                     <HBox alignment="CENTER" prefHeight="47.0" prefWidth="760.0">
+                        <children>
+                           <Button fx:id="btnRegistrarViajePaneListar" mnemonicParsing="false" onAction="#ingresarViaje" text="Registrar viaje" />
+                        </children>
+                     </HBox>
                         </VBox>
                     </Tab>
                 </TabPane>

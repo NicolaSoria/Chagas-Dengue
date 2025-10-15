@@ -12,7 +12,7 @@ public class ViajeDAO implements interfaceDAO<Viaje,Integer>{
 
     private Connection conexion;
 
-    public ViajeDAO(Connection conexion){this.conexion = ConexionBD.getInstancia().getConexion();}
+    public ViajeDAO(){this.conexion = ConexionBD.getInstancia().getConexion();}
 
     @Override
     public void insertar(Viaje objeto) {
@@ -72,7 +72,7 @@ public class ViajeDAO implements interfaceDAO<Viaje,Integer>{
     }
 
     @Override
-    public void eliminar(int id) {
+    public void eliminar(Integer id) {
         String sql = "DELETE FROM Viajes WHERE VCod = ?";
 
         try (PreparedStatement ps = conexion.prepareStatement(sql)){

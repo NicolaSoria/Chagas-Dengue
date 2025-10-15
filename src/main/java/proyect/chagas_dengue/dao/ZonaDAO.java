@@ -78,11 +78,11 @@ public class ZonaDAO implements interfaceDAO<Zona,String>{
     }
 
     @Override
-    public void eliminar(int id) {
-        String sql = "DELETE FROM Zonas WHERE ZCod = ?";
+    public void eliminar(String id) {
+        String sql = "DELETE FROM Zonas WHERE nombre = ?";
 
         try (PreparedStatement ps = conexion.prepareStatement(sql)){
-            ps.setInt(1,id);
+            ps.setString(1,id);
             ps.executeUpdate();
         }catch (SQLException e){
             e.printStackTrace();

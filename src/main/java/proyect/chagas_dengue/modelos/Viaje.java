@@ -10,6 +10,11 @@ public class Viaje {
     private LocalDate fechaInicio;
     private Tipo tipo;
 
+    public Viaje(){
+        this.fechaInicio = null;
+        this.tipo = null;
+    }
+
     public Viaje(LocalDate fechaInicio, Tipo tipo) {
         this.fechaInicio = fechaInicio;
         this.tipo = tipo;
