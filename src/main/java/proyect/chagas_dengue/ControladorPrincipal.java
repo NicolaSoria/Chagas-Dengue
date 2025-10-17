@@ -38,7 +38,6 @@ import java.awt.event.ActionEvent;
 
 public class ControladorPrincipal {
 
-    @FXML private Button btnRegistrarViajePaneListar;
     @FXML private ChoiceBox<Zona> chBoxDestPnDestPrepViaje2;
     @FXML private ChoiceBox<Zona> chBoxDestPnDestPrepViaje3;
     @FXML private RadioButton radbtnDiaPaneDestPrepViaje;
@@ -94,12 +93,13 @@ public class ControladorPrincipal {
         chBoxDestPnDestPrepViaje3.getItems().setAll(zonas);
     }
 
-    @FXML private void clearZonas(){
+    @FXML private void clearZonasChoiceBox(){
+        chBoxDestPnDestPrepViaje.getItems().clear();
         chBoxDestPnDestPrepViaje.setValue(null);
+        chBoxDestPnDestPrepViaje2.getItems().clear();
         chBoxDestPnDestPrepViaje2.setValue(null);
+        chBoxDestPnDestPrepViaje3.getItems().clear();
         chBoxDestPnDestPrepViaje3.setValue(null);
-        datePnDestPrepViaje.setValue(null);
-        tipoViajeOpcs.selectToggle(null);
         //configurar para boton Ingresar viaje onAction="#clearZonasChoiceBox"
         //llamar nuevamente cargarZonasChoiceBox() tras actualizacion
     }
@@ -114,83 +114,6 @@ public class ControladorPrincipal {
             scrPaneElmsPrepViaje.setVvalue(0); // Vertical scroll al tope
             scrPaneElmsPrepViaje.setHvalue(0); // Horizontal scroll al inicio (opcional)
         });
-    }
-
-    private void mostrarAlerta(String titulo, String msj){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(msj);
-        alert.showAndWait();
-    }
-
-    @FXML private void ingresarViaje(){
-        LocalDate fechaInicio = datePnDestPrepViaje.getValue();
-
-        if (fechaInicio == null) {
-            mostrarAlerta("Error", "Fecha no seleccionada.");
-            return;
-        }
-
-        Viaje.Tipo tipo;
-        if (radbtnDiaPaneDestPrepViaje.isSelected()){
-            tipo = Viaje.Tipo.Diario;
-        }else if (radbtnBarrPaneDestPrepViaje.isSelected()){
-            tipo = Viaje.Tipo.Barrido;
-        }else {
-            mostrarAlerta("Error","Debes seleccionar un tipo de viaje.");
-            return;
-        }
-
-        Zona dest1 = chBoxDestPnDestPrepViaje.getValue();
-        Zona dest2 = chBoxDestPnDestPrepViaje2.getValue();
-        Zona dest3 = chBoxDestPnDestPrepViaje3.getValue();
-
-        if (dest1 == null && dest2 == null && dest3 == null) {
-            mostrarAlerta("Error","Debes seleccionar al menos un destino.");
-            return;
-        }
-
-        Set<Integer> idsDests = new HashSet<>();
-        if (dest1 != null){
-            idsDests.add(dest1.getZCod());
-        }if (dest2 != null){
-            if (!idsDests.add(dest2.getZCod())){
-                mostrarAlerta("Error", "Destino repetido en seleccion.");
-                return;
-            }
-        }
-        if (dest3 != null){
-            if (!idsDests.add(dest3.getZCod())){
-                mostrarAlerta("Error","Destino repetido en seleccion.");
-                return;
-            }
-        }
-
-        Viaje nuevo = new Viaje();
-        nuevo.setFechaInicio(fechaInicio);
-        nuevo.setTipo(tipo);
-
-        ViajeDAO dao = new ViajeDAO();
-        dao.insertar(nuevo);
-
-        DestinoDAO destinoDAO = new DestinoDAO();
-        for (Integer ZCod : idsDests){
-            Destino destino = new Destino(nuevo.getVCod(),ZCod);
-            destinoDAO.insertar(destino);
-        }
-
-        ObservableList<Camioneta> camionetas = tableCamionetas.getItems();
-        if (camionetas.isEmpty()) {
-            mostrarAlerta("Aviso", "No se registró ninguna camioneta para este viaje.");
-        } else {
-            UsanDAO usanDAO = new UsanDAO();
-            for (Camioneta c : camionetas) {
-                usanDAO.insertar(new Usan(nuevo.getVCod(), c.getCCod()));
-            }
-        }
-
-        clearZonas();
     }
 
     @FXML
@@ -210,14 +133,12 @@ public class ControladorPrincipal {
 
         // PRODUCTOS QUÍMICOS
         ObservableList<ProductoQuimico> todosLosProductos = tableQuimicos.getItems();
-        List<ProductoQuimico> listaProductos = new ArrayList<>(todosLosProductos);
-
-        for (ProductoQuimico producto : listaProductos) {
+        for (ProductoQuimico producto : todosLosProductos) {
             int codigo = producto.getPCod();
             contProductos.put(codigo, contProductos.getOrDefault(codigo, 0) + 1);
         }
 
-        // 2. PROCESAR ELEMENTOS DE SEGURIDAD (si tienes la tabla)
+        // ELEMENTOS DE SEGURIDAD
         if (tableElementos != null) {
             ObservableList<ElementoDeSeguridad> todosElementosSeguridad = tableElementos.getItems();
             for (ElementoDeSeguridad elemento : todosElementosSeguridad) {
@@ -226,7 +147,7 @@ public class ControladorPrincipal {
             }
         }
 
-        // 3. PROCESAR CAMIONETAS (si tienes la tabla)
+        // CAMIONETAS
         if (tableCamionetas != null) {
             ObservableList<Camioneta> todasCamionetas = tableCamionetas.getItems();
             for (Camioneta camioneta : todasCamionetas) {
@@ -235,7 +156,7 @@ public class ControladorPrincipal {
             }
         }
 
-        // 4. PROCESAR MÁQUINAS (si tienes la tabla)
+        // MÁQUINAS
         if (tableMaquinas != null) {
             ObservableList<Maquina> todasMaquinas = tableMaquinas.getItems();
             for (Maquina maquina : todasMaquinas) {
@@ -247,7 +168,7 @@ public class ControladorPrincipal {
         // GENERAR LA LISTA VISUAL
         int contador = 1;
 
-        // A. PRODUCTOS QUÍMICOS
+        // PRODUCTOS QUÍMICOS
         if (!contProductos.isEmpty()) {
             Label seccionLabel = new Label("PRODUCTOS QUÍMICOS:");
             seccionLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 5 5 5; -fx-text-fill: #2c3e50;");
@@ -259,7 +180,7 @@ public class ControladorPrincipal {
 
                 String nombreProducto = "Producto Código " + codigo;
                 // Buscar el nombre real del producto
-                for (ProductoQuimico producto : listaProductos) {
+                for (ProductoQuimico producto : todosLosProductos) {
                     if (producto.getPCod() == codigo) {
                         nombreProducto = producto.getNombre();
                         break;
@@ -273,7 +194,7 @@ public class ControladorPrincipal {
             }
         }
 
-        // B. ELEMENTOS DE SEGURIDAD
+        // ELEMENTOS DE SEGURIDAD
         if (!contSeguridad.isEmpty()) {
             Label seccionLabel = new Label("ELEMENTOS DE SEGURIDAD:");
             seccionLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 5 5 5; -fx-text-fill: #2c3e50;");
@@ -287,7 +208,7 @@ public class ControladorPrincipal {
             }
         }
 
-        // C. CAMIONETAS
+        // CAMIONETAS
         if (!contCamionetas.isEmpty()) {
             Label seccionLabel = new Label("CAMIONETAS:");
             seccionLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 5 5 5; -fx-text-fill: #2c3e50;");
@@ -301,7 +222,7 @@ public class ControladorPrincipal {
             }
         }
 
-        // D. MÁQUINAS
+        // MÁQUINAS
         if (!contMaquinas.isEmpty()) {
             Label seccionLabel = new Label("MÁQUINAS:");
             seccionLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 5 5 5; -fx-text-fill: #2c3e50;");
@@ -315,20 +236,19 @@ public class ControladorPrincipal {
             }
         }
 
-        // SI NO HAY ELEMENTOS EN NINGUNA TABLA
+        // Lista vacia
         if (listaContainer.getChildren().isEmpty()) {
             Label mensajeVacio = new Label("No hay elementos en ninguna tabla");
             mensajeVacio.setStyle("-fx-font-size: 14px; -fx-text-fill: #666; -fx-font-style: italic; -fx-padding: 20px;");
             listaContainer.getChildren().add(mensajeVacio);
         }
     }
-                    // ############## ARREGLAR ######################
 
-    // Método nuevo para actualizar el mapa de objetos para el PDF
+    //##################### PDF #######################
     private void actualizarMapaObjetos() {
         objetos.clear(); // Limpiar el mapa existente
 
-        // 1. AGREGAR PRODUCTOS QUÍMICOS
+        //PRODUCTOS QUÍMICOS
         ObservableList<ProductoQuimico> todosLosProductos = tableQuimicos.getItems();
         List<ProductoQuimico> listaProductos = new ArrayList<>(todosLosProductos);
 
@@ -337,7 +257,7 @@ public class ControladorPrincipal {
             objetos.put(clave, objetos.getOrDefault(clave, 0) + 1);
         }
 
-        // 2. AGREGAR ELEMENTOS DE SEGURIDAD
+        //ELEMENTOS DE SEGURIDAD
         if (tableElementos != null) {
             ObservableList<ElementoDeSeguridad> todosElementosSeguridad = tableElementos.getItems();
             for (ElementoDeSeguridad elemento : todosElementosSeguridad) {
@@ -346,7 +266,7 @@ public class ControladorPrincipal {
             }
         }
 
-        // 3. AGREGAR CAMIONETAS
+        //AGREGAR CAMIONETAS
         if (tableCamionetas != null) {
             ObservableList<Camioneta> todasCamionetas = tableCamionetas.getItems();
             for (Camioneta camioneta : todasCamionetas) {
@@ -355,7 +275,7 @@ public class ControladorPrincipal {
             }
         }
 
-        // 4. AGREGAR MÁQUINAS
+        //AGREGAR MÁQUINAS
         if (tableMaquinas != null) {
             ObservableList<Maquina> todasMaquinas = tableMaquinas.getItems();
             for (Maquina maquina : todasMaquinas) {
@@ -616,7 +536,7 @@ public class ControladorPrincipal {
     private void configurarColumnas() {
         // Camionetas
 
-        colCamionetaCodigo.setCellValueFactory(new PropertyValueFactory<>("CCod"));
+        colCamionetaCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         colCamionetaPatente.setCellValueFactory(new PropertyValueFactory<>("patente"));
         colCamionetaEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
@@ -785,28 +705,6 @@ public class ControladorPrincipal {
 
     @FXML
     private void onGuardar() {
-
-        if (tableElementos.getItems().isEmpty()) {
-            mostrarAlerta("Error", "No se registró ningún elemento de seguridad.");
-            return;
-        }
-
-        if (tableQuimicos.getItems().isEmpty()) {
-            mostrarAlerta("Error", "No se registró ningún producto químico.");
-            return;
-        }
-
-        if (tableCamionetas.getItems().isEmpty()) {
-            mostrarAlerta("Error", "No se registró ninguna camioneta.");
-            return;
-        }
-
-        if (tableMaquinas.getItems().isEmpty()) {
-            mostrarAlerta("Error", "No se registró ninguna máquina.");
-            return;
-        }
-
-
         // Crear una lista general
         List<Object> listaGeneral = new ArrayList<>();
 
@@ -823,9 +721,10 @@ public class ControladorPrincipal {
             System.out.println(" - " + obj);
         }
 
-        mostrarAlerta("Éxito", "Elementos guardados correctamente");
-
-
+        // Aquí podés hacer lo que necesites con la lista:
+        // ✅ Guardarla en base de datos
+        // ✅ Pasarla a otro controlador
+        // ✅ Usarla para generar un informe
     }
 
 //Borrar elementos de la tabla
@@ -980,30 +879,68 @@ public class ControladorPrincipal {
 
         if (tipoViaje != null) {
             try {
-                // crear la conexión
+                // 1️⃣ Crear la conexión (si tu clase no tiene métodos estáticos)
+
                 Connection conn = ConexionBD.getConexion();
 
-                // DAO con conexion
+                // 2️⃣ Crear el DAO con esa conexión
                 ElementoSeguridadDAO dao = new ElementoSeguridadDAO(conn);
 
-                //lista de elementos según el tipo de viaje
+                // 3️⃣ Obtener la lista de elementos según el tipo de viaje
                 List<ElementoDeSeguridad> lista = dao.listarPorTipoViaje(tipoViaje);
 
-                // Cargar la lista en la tabla
+                // 4️⃣ Cargar la lista en la tabla
                 tableElementos.getItems().setAll(lista);
 
-                System.out.println("se cargaron los elementos de seguridad para el viaje " + tipoViaje);
+                System.out.println("✅ Se cargaron los elementos de seguridad para el viaje " + tipoViaje);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
         } else {
-            System.out.println("No se ha seleccionado ningún tipo de viaje");
+            System.out.println("⚠ No se ha seleccionado ningún tipo de viaje");
         }
 
         // Cambiar al panel de elementos
         mostrarPanelElementos();
+    }
+
+
+    public void onCancelar(javafx.event.ActionEvent actionEvent) {
+        // Advertencia
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Cancelar planificación");
+        confirm.setHeaderText("¿Desea cancelar la planificación del viaje?");
+        confirm.setContentText("Se descartarán los cambios no guardados.");
+
+        confirm.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                try {
+                    mostrarPaneIncio();
+                } catch (Exception ex) {
+                    System.out.println("No entro al menu");
+                }
+
+                // Limpiar Destino
+                if (datePnDestPrepViaje != null) datePnDestPrepViaje.setValue(null);
+                if (chBoxDestPnDestPrepViaje != null) chBoxDestPnDestPrepViaje.getSelectionModel().clearSelection();
+                if (chBoxDestPnDestPrepViaje2 != null) chBoxDestPnDestPrepViaje2.getSelectionModel().clearSelection();
+                if (chBoxDestPnDestPrepViaje3 != null) chBoxDestPnDestPrepViaje3.getSelectionModel().clearSelection();
+
+                // Limpiar tablas recursos
+                if (tableQuimicos != null) tableQuimicos.getItems().clear();
+                if (tableElementos != null) tableElementos.getItems().clear();
+                if (tableCamionetas != null) tableCamionetas.getItems().clear();
+                if (tableMaquinas != null) tableMaquinas.getItems().clear();
+
+                // Mensaje
+                actualizarListaVisual();
+                if (lblMensajePDF != null) {
+                    lblMensajePDF.setText("");
+                }
+            }
+        });
     }
 }
 

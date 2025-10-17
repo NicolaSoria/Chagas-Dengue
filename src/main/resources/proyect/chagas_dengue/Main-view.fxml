@@ -5,245 +5,243 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox stylesheets="@estilos.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyect.chagas_dengue.ControladorPrincipal">
+<?import javafx.geometry.Insets?>
 
-    <TabPane fx:id="mainTabPane" styleClass="custom-tab-pane" tabClosingPolicy="UNAVAILABLE">
-        <Tab fx:id="tabMenu" styleClass="menu-tab" text="Menu">
-            <StackPane style="-fx-background-color: white;">
-                <VBox alignment="CENTER" spacing="20" style="-fx-background-color: white; -fx-padding: 50;">
-                    <Label styleClass="content-label" text="Bienvenido a Chagas/Dengue" />
-                    <!-- Logo desde archivo -->
-                    <ImageView fitHeight="200" fitWidth="200" preserveRatio="true">
-                        <Image url="@animal.png" />
-                    </ImageView>
-                </VBox>
-            </StackPane>
-        </Tab>
-        <Tab styleClass="viaje-tab" text="Viaje">
-            <VBox>
-                <TabPane fx:id="tabPanePrepViaje" styleClass="custom-subtab-pane" tabClosingPolicy="UNAVAILABLE">
+    <BorderPane stylesheets="@estilos.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyect.chagas_dengue.ControladorPrincipal">
 
-                    <!-- ######################## Destino ##################### -->
-
-                    <Tab fx:id="tabDestPrepViaje" styleClass="submenu-tab" text="Destino">
+        <center>
+            <TabPane fx:id="mainTabPane" styleClass="custom-tab-pane" tabClosingPolicy="UNAVAILABLE">
+                <tabs>
+                    <Tab fx:id="tabMenu" styleClass="menu-tab" text="Menu">
                         <StackPane style="-fx-background-color: white;">
-                            <Pane>
-                                <children>
-                                    <Label layoutX="206.0" layoutY="162.0" text="Fecha:">
-                                        <font>
-                                            <Font size="18.0" />
-                                        </font>
-                                    </Label>
-                                    <DatePicker fx:id="datePnDestPrepViaje" layoutX="277.0" layoutY="163.0" />
-                                    <Button fx:id="btnSigPnDestPrepViaje" layoutX="351.0" layoutY="439.0" mnemonicParsing="false" onAction="#onSiguiente" text="Siguiente">
-                                        <font>
-                                            <Font size="18.0" />
-                                        </font>
-                                    </Button>
-                                    <Label alignment="CENTER" layoutY="34.0" prefHeight="90.0" prefWidth="800.0" text="Seleccione destino, fecha y tipo de viaje" textAlignment="CENTER" wrapText="true">
-                                        <font>
-                                            <Font size="24.0" />
-                                        </font>
-                                    </Label>
-                                    <Label layoutX="206.0" layoutY="229.0" text="Tipo:">
-                                        <font>
-                                            <Font size="18.0" />
-                                        </font>
-                                    </Label>
-                                    <RadioButton fx:id="radbtnDiaPaneDestPrepViaje" layoutX="277.0" layoutY="229.0" mnemonicParsing="false" text="Diario">
-                                        <font>
-                                            <Font size="18.0" />
-                                        </font>
-                                        <toggleGroup>
-                                            <ToggleGroup fx:id="tipoViajeOpcs" />
-                                        </toggleGroup>
-                                    </RadioButton>
-                                    <RadioButton fx:id="radbtnBarrPaneDestPrepViaje" layoutX="420.0" layoutY="229.0" mnemonicParsing="false" text="Barrido" toggleGroup="$tipoViajeOpcs">
-                                        <font>
-                                            <Font size="18.0" />
-                                        </font>
-                                    </RadioButton>
-                                    <Label layoutX="203.0" layoutY="290.0" text="Destino(s):">
-                                        <font>
-                                            <Font size="18.0" />
-                                        </font>
-                                    </Label>
-                                    <ChoiceBox fx:id="chBoxDestPnDestPrepViaje" layoutX="301.0" layoutY="291.0" prefWidth="150.0" />
-                           <ChoiceBox fx:id="chBoxDestPnDestPrepViaje2" layoutX="301.0" layoutY="338.0" prefWidth="150.0" />
-                           <ChoiceBox fx:id="chBoxDestPnDestPrepViaje3" layoutX="301.0" layoutY="383.0" prefWidth="150.0" />
-                                </children>
-                            </Pane>
+                            <VBox alignment="CENTER" spacing="20" style="-fx-background-color: white; -fx-padding: 50;">
+                                <Label styleClass="content-label" text="Bienvenido a Chagas/Dengue" />
+                                <ImageView fitHeight="200" fitWidth="200" preserveRatio="true">
+                                    <Image url="@animal.png" />
+                                </ImageView>
+                            </VBox>
                         </StackPane>
                     </Tab>
+                    <Tab styleClass="viaje-tab" text="Viaje">
+                        <VBox>
+                            <TabPane fx:id="tabPanePrepViaje" styleClass="custom-subtab-pane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
 
-                    <!-- ######################## Elementos ##################### -->
+                                                         <!-- Destino-->
 
-                    <Tab fx:id="tabElmsPrepViaje" styleClass="submenu-tab" text="Elementos">
-                        <content>
-                            <!-- ScrollPane para permitir desplazamiento vertical -->
-                            <ScrollPane fx:id="scrPaneElmsPrepViaje" fitToWidth="true" hbarPolicy="NEVER" pannable="true" vbarPolicy="AS_NEEDED">
-                                <AnchorPane fx:id="anchorElementos" prefHeight="560.0" prefWidth="800.0" style="-fx-background-color: white;">
+                                <Tab fx:id="tabDestPrepViaje" styleClass="submenu-tab" text="Destino">
+                                    <StackPane style="-fx-background-color: white;">
+                                        <Pane>
+                                            <children>
+                                                <Label layoutX="206.0" layoutY="162.0" text="Fecha:">
+                                                    <font>
+                                                        <Font size="18.0" />
+                                                    </font>
+                                                </Label>
+                                                <DatePicker fx:id="datePnDestPrepViaje" layoutX="277.0" layoutY="163.0" />
+                                                <Button fx:id="btnSigPnDestPrepViaje" layoutX="351.0" layoutY="439.0" mnemonicParsing="false" onAction="#onSiguiente" text="Siguiente">
+                                                    <font>
+                                                        <Font size="18.0" />
+                                                    </font>
+                                                </Button>
+                                                <Label alignment="CENTER" layoutY="34.0" prefHeight="90.0" prefWidth="800.0" text="Seleccione destino, fecha y tipo de viaje" textAlignment="CENTER" wrapText="true">
+                                                    <font>
+                                                        <Font size="24.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label layoutX="206.0" layoutY="229.0" text="Tipo:">
+                                                    <font>
+                                                        <Font size="18.0" />
+                                                    </font>
+                                                </Label>
+                                                <RadioButton fx:id="radbtnDiaPaneDestPrepViaje" layoutX="277.0" layoutY="229.0" mnemonicParsing="false" text="Diario">
+                                                    <font>
+                                                        <Font size="18.0" />
+                                                    </font>
+                                                    <toggleGroup>
+                                                        <ToggleGroup fx:id="tipoViajeOpcs" />
+                                                    </toggleGroup>
+                                                </RadioButton>
+                                                <RadioButton fx:id="radbtnBarrPaneDestPrepViaje" layoutX="420.0" layoutY="229.0" mnemonicParsing="false" text="Barrido" toggleGroup="$tipoViajeOpcs">
+                                                    <font>
+                                                        <Font size="18.0" />
+                                                    </font>
+                                                </RadioButton>
+                                                <Label layoutX="203.0" layoutY="290.0" text="Destino(s):">
+                                                    <font>
+                                                        <Font size="18.0" />
+                                                    </font>
+                                                </Label>
+                                                <ChoiceBox fx:id="chBoxDestPnDestPrepViaje" layoutX="301.0" layoutY="291.0" prefWidth="150.0" />
+                                                <ChoiceBox fx:id="chBoxDestPnDestPrepViaje2" layoutX="301.0" layoutY="338.0" prefWidth="150.0" />
+                                                <ChoiceBox fx:id="chBoxDestPnDestPrepViaje3" layoutX="301.0" layoutY="383.0" prefWidth="150.0" />
+                                            </children>
+                                        </Pane>
+                                    </StackPane>
+                                </Tab>
 
-                                    <children>
-                                        <!-- Contenedor principal para alinear verticalmente -->
-                                        <VBox alignment="CENTER" layoutY="19.0" prefHeight="541.0" prefWidth="800.0" spacing="10" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="19.0">
+                                                                <!-- Asignar Elementos-->
 
-                                            <!-- Labels arriba del Accordion -->
-                                            <HBox spacing="20" />
-                                            <Label text="Seleccione una pestaña para añadir elementos">
-                                                <font>
-                                                    <Font size="19.0" />
-                                                </font>
-                                            </Label>
+                                <Tab fx:id="tabElmsPrepViaje" styleClass="submenu-tab" text="Elementos">
+                                    <content>
+                                        <ScrollPane fx:id="scrPaneElmsPrepViaje" fitToWidth="true" fitToHeight="true" hbarPolicy="NEVER" pannable="true" vbarPolicy="AS_NEEDED" >
+                                            <AnchorPane fx:id="anchorElementos" style="-fx-background-color: white; -fx-padding: 0 0 350 0 ">
+                                                <children>
+                                                    <VBox alignment="CENTER" spacing="10" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
 
-                                            <!-- Accordion ocupa todo el espacio restante -->
-                                            <Accordion fx:id="accordion" prefHeight="406.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
+                                                        <HBox spacing="20" />
+                                                        <Label text="Seleccione una pestaña para añadir elementos">
+                                                            <font>
+                                                                <Font size="19.0" />
+                                                            </font>
+                                                        </Label>
 
-                                                <panes>
-                                                    <!-- Elementos de seguridad -->
-                                                    <TitledPane animated="false" text="Elementos de seguridad">
-                                                        <content>
-                                                            <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">
-                                                                <Label text="Elementos de seguridad">
-                                                                    <font>
-                                                                        <Font size="20" />
-                                                                    </font>
-                                                                </Label>
+                                                        <Accordion fx:id="accordion" prefHeight="406.0" prefWidth="800.0"  VBox.vgrow="ALWAYS">
 
-                                                                <TableView fx:id="tableElementos" prefHeight="200" prefWidth="650">
-                                                                    <columns>
+                                                            <panes>
+                                                                <TitledPane animated="false" text="Elementos de seguridad">
+                                                                    <content>
+                                                                        <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">
+                                                                            <Label text="Elementos de seguridad">
+                                                                                <font>
+                                                                                    <Font size="20" />
+                                                                                </font>
+                                                                            </Label>
 
-                                                                        <TableColumn fx:id="colEstado" prefWidth="100" text="Estado" />
-                                                                        <TableColumn fx:id="colDescripcion" prefWidth="266.0" text="Descripción" />
+                                                                            <TableView fx:id="tableElementos" prefHeight="200" prefWidth="650">
+                                                                                <columns>
 
-                                                                    </columns>
-                                                                </TableView>
+                                                                                    <TableColumn fx:id="colEstado" prefWidth="100" text="Estado" />
+                                                                                    <TableColumn fx:id="colDescripcion" prefWidth="266.0" text="Descripción" />
 
-                                                                <HBox alignment="CENTER" spacing="10" />
-                                                            </VBox>
-                                                        </content>
-                                                    </TitledPane>
+                                                                                </columns>
+                                                                            </TableView>
 
-                                                    <!-- Productos Químicos -->
-                                                    <TitledPane animated="false" text="Productos Químicos">
-                                                        <content>
-                                                            <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">
-                                                                <Label text="Producto(s) químico(s)">
-                                                                    <font>
-                                                                        <Font size="20" />
-                                                                    </font>
-                                                                </Label>
+                                                                            <HBox alignment="CENTER" spacing="10" />
+                                                                        </VBox>
+                                                                    </content>
+                                                                </TitledPane>
 
-                                                                <TableView fx:id="tableQuimicos" prefHeight="200" prefWidth="650">
-                                                                    <columns>
-                                                                        <TableColumn fx:id="colProdCodigo" prefWidth="100" text="Código" />
-                                                                        <TableColumn fx:id="colProdNombre" prefWidth="150" text="Nombre" />
-                                                                        <TableColumn fx:id="colProdMarca" prefWidth="150" text="Marca" />
-                                                                        <TableColumn fx:id="colProdPresentacion" prefWidth="150" text="Presentación (L)" />
-                                                                    </columns>
-                                                                </TableView>
+                                                                <TitledPane animated="false" text="Productos Químicos">
+                                                                    <content>
+                                                                        <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">
+                                                                            <Label text="Producto(s) químico(s)">
+                                                                                <font>
+                                                                                    <Font size="20" />
+                                                                                </font>
+                                                                            </Label>
 
-                                                                <HBox alignment="CENTER" spacing="10">
-                                                                    <Button fx:id="btnAñadirProducto" onAction="#onAñadirProducto" prefWidth="100" text="Agregar..." />
-                                                                    <Button fx:id="btnEditarQuimicos" onAction="#onEditarQuimicos" prefWidth="100" text="Editar..." />
-                                                                </HBox>
-                                                            </VBox>
-                                                        </content>
-                                                    </TitledPane>
+                                                                            <TableView fx:id="tableQuimicos" prefHeight="200" prefWidth="650">
+                                                                                <columns>
+                                                                                    <TableColumn fx:id="colProdCodigo" prefWidth="100" text="Código" />
+                                                                                    <TableColumn fx:id="colProdNombre" prefWidth="150" text="Nombre" />
+                                                                                    <TableColumn fx:id="colProdMarca" prefWidth="150" text="Marca" />
+                                                                                    <TableColumn fx:id="colProdPresentacion" prefWidth="150" text="Presentación (L)" />
+                                                                                </columns>
+                                                                            </TableView>
 
-                                                    <!-- Camionetas -->
-                                                    <TitledPane animated="false" expanded="false" text="Camionetas">
-                                                        <content>
-                                                            <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">
-                                                                <Label text="Camioneta(s)">
-                                                                    <font>
-                                                                        <Font size="20" />
-                                                                    </font>
-                                                                </Label>
+                                                                            <HBox alignment="CENTER" spacing="10">
+                                                                                <Button fx:id="btnAñadirProducto" onAction="#onAñadirProducto" prefWidth="100" text="Agregar..." />
+                                                                                <Button fx:id="btnEditarQuimicos" onAction="#onEditarQuimicos" prefWidth="100" text="Editar..." />
+                                                                            </HBox>
+                                                                        </VBox>
+                                                                    </content>
+                                                                </TitledPane>
 
-                                                                <TableView fx:id="tableCamionetas" prefHeight="200" prefWidth="650">
-                                                                    <columns>
-                                                                        <TableColumn fx:id="colCamionetaCodigo" prefWidth="100" text="Código" />
-                                                                        <TableColumn fx:id="colCamionetaPatente" prefWidth="150" text="Patente" />
-                                                                        <TableColumn fx:id="colCamionetaEstado" prefWidth="150" text="Estado" />
-                                                                    </columns>
-                                                                </TableView>
+                                                                <TitledPane animated="false" expanded="false" text="Camionetas">
+                                                                    <content>
+                                                                        <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">
+                                                                            <Label text="Camioneta(s)">
+                                                                                <font>
+                                                                                    <Font size="20" />
+                                                                                </font>
+                                                                            </Label>
 
-                                                                <HBox alignment="CENTER" spacing="10">
-                                                                    <Button fx:id="btnAñadirCamioneta" onAction="#onAñadirCamioneta" prefWidth="100" text="Agregar..." />
-                                                                    <Button fx:id="btnEditarCamionetas" onAction="#onEditarCamionetas" prefWidth="100" text="Editar..." />
-                                                                </HBox>
-                                                            </VBox>
-                                                        </content>
-                                                    </TitledPane>
+                                                                            <TableView fx:id="tableCamionetas" prefHeight="200" prefWidth="650">
+                                                                                <columns>
+                                                                                    <TableColumn fx:id="colCamionetaCodigo" prefWidth="100" text="Código" />
+                                                                                    <TableColumn fx:id="colCamionetaPatente" prefWidth="150" text="Patente" />
+                                                                                    <TableColumn fx:id="colCamionetaEstado" prefWidth="150" text="Estado" />
+                                                                                </columns>
+                                                                            </TableView>
 
-                                                    <!-- Maquinas -->
-                                                    <TitledPane animated="false" expanded="false" prefHeight="343.0" prefWidth="800.0" text="Maquinas">
-                                                        <content>
-                                                            <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">
-                                                                <Label text="Máquina(s)">
-                                                                    <font>
-                                                                        <Font size="20" />
-                                                                    </font>
-                                                                </Label>
+                                                                            <HBox alignment="CENTER" spacing="10">
+                                                                                <Button fx:id="btnAñadirCamioneta" onAction="#onAñadirCamioneta" prefWidth="100" text="Agregar..." />
+                                                                                <Button fx:id="btnEditarCamionetas" onAction="#onEditarCamionetas" prefWidth="100" text="Editar..." />
+                                                                            </HBox>
+                                                                        </VBox>
+                                                                    </content>
+                                                                </TitledPane>
 
-                                                                <TableView fx:id="tableMaquinas" prefHeight="200" prefWidth="650">
-                                                                    <columns>
-                                                                        <TableColumn fx:id="colMaqCodigo" prefWidth="100" text="Código" />
-                                                                        <TableColumn fx:id="colMaqMarca" prefWidth="150" text="Marca" />
-                                                                        <TableColumn fx:id="colMaqModelo" prefWidth="150" text="Modelo" />
-                                                                        <TableColumn fx:id="colMaqTipo" prefWidth="150" text="Tipo" />
-                                                                    </columns>
-                                                                </TableView>
+                                                                <TitledPane animated="false" expanded="false" prefHeight="343.0" prefWidth="800.0" text="Maquinas">
+                                                                    <content>
+                                                                        <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">
+                                                                            <Label text="Máquina(s)">
+                                                                                <font>
+                                                                                    <Font size="20" />
+                                                                                </font>
+                                                                            </Label>
 
-                                                                <HBox alignment="CENTER" spacing="10">
-                                                                    <Button fx:id="btnAñadirMaquina" onAction="#onAñadirMaquina" prefWidth="100" text="Agregar..." />
-                                                                    <Button fx:id="btnEditarMaquinas" onAction="#onEditarMaquinas" prefWidth="100" text="Editar..." />
-                                                                </HBox>
-                                                            </VBox>
-                                                        </content>
-                                                    </TitledPane>
-                                                </panes>
-                                            </Accordion>
-                                            <Button fx:id="btnGuardarElementos" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onGuardar" text="Guardar" />
-                                        </VBox>
-                                    </children>
-                                </AnchorPane>
+                                                                            <TableView fx:id="tableMaquinas" prefHeight="200" prefWidth="650">
+                                                                                <columns>
+                                                                                    <TableColumn fx:id="colMaqCodigo" prefWidth="100" text="Código" />
+                                                                                    <TableColumn fx:id="colMaqMarca" prefWidth="150" text="Marca" />
+                                                                                    <TableColumn fx:id="colMaqModelo" prefWidth="150" text="Modelo" />
+                                                                                    <TableColumn fx:id="colMaqTipo" prefWidth="150" text="Tipo" />
+                                                                                </columns>
+                                                                            </TableView>
 
-                            </ScrollPane>
-                        </content>
-                    </Tab>
+                                                                            <HBox alignment="CENTER" spacing="10">
+                                                                                <Button fx:id="btnAñadirMaquina" onAction="#onAñadirMaquina" prefWidth="100" text="Agregar..." />
+                                                                                <Button fx:id="btnEditarMaquinas" onAction="#onEditarMaquinas" prefWidth="100" text="Editar..." />
+                                                                            </HBox>
+                                                                        </VBox>
+                                                                    </content>
+                                                                </TitledPane>
+                                                            </panes>
+                                                        </Accordion>
+                                                        <Button fx:id="btnGuardarElementos" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onGuardar" text="Guardar" />
+                                                    </VBox>
+                                                </children>
 
-                    <!-- ######################## Listar ##################### -->
+                                            </AnchorPane>
+                                        </ScrollPane>
+                                    </content>
+                                </Tab>
 
-                    <Tab fx:id="tabListPrepViaje" styleClass="submenu-tab" text="Listar">
-                        <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20;">
-                            <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #363535;" text="Lista de Elementos del Viaje" />
+                                                                    <!-- Listar-->
 
-                            <!-- ScrollPane para la lista -->
-                            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="AS_NEEDED">
-                                <VBox fx:id="listaContainer" spacing="8" styleClass="ListarCont">
-                                    <!-- Los labels se generarán automáticamente desde el controlador -->
-                                </VBox>
-                            </ScrollPane>
+                                <Tab fx:id="tabListPrepViaje" styleClass="submenu-tab" text="Listar">
+                                    <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20;">
+                                        <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #363535;" text="Lista de Elementos del Viaje" />
 
-                            <HBox alignment="CENTER" spacing="20">
-                                <Button fx:id="btnGenerarPDF" onAction="#generarPDF" text="Generar PDF" />
-                                <Button fx:id="btnActualizarLista" onAction="#actualizarLista" text="Actualizar Lista" />
-                            </HBox>
+                                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="AS_NEEDED">
+                                            <VBox fx:id="listaContainer" spacing="8" styleClass="ListarCont">
+                                                <!-- Los labels se generarán automáticamente desde el controlador -->
+                                            </VBox>
+                                        </ScrollPane>
 
-                            <!-- Mensaje de confirmación -->
-                            <Label fx:id="lblMensajePDF" style="-fx-font-size: 14px; -fx-text-fill: #28a745;" text="" />
-                     <HBox alignment="CENTER" prefHeight="47.0" prefWidth="760.0">
-                        <children>
-                           <Button fx:id="btnRegistrarViajePaneListar" mnemonicParsing="false" onAction="#ingresarViaje" text="Registrar viaje" />
-                        </children>
-                     </HBox>
+                                        <HBox alignment="CENTER" spacing="20">
+                                            <Button fx:id="btnGenerarPDF" onAction="#generarPDF" text="Generar PDF" />
+                                            <Button fx:id="btnActualizarLista" onAction="#actualizarLista" text="Actualizar Lista" />
+                                        </HBox>
+
+                                        <Label fx:id="lblMensajePDF" style="-fx-font-size: 14px; -fx-text-fill: #28a745;" text="" />
+                                    </VBox>
+                                </Tab>
+                            </TabPane>
                         </VBox>
                     </Tab>
-                </TabPane>
-            </VBox>
-        </Tab>
-    </TabPane>
+                </tabs>
+            </TabPane>
+        </center>
 
-</VBox>
+        <bottom>
+            <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER_RIGHT">
+                <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#onCancelar" text="Cancelar" />
+                <padding>
+                    <Insets bottom="10.0" right="10.0" top="10.0" />
+                </padding>
+            </HBox>
+        </bottom>
+
+    </BorderPane>
