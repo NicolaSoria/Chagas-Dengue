@@ -51,12 +51,11 @@ public class ControladorPrincipal {
     @FXML private Tab tabElmsPrepViaje;
     @FXML private ChoiceBox<Zona> chBoxDestPnDestPrepViaje;
     @FXML private DatePicker datePnDestPrepViaje;
-    @FXML private Button btnSigPnDestPrepViaje;
     @FXML private TabPane tabPanePrepViaje;
     @FXML private VBox listaContainer;
     @FXML private Label lblMensajePDF;
 
-    private ZonaDAO zonaDAO = new ZonaDAO();
+
     private ObservableList<Camioneta> listaCamionetas = FXCollections.observableArrayList();
 
     // Datos de ejemplo para la lista
@@ -67,7 +66,7 @@ public class ControladorPrincipal {
         mostrarPaneIncio();
         configurarColumnas();
 //        cargarDatos();
-        cargarZonasChoiceBox();
+        cargarZonas();
         fechasCont();
         // Asignar la lista observable a la tabla
         tableCamionetas.setItems(listaCamionetas);
@@ -86,22 +85,20 @@ public class ControladorPrincipal {
         });
     }
 
-    @FXML private void cargarZonasChoiceBox(){
+    @FXML private void cargarZonas(){
+        ZonaDAO zonaDAO = new ZonaDAO();
         List<Zona> zonas = zonaDAO.listarTodos();
         chBoxDestPnDestPrepViaje.getItems().setAll(zonas);
         chBoxDestPnDestPrepViaje2.getItems().setAll(zonas);
         chBoxDestPnDestPrepViaje3.getItems().setAll(zonas);
     }
 
-    @FXML private void clearZonasChoiceBox(){
-        chBoxDestPnDestPrepViaje.getItems().clear();
+    @FXML private void clearZonas(){
         chBoxDestPnDestPrepViaje.setValue(null);
-        chBoxDestPnDestPrepViaje2.getItems().clear();
         chBoxDestPnDestPrepViaje2.setValue(null);
-        chBoxDestPnDestPrepViaje3.getItems().clear();
         chBoxDestPnDestPrepViaje3.setValue(null);
-        //configurar para boton Ingresar viaje onAction="#clearZonasChoiceBox"
-        //llamar nuevamente cargarZonasChoiceBox() tras actualizacion
+        tipoViajeOpcs.selectToggle(null);
+        datePnDestPrepViaje.setValue(null);
     }
 
     @FXML public void mostrarPaneIncio(){
@@ -114,6 +111,83 @@ public class ControladorPrincipal {
             scrPaneElmsPrepViaje.setVvalue(0); // Vertical scroll al tope
             scrPaneElmsPrepViaje.setHvalue(0); // Horizontal scroll al inicio (opcional)
         });
+    }
+
+    private void mostrarAlerta(String titulo, String msj){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(msj);
+        alert.showAndWait();
+    }
+
+    @FXML private void ingresarViaje(){
+        LocalDate fechainicio = datePnDestPrepViaje.getValue();
+
+        if (fechainicio == null) {
+            mostrarAlerta("Error","Fecha no seleccionada.");
+            return;
+        }
+
+        Viaje.Tipo tipo;
+        if (radbtnDiaPaneDestPrepViaje.isSelected()){
+            tipo = Viaje.Tipo.Diario;
+        }else if (radbtnBarrPaneDestPrepViaje.isSelected()){
+            tipo = Viaje.Tipo.Barrido;
+        }else {
+            mostrarAlerta("Error", "Debe seleccionar un tipo de viaje.");
+            return;
+        }
+
+        Zona dest1 = chBoxDestPnDestPrepViaje.getValue();
+        Zona dest2 = chBoxDestPnDestPrepViaje2.getValue();
+        Zona dest3 = chBoxDestPnDestPrepViaje3.getValue();
+
+        if (dest1 == null && dest2 == null && dest3 == null) {
+            mostrarAlerta("Error", "Debe seleccionar al menos un destino.");
+            return;
+        }
+
+        Set<Integer> idsDests = new HashSet<>();
+        if (dest1 != null) {
+            idsDests.add(dest1.getZCod());
+        }if (dest2 != null) {
+            if (!idsDests.add(dest2.getZCod())){
+                mostrarAlerta("Error", "Destino repetido en seleccion.");
+                return;
+            }
+        }
+        if (dest3 != null) {
+            if (!idsDests.add(dest3.getZCod())) {
+                mostrarAlerta("Error", "Destino repetido en seleccion.");
+                return;
+            }
+        }
+
+        Viaje nuevo = new Viaje();
+        nuevo.setFechaInicio(fechainicio);
+        nuevo.setTipo(tipo);
+
+        ViajeDAO dao = new ViajeDAO();
+        dao.insertar(nuevo);
+
+        DestinoDAO dao2 = new DestinoDAO();
+        for (Integer ZCod : idsDests) {
+            Destino destino = new Destino(nuevo.getVCod(),ZCod);
+            dao2.insertar(destino);
+        }
+
+        ObservableList<Camioneta> camionetas = tableCamionetas.getItems();
+        if(camionetas.isEmpty()) {
+            mostrarAlerta("Error", "No se asigno camioneta para el viaje.");
+        }else {
+            UsanDAO dao3 = new UsanDAO();
+            for (Camioneta c : camionetas) {
+                dao3.insertar(new Usan(nuevo.getVCod(), c.getCCod()));
+            }
+        }
+
+        clearZonas();
     }
 
     @FXML
@@ -726,11 +800,6 @@ public class ControladorPrincipal {
         for (Object obj : listaGeneral) {
             System.out.println(" - " + obj);
         }
-
-        // Aquí podés hacer lo que necesites con la lista:
-        // ✅ Guardarla en base de datos
-        // ✅ Pasarla a otro controlador
-        // ✅ Usarla para generar un informe
     }
 
 //Borrar elementos de la tabla
