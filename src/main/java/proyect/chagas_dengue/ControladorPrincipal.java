@@ -502,6 +502,12 @@ public class ControladorPrincipal {
 
 //    private Connection conn;
 
+    // ========== EMPLEADOS ==========
+    @FXML private TableView<Empleado> tableEmpleados;
+    @FXML private TableColumn<Camioneta, Integer> colEmpleadoDNI;
+    @FXML private TableColumn<Camioneta, String> colEmpleadoNombre;
+            ;
+
     // ========== CAMIONETAS ==========
     @FXML private TableView<Camioneta> tableCamionetas;
     @FXML private TableColumn<Camioneta, Integer> colCamionetaCodigo;
