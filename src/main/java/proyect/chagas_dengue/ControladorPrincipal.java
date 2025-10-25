@@ -31,6 +31,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import proyect.chagas_dengue.conexion.ConexionBD;
 import proyect.chagas_dengue.dao.*;
+import proyect.chagas_dengue.interfaz.PlanificarViajeController;
 import proyect.chagas_dengue.interfaz.SeleccionarController;
 import proyect.chagas_dengue.modelos.*;
 
@@ -62,7 +63,7 @@ public class ControladorPrincipal {
     private Map<String, Integer> objetos = new HashMap<>();
 
     @FXML public void initialize(){
-        actualizarListaVisual();
+        actualizarLista();
         mostrarPaneIncio();
         configurarColumnas();
 //        cargarDatos();
@@ -192,131 +193,11 @@ public class ControladorPrincipal {
 
     @FXML
     private void actualizarLista() {
-        actualizarListaVisual();
+        PlanificarViajeController objLista = new PlanificarViajeController();
+        objLista.actualizarListaVisual(listaContainer, tableQuimicos.getItems(), tableElementos != null ? tableElementos.getItems() : null, tableCamionetas.getItems(), tableMaquinas.getItems());
         lblMensajePDF.setText("Lista actualizada correctamente");
     }
 
-    private void actualizarListaVisual() {
-        listaContainer.getChildren().clear();
-
-        // Mapas para contar elementos de cada tabla
-        Map<Integer, Integer> contProductos = new HashMap<>(); // Para productos químicos
-        Map<String, Integer> contSeguridad = new HashMap<>();  // Para elementos de seguridad
-        Map<String, Integer> contCamionetas = new HashMap<>(); // Para camionetas
-        Map<String, Integer> contMaquinas = new HashMap<>();   // Para máquinas
-
-        // PRODUCTOS QUÍMICOS
-        ObservableList<ProductoQuimico> todosLosProductos = tableQuimicos.getItems();
-        for (ProductoQuimico producto : todosLosProductos) {
-            int codigo = producto.getPCod();
-            contProductos.put(codigo, contProductos.getOrDefault(codigo, 0) + 1);
-        }
-
-        // ELEMENTOS DE SEGURIDAD
-        if (tableElementos != null) {
-            ObservableList<ElementoDeSeguridad> todosElementosSeguridad = tableElementos.getItems();
-            for (ElementoDeSeguridad elemento : todosElementosSeguridad) {
-                String nombre = elemento.getDescripcion();
-                contSeguridad.put(nombre, contSeguridad.getOrDefault(nombre, 0) + 1);
-            }
-        }
-
-        // CAMIONETAS
-        if (tableCamionetas != null) {
-            ObservableList<Camioneta> todasCamionetas = tableCamionetas.getItems();
-            for (Camioneta camioneta : todasCamionetas) {
-                String patente = camioneta.getPatente();
-                contCamionetas.put(patente, contCamionetas.getOrDefault(patente, 0) + 1);
-            }
-        }
-
-        // MÁQUINAS
-        if (tableMaquinas != null) {
-            ObservableList<Maquina> todasMaquinas = tableMaquinas.getItems();
-            for (Maquina maquina : todasMaquinas) {
-                String nombre = maquina.getTipo() + " - " + maquina.getModelo();
-                contMaquinas.put(nombre, contMaquinas.getOrDefault(nombre, 0) + 1);
-            }
-        }
-
-        // GENERAR LA LISTA VISUAL
-        int contador = 1;
-
-        // PRODUCTOS QUÍMICOS
-        if (!contProductos.isEmpty()) {
-            Label seccionLabel = new Label("PRODUCTOS QUÍMICOS:");
-            seccionLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 5 5 5; -fx-text-fill: #2c3e50;");
-            listaContainer.getChildren().add(seccionLabel);
-
-            for (Map.Entry<Integer, Integer> entry : contProductos.entrySet()) {
-                int codigo = entry.getKey();
-                int cantidad = entry.getValue();
-
-                String nombreProducto = "Producto Código " + codigo;
-                // Buscar el nombre real del producto
-                for (ProductoQuimico producto : todosLosProductos) {
-                    if (producto.getPCod() == codigo) {
-                        nombreProducto = producto.getNombre();
-                        break;
-                    }
-                }
-
-                Label label = new Label(String.format("   %d. %s x%d", contador, nombreProducto, cantidad));
-                label.setStyle("-fx-font-size: 14px; -fx-padding: 2px 5px; -fx-text-fill: #363535;");
-                listaContainer.getChildren().add(label);
-                contador++;
-            }
-        }
-
-        // ELEMENTOS DE SEGURIDAD
-        if (!contSeguridad.isEmpty()) {
-            Label seccionLabel = new Label("ELEMENTOS DE SEGURIDAD:");
-            seccionLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 5 5 5; -fx-text-fill: #2c3e50;");
-            listaContainer.getChildren().add(seccionLabel);
-
-            for (Map.Entry<String, Integer> entry : contSeguridad.entrySet()) {
-                Label label = new Label(String.format("   %d. %s x%d", contador, entry.getKey(), entry.getValue()));
-                label.setStyle("-fx-font-size: 14px; -fx-padding: 2px 5px; -fx-text-fill: #363535;");
-                listaContainer.getChildren().add(label);
-                contador++;
-            }
-        }
-
-        // CAMIONETAS
-        if (!contCamionetas.isEmpty()) {
-            Label seccionLabel = new Label("CAMIONETAS:");
-            seccionLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 5 5 5; -fx-text-fill: #2c3e50;");
-            listaContainer.getChildren().add(seccionLabel);
-
-            for (Map.Entry<String, Integer> entry : contCamionetas.entrySet()) {
-                Label label = new Label(String.format("   %d. %s x%d", contador, entry.getKey(), entry.getValue()));
-                label.setStyle("-fx-font-size: 14px; -fx-padding: 2px 5px; -fx-text-fill: #363535;");
-                listaContainer.getChildren().add(label);
-                contador++;
-            }
-        }
-
-        // MÁQUINAS
-        if (!contMaquinas.isEmpty()) {
-            Label seccionLabel = new Label("MÁQUINAS:");
-            seccionLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 5 5 5; -fx-text-fill: #2c3e50;");
-            listaContainer.getChildren().add(seccionLabel);
-
-            for (Map.Entry<String, Integer> entry : contMaquinas.entrySet()) {
-                Label label = new Label(String.format("   %d. %s x%d", contador, entry.getKey(), entry.getValue()));
-                label.setStyle("-fx-font-size: 14px; -fx-padding: 2px 5px; -fx-text-fill: #363535;");
-                listaContainer.getChildren().add(label);
-                contador++;
-            }
-        }
-
-        // Lista vacia
-        if (listaContainer.getChildren().isEmpty()) {
-            Label mensajeVacio = new Label("No hay elementos en ninguna tabla");
-            mensajeVacio.setStyle("-fx-font-size: 14px; -fx-text-fill: #666; -fx-font-style: italic; -fx-padding: 20px;");
-            listaContainer.getChildren().add(mensajeVacio);
-        }
-    }
 
     //##################### PDF #######################
     private void actualizarMapaObjetos() {
@@ -1010,7 +891,7 @@ public class ControladorPrincipal {
                 if (tableMaquinas != null) tableMaquinas.getItems().clear();
 
                 // Mensaje
-                actualizarListaVisual();
+                actualizarLista();
                 if (lblMensajePDF != null) {
                     lblMensajePDF.setText("");
                 }
