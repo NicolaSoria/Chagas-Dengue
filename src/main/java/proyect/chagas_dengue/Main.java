@@ -28,12 +28,12 @@ public class Main extends Application {
         try {
             Connection conexion = ConexionBD.getInstancia().getConexion();
             if (conexion != null && !conexion.isClosed()) {
-                System.out.println("✅ Conexión exitosa con la base de datos!");
+                System.out.println("Conexión exitosa con la base de datos!");
             } else {
-                System.out.println("❌ No se pudo conectar a la base de datos.");
+                System.out.println("No se pudo conectar a la base de datos.");
             }
         } catch (Exception e) {
-            System.out.println("❌ Error al conectar con la base de datos:");
+            System.out.println("Error al conectar con la base de datos:");
             e.printStackTrace();
         }
 
