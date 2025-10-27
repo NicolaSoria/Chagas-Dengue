@@ -100,6 +100,18 @@ public class ControladorPrincipal {
         chBoxDestPnDestPrepViaje3.setValue(null);
         tipoViajeOpcs.selectToggle(null);
         datePnDestPrepViaje.setValue(null);
+
+        if (tableQuimicos != null) tableQuimicos.getItems().clear();
+        if (tableElementos != null) tableElementos.getItems().clear();
+        if (tableCamionetas != null) tableCamionetas.getItems().clear();
+        if (tableMaquinas != null) tableMaquinas.getItems().clear();
+
+        chBoxDestPnDestPrepViaje.setDisable(false);
+        chBoxDestPnDestPrepViaje2.setDisable(false);
+        chBoxDestPnDestPrepViaje3.setDisable(false);
+
+        radbtnBarrPaneDestPrepViaje.setDisable(false);
+        radbtnDiaPaneDestPrepViaje.setDisable(false);
     }
 
     @FXML public void mostrarPaneIncio(){
@@ -165,6 +177,16 @@ public class ControladorPrincipal {
             }
         }
 
+        ObservableList<Camioneta> camionetas = tableCamionetas.getItems();
+        ObservableList<Maquina> maquinas = tableMaquinas.getItems();
+        ObservableList<ProductoQuimico> productos = tableQuimicos.getItems();
+        ObservableList<ElementoDeSeguridad> elementos = tableElementos.getItems();
+
+        if (camionetas.isEmpty() || maquinas.isEmpty() || productos.isEmpty() || elementos.isEmpty()) {
+            mostrarAlerta("Error","Una de las listas de recursos esta vacia.");
+            return;
+        }
+
         Viaje nuevo = new Viaje();
         nuevo.setFechaInicio(fechainicio);
         nuevo.setTipo(tipo);
@@ -178,14 +200,9 @@ public class ControladorPrincipal {
             dao2.insertar(destino);
         }
 
-        ObservableList<Camioneta> camionetas = tableCamionetas.getItems();
-        if(camionetas.isEmpty()) {
-            mostrarAlerta("Error", "No se asigno camioneta para el viaje.");
-        }else {
-            UsanDAO dao3 = new UsanDAO();
-            for (Camioneta c : camionetas) {
-                dao3.insertar(new Usan(nuevo.getVCod(), c.getCCod()));
-            }
+        UsanDAO dao3 = new UsanDAO();
+        for (Camioneta c : camionetas) {
+            dao3.insertar(new Usan(nuevo.getVCod(), c.getCCod()));
         }
 
         clearZonas();
@@ -681,6 +698,9 @@ public class ControladorPrincipal {
         for (Object obj : listaGeneral) {
             System.out.println(" - " + obj);
         }
+
+        tabPanePrepViaje.getSelectionModel().select(tabDestPrepViaje);
+
     }
 
 //Borrar elementos de la tabla
@@ -832,32 +852,63 @@ public class ControladorPrincipal {
     public void onSiguiente(javafx.event.ActionEvent actionEvent) {
         // Obtener el tipo de viaje
         String tipoViaje = obtenerTipoViajeSeleccionado();
+        Zona dest1 = chBoxDestPnDestPrepViaje.getValue();
+        Zona dest2 = chBoxDestPnDestPrepViaje2.getValue();
+        Zona dest3 = chBoxDestPnDestPrepViaje3.getValue();
+
+        if (dest1 == null && dest2 == null && dest3 == null) {
+            mostrarAlerta("Error", "Debe seleccionar al menos un destino.");
+            return;
+        }
+
+        Set<Integer> idsDests = new HashSet<>();
+        if (dest1 != null) {
+            idsDests.add(dest1.getZCod());
+        }if (dest2 != null) {
+            if (!idsDests.add(dest2.getZCod())){
+                mostrarAlerta("Error", "Destino repetido en seleccion.");
+                return;
+            }
+        }
+        if (dest3 != null) {
+            if (!idsDests.add(dest3.getZCod())) {
+                mostrarAlerta("Error", "Destino repetido en seleccion.");
+                return;
+            }
+        }
 
         if (tipoViaje != null) {
             try {
-                // 1️⃣ Crear la conexión (si tu clase no tiene métodos estáticos)
+                //Crear la conexión (si tu clase no tiene métodos estáticos)
 
                 Connection conn = ConexionBD.getConexion();
 
-                // 2️⃣ Crear el DAO con esa conexión
+                //Crear el DAO con esa conexión
                 ElementoSeguridadDAO dao = new ElementoSeguridadDAO(conn);
 
-                // 3️⃣ Obtener la lista de elementos según el tipo de viaje
+                //Obtener la lista de elementos según el tipo de viaje
                 List<ElementoDeSeguridad> lista = dao.listarPorTipoViaje(tipoViaje);
 
-                // 4️⃣ Cargar la lista en la tabla
+                //Cargar la lista en la tabla
                 tableElementos.getItems().setAll(lista);
 
-                System.out.println("✅ Se cargaron los elementos de seguridad para el viaje " + tipoViaje);
+                System.out.println("Se cargaron los elementos de seguridad para el viaje " + tipoViaje);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
         } else {
-            System.out.println("⚠ No se ha seleccionado ningún tipo de viaje");
+            mostrarAlerta("Error","No se ha seleccionado tipo de viaje");
+            return;
         }
 
+        chBoxDestPnDestPrepViaje.setDisable(true);
+        chBoxDestPnDestPrepViaje2.setDisable(true);
+        chBoxDestPnDestPrepViaje3.setDisable(true);
+
+        radbtnBarrPaneDestPrepViaje.setDisable(true);
+        radbtnDiaPaneDestPrepViaje.setDisable(true);
         // Cambiar al panel de elementos
         mostrarPanelElementos();
     }
@@ -873,6 +924,7 @@ public class ControladorPrincipal {
         confirm.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 try {
+                    tabPanePrepViaje.getSelectionModel().select(tabDestPrepViaje);
                     mostrarPaneIncio();
                 } catch (Exception ex) {
                     System.out.println("No entro al menu");
@@ -880,6 +932,7 @@ public class ControladorPrincipal {
 
                 // Limpiar Destino
                 if (datePnDestPrepViaje != null) datePnDestPrepViaje.setValue(null);
+                if (radbtnDiaPaneDestPrepViaje.isSelected() || radbtnBarrPaneDestPrepViaje.isSelected()) tipoViajeOpcs.selectToggle(null);
                 if (chBoxDestPnDestPrepViaje != null) chBoxDestPnDestPrepViaje.getSelectionModel().clearSelection();
                 if (chBoxDestPnDestPrepViaje2 != null) chBoxDestPnDestPrepViaje2.getSelectionModel().clearSelection();
                 if (chBoxDestPnDestPrepViaje3 != null) chBoxDestPnDestPrepViaje3.getSelectionModel().clearSelection();
@@ -889,6 +942,13 @@ public class ControladorPrincipal {
                 if (tableElementos != null) tableElementos.getItems().clear();
                 if (tableCamionetas != null) tableCamionetas.getItems().clear();
                 if (tableMaquinas != null) tableMaquinas.getItems().clear();
+
+                chBoxDestPnDestPrepViaje.setDisable(false);
+                chBoxDestPnDestPrepViaje2.setDisable(false);
+                chBoxDestPnDestPrepViaje3.setDisable(false);
+
+                radbtnBarrPaneDestPrepViaje.setDisable(false);
+                radbtnDiaPaneDestPrepViaje.setDisable(false);
 
                 // Mensaje
                 actualizarLista();

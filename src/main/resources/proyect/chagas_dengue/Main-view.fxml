@@ -55,7 +55,7 @@
                                                     </font>
                                                 </Label>
                                                 <DatePicker fx:id="datePnDestPrepViaje" layoutX="277.0" layoutY="163.0" />
-                                                <Button fx:id="btnSigPnDestPrepViaje" layoutX="351.0" layoutY="439.0" mnemonicParsing="false" onAction="#onSiguiente" text="Siguiente">
+                                                <Button fx:id="btnSigPnDestPrepViaje" layoutX="351.0" layoutY="439.0" mnemonicParsing="false" onAction="#onSiguiente" prefHeight="40.0" prefWidth="100.0" text="Siguiente">
                                                     <font>
                                                         <Font size="18.0" />
                                                     </font>
@@ -91,6 +91,11 @@
                                                 <ChoiceBox fx:id="chBoxDestPnDestPrepViaje" layoutX="301.0" layoutY="291.0" prefWidth="150.0" />
                                                 <ChoiceBox fx:id="chBoxDestPnDestPrepViaje2" layoutX="301.0" layoutY="338.0" prefWidth="150.0" />
                                                 <ChoiceBox fx:id="chBoxDestPnDestPrepViaje3" layoutX="301.0" layoutY="383.0" prefWidth="150.0" />
+                                 <Button fx:id="btnRegistrarViajePaneListar" layoutX="134.0" layoutY="439.0" mnemonicParsing="false" onAction="#ingresarViaje" prefHeight="40.0" prefWidth="152.0" text="Registrar viaje">
+                                    <font>
+                                       <Font size="18.0" />
+                                    </font>
+                                 </Button>
                                             </children>
                                         </Pane>
                                     </StackPane>
@@ -98,7 +103,7 @@
 
                                                                 <!-- Asignar Elementos-->
 
-                                <Tab fx:id="tabElmsPrepViaje" styleClass="submenu-tab" text="Elementos">
+                                <Tab fx:id="tabElmsPrepViaje" styleClass="submenu-tab" text="Recursos">
                                     <content>
                                         <ScrollPane fx:id="scrPaneElmsPrepViaje" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" vbarPolicy="AS_NEEDED">
                                             <AnchorPane fx:id="anchorElementos" style="-fx-background-color: white; -fx-padding: 0 0 350 0 ">
@@ -106,7 +111,7 @@
                                                     <VBox alignment="CENTER" spacing="10" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
 
                                                         <HBox spacing="20" />
-                                                        <Label text="Seleccione una pestaña para añadir elementos">
+                                                        <Label text="Seleccione una pestaña para añadir recursos">
                                                             <font>
                                                                 <Font size="19.0" />
                                                             </font>
@@ -257,7 +262,7 @@
 
                                 <Tab fx:id="tabListPrepViaje" styleClass="submenu-tab" text="Listar">
                                     <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20;">
-                                        <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #363535;" text="Lista de Elementos del Viaje" />
+                                        <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #363535;" text="Lista de Recursos del Viaje" />
 
                                         <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="AS_NEEDED">
                                             <VBox fx:id="listaContainer" spacing="8" styleClass="ListarCont">
@@ -271,11 +276,7 @@
                                         </HBox>
 
                                         <Label fx:id="lblMensajePDF" style="-fx-font-size: 14px; -fx-text-fill: #28a745;" text="" />
-                           <HBox alignment="CENTER" prefHeight="29.0" prefWidth="760.0">
-                              <children>
-                                 <Button fx:id="btnRegistrarViajePaneListar" mnemonicParsing="false" onAction="#ingresarViaje" text="Registrar viaje" />
-                              </children>
-                           </HBox>
+                           <HBox alignment="CENTER" prefHeight="29.0" prefWidth="760.0" />
                                     </VBox>
                                 </Tab>
                             </TabPane>
