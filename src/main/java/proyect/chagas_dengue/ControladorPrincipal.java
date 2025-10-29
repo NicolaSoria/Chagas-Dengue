@@ -57,7 +57,7 @@ public class ControladorPrincipal {
     @FXML private Label lblMensajePDF;
 
 
-    private ObservableList<Camioneta> listaCamionetas = FXCollections.observableArrayList();
+   // private ObservableList<Camioneta> listaCamionetas = FXCollections.observableArrayList();
 
     // Datos de ejemplo para la lista
     private Map<String, Integer> objetos = new HashMap<>();
@@ -70,7 +70,7 @@ public class ControladorPrincipal {
         cargarZonas();
         fechasCont();
         // Asignar la lista observable a la tabla
-        tableCamionetas.setItems(listaCamionetas);
+        //tableCamionetas.setItems(listaCamionetas);
     }
 
     private void fechasCont(){
@@ -476,8 +476,9 @@ public class ControladorPrincipal {
 
     // ========== EMPLEADOS ==========
     @FXML private TableView<Empleado> tableEmpleados;
-    @FXML private TableColumn<Camioneta, Integer> colEmpleadoDNI;
-    @FXML private TableColumn<Camioneta, String> colEmpleadoNombre;
+    @FXML private TableColumn<Empleado, Integer> colEmpleadoDNI;
+    @FXML private TableColumn<Empleado, String> colEmpleadoNombre;
+    @FXML private TableColumn<Empleado, Integer> colEmpleadoCod;
             ;
 
     // ========== CAMIONETAS ==========
@@ -514,7 +515,7 @@ public class ControladorPrincipal {
     private void configurarColumnas() {
         // Camionetas
 
-        colCamionetaCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+        colCamionetaCodigo.setCellValueFactory(new PropertyValueFactory<>("CCod"));
         colCamionetaPatente.setCellValueFactory(new PropertyValueFactory<>("patente"));
         colCamionetaEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
@@ -534,6 +535,13 @@ public class ControladorPrincipal {
 
         colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
         colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
+
+        //Empleados
+
+        colEmpleadoDNI.setCellValueFactory(new PropertyValueFactory<>("dni"));
+        colEmpleadoCod.setCellValueFactory(new PropertyValueFactory<>("ECod"));
+        colEmpleadoNombre.setCellValueFactory(new PropertyValueFactory<>("Nombre"));
+
     }
 
     private void cargarDatos() {
@@ -569,7 +577,9 @@ public class ControladorPrincipal {
                     c -> {
                         Camioneta cam = (Camioneta)c;
                         return "Patente: " + cam.getPatente() + " | Estado: " + cam.getEstado();
-                    }
+                    },
+                    false
+
             );
 
             Stage stage = new Stage();
@@ -584,9 +594,9 @@ public class ControladorPrincipal {
             if (seleccionadoObj != null) {
                 Camioneta seleccionado = (Camioneta) seleccionadoObj;
 
-                listaCamionetas.add(seleccionado); // agregar a la lista observable
+          //      listaCamionetas.add(seleccionado); // agregar a la lista observable
 
-//                tableCamionetas.getItems().add(seleccionado);
+               tableCamionetas.getItems().add(seleccionado);
                 System.out.println("Camioneta seleccionada: " + seleccionado.getPatente());
             }
 
@@ -615,7 +625,8 @@ public class ControladorPrincipal {
                     p -> {
                         ProductoQuimico prod = (ProductoQuimico)p;
                         return prod.getNombre() + " | Marca: " + prod.getMarca();
-                    }
+                    },
+                    false
             );
 
             Stage stage = new Stage();
@@ -656,7 +667,8 @@ public class ControladorPrincipal {
                     m -> {
                         Maquina maq = (Maquina)m;
                         return maq.getMarca() + " | Modelo: " + maq.getModelo();
-                    }
+                    },
+                    false
             );
 
             Stage stage = new Stage();
@@ -671,6 +683,47 @@ public class ControladorPrincipal {
                 Maquina seleccionado = (Maquina) seleccionadoObj;
                 tableMaquinas.getItems().add(seleccionado);
                 System.out.println("Máquina seleccionada: " + seleccionado.getMarca() + " " + seleccionado.getModelo());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private Button btnAñadirEmpleado;
+
+    @FXML
+    private void onAñadirEmpleados() {
+        try {
+            EmpleadoDAO dao = new EmpleadoDAO();
+            List<Empleado> empleados = dao.listarTodos();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/proyect/chagas_dengue/interfaz/Seleccionar1.fxml"));
+            Parent root = loader.load();
+
+            SeleccionarController controller = loader.getController();
+            controller.configurar(
+                    "Seleccionar Empleado",
+                    empleados,
+                    e -> {
+                        Empleado emp = (Empleado) e;
+                        return emp.getNombre() + " (DNI: " + emp.getDni() + ")";
+                    },
+                    true
+            );
+
+            Stage stage = new Stage();
+            controller.setStage(stage);
+            stage.initOwner(btnAñadirEmpleado.getScene().getWindow());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+
+            Object seleccionadoObj = controller.getSeleccionado();
+            if (seleccionadoObj != null) {
+                Empleado seleccionado = (Empleado) seleccionadoObj;
+                tableEmpleados.getItems().add(seleccionado);
             }
 
         } catch (Exception e) {
@@ -713,10 +766,12 @@ public class ControladorPrincipal {
     @FXML private Button btnEditarCamionetas;
     @FXML private Button btnEditarQuimicos;
     @FXML private Button btnEditarMaquinas;
+    @FXML private Button btnEditarEmpleados;
 
     private boolean editandoCamionetas = false;
     private boolean editandoQuimicos = false;
     private boolean editandoMaquinas = false;
+    private boolean editandoEmpleados = false;
 
     @FXML
     private void onEditarCamionetas() {
@@ -757,6 +812,20 @@ public class ControladorPrincipal {
             btnEditarMaquinas.setText("Editar");
             btnEditarMaquinas.setStyle("");
             quitarColumnaBorrar(tableMaquinas);
+        }
+    }
+
+    @FXML
+    private void onEditarEmpleados() {
+        editandoEmpleados = !editandoEmpleados;
+        if (editandoEmpleados) {
+            btnEditarEmpleados.setText("Cancelar");
+            btnEditarEmpleados.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;"); // rojo
+            agregarColumnaBorrar(tableEmpleados);
+        } else {
+            btnEditarEmpleados.setText("Editar");
+            btnEditarEmpleados.setStyle("");
+            quitarColumnaBorrar(tableEmpleados);
         }
     }
 

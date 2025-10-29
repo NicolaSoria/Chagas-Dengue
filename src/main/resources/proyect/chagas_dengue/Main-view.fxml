@@ -1,30 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Accordion?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane stylesheets="@estilos.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyect.chagas_dengue.ControladorPrincipal">
+<BorderPane stylesheets="@estilos.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyect.chagas_dengue.ControladorPrincipal">
 
         <center>
             <TabPane fx:id="mainTabPane" styleClass="custom-tab-pane" tabClosingPolicy="UNAVAILABLE">
@@ -130,18 +112,18 @@
                                                                                 </font>
                                                                             </Label>
 
-                                                                            <TableView fx:id="0" prefHeight="200" prefWidth="650">
+                                                                            <TableView fx:id="tableEmpleados" prefHeight="200" prefWidth="650">
                                                                                 <columns>
-                                                                                    <TableColumn fx:id="colEmpCod" prefWidth="100" text="Código" />
-                                                                                    <TableColumn fx:id="colEmpNombre" prefWidth="150" text="Nombre" />
-                                                                                    <TableColumn fx:id="colDNI" prefWidth="150" text="DNI" />
+                                                                                    <TableColumn fx:id="colEmpleadoCod" prefWidth="100" text="Código" />
+                                                                                    <TableColumn fx:id="colEmpleadoNombre" prefWidth="150" text="Nombre" />
+                                                                                    <TableColumn fx:id="colEmpleadoDNI" prefWidth="150" text="DNI" />
 
                                                                                 </columns>
                                                                             </TableView>
 
                                                                             <HBox alignment="CENTER" spacing="10">
-                                                                                <!--                                                                            <Button fx:id="btnAñadirProducto" onAction="#onAñadirProducto" prefWidth="100" text="Agregar..." />-->
-                                                                                <!--                                                                            <Button fx:id="btnEditarQuimicos" onAction="#onEditarQuimicos" prefWidth="100" text="Editar..." />-->
+                                                                                    <Button fx:id="btnAñadirEmpleado" onAction="#onAñadirEmpleados" prefWidth="100" text="Agregar..." />
+                                                                                    <Button fx:id="btnEditarEmpleados" onAction="#onEditarEmpleados" prefWidth="100" text="Editar..." />
                                                                             </HBox>
                                                                         </VBox>
                                                                     </content>

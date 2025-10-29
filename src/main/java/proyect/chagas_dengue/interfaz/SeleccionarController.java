@@ -2,17 +2,17 @@ package proyect.chagas_dengue.interfaz;
 
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import proyect.chagas_dengue.dao.CamionetaDAO;
 import proyect.chagas_dengue.modelos.Camioneta;
 
+import javax.swing.*;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class SeleccionarController<Object> {
 
@@ -28,8 +28,15 @@ public class SeleccionarController<Object> {
     @FXML
     private Button btnSeleccionar;
 
+    @FXML private TextField txtBuscar;
+
+    @FXML private Label lblBuscar;
+
     private Object seleccionado;
     private Stage stage;
+
+    private List<Object> elementosOriginales = new ArrayList<>();
+    private Function<Object, String> mostrarFuncion;
 
     @FXML
     public void initialize() {
@@ -45,9 +52,14 @@ public class SeleccionarController<Object> {
         });
     }
 
-    public void configurar(String titulo, List<Object> elementos, Function<Object, String> mostrar) {
+    public void configurar(String titulo, List<Object> elementos, Function<Object, String> mostrar,boolean conBusqueda) {
+
+        this.mostrarFuncion = mostrar;
 
         lblTitulo.setText(titulo);
+
+        elementosOriginales.clear();
+        elementosOriginales.addAll(elementos);
 
         // Agregar los objetos reales al ListView
         listItems.getItems().setAll(elementos);
@@ -67,6 +79,17 @@ public class SeleccionarController<Object> {
             }
         });
 
+        if (txtBuscar != null) {
+            txtBuscar.setVisible(conBusqueda);
+            txtBuscar.setManaged(conBusqueda);
+            lblBuscar.setVisible(conBusqueda);
+
+
+            if (conBusqueda) {
+                txtBuscar.textProperty().addListener((obs, old, newText) -> filtrarLista(newText));
+            }
+        }
+
 //        lblTitulo.setText(titulo);
 //        listItems.getItems().setAll(elementos);
 //
@@ -77,6 +100,18 @@ public class SeleccionarController<Object> {
 //                setText(empty || item == null ? "" : mostrar.apply(item));
 //            }
 //        });
+    }
+
+    private void filtrarLista(String filtro) {
+        if (filtro == null || filtro.isEmpty()) {
+            listItems.getItems().setAll(elementosOriginales);
+        } else {
+            String f = filtro.toLowerCase();
+            List<Object> filtrados = elementosOriginales.stream()
+                    .filter(obj -> mostrarFuncion.apply(obj).toLowerCase().contains(f))
+                    .collect(Collectors.toList());
+            listItems.getItems().setAll(filtrados);
+        }
     }
 
     public Object getSeleccionado() {
