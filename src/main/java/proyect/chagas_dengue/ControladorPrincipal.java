@@ -948,7 +948,7 @@ public class ControladorPrincipal {
 
         if (tipoViaje != null) {
             try {
-                //Crear la conexión (si tu clase no tiene métodos estáticos)
+                //Crear la conexión
 
                 Connection conn = ConexionBD.getConexion();
 
@@ -958,8 +958,14 @@ public class ControladorPrincipal {
                 //Obtener la lista de elementos según el tipo de viaje
                 List<ElementoDeSeguridad> lista = dao.listarPorTipoViaje(tipoViaje);
 
+                // 🔎 Filtramos los elementos que no estén deteriorados
+                List<ElementoDeSeguridad> filtrados = lista.stream()
+                        .filter(e -> e.getEstado().equalsIgnoreCase("Nuevo")
+                                || e.getEstado().equalsIgnoreCase("Usado"))
+                        .toList();
+
                 //Cargar la lista en la tabla
-                tableElementos.getItems().setAll(lista);
+                tableElementos.getItems().setAll(filtrados);
 
                 System.out.println("Se cargaron los elementos de seguridad para el viaje " + tipoViaje);
 

@@ -12,7 +12,7 @@ public class ConexionBD {
     // Cambiá los valores según tu configuración
     private static final String URL = "jdbc:mysql://localhost:3306/proychagas";
     private static final String USER = "root";
-    private static final String PASSWORD = "1234";
+    private static final String PASSWORD = "root";
 
     private ConexionBD() {
         try {
