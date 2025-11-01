@@ -103,4 +103,57 @@ public class ViajeDAO implements interfaceDAO<Viaje,Integer>{
         }
         return lista;
     }
+
+    public List<Viaje> filtrar(String texto, LocalDate fecha, String estado) {
+        List<Viaje> lista = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder("SELECT * FROM Viajes WHERE 1=1");
+
+        // Filtros dinámicos
+        if (texto != null && !texto.isEmpty()) {
+            sql.append(" AND (VCod LIKE ? OR VCod IN (SELECT VCod FROM Destino d JOIN Zonas z ON d.ZCod = z.ZCod WHERE z.nombre LIKE ?))");
+        }
+        if (fecha != null) {
+            sql.append(" AND fecha_inicio = ?");
+        }
+        if (estado != null && !estado.isEmpty()) {
+            sql.append(" AND estado = ?");
+        }
+
+        try (Connection conn = ConexionBD.getInstancia().getConexion();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            int index = 1;
+
+            if (texto != null && !texto.isEmpty()) {
+                ps.setString(index++, "%" + texto + "%");
+                ps.setString(index++, "%" + texto + "%");
+            }
+            if (fecha != null) {
+                ps.setDate(index++, java.sql.Date.valueOf(fecha));
+            }
+            if (estado != null && !estado.isEmpty()) {
+                ps.setString(index++, estado);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Viaje v = new Viaje();
+                v.setVCod(rs.getInt("VCod"));
+                v.setFechaInicio(rs.getDate("fecha_inicio").toLocalDate());
+                v.setTipo(Viaje.Tipo.valueOf(rs.getString("tipo")));
+                v.setEstado(Viaje.Estado.valueOf(rs.getString("estado")));
+                lista.add(v);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
+
 }
+
+
+

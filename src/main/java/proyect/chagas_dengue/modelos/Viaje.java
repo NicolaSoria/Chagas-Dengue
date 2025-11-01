@@ -6,9 +6,13 @@ public class Viaje {
     public enum Tipo{
         Diario,Barrido
     }
+    public enum Estado{
+        Pendiente,Finalizado
+    }
     private int VCod;
     private LocalDate fechaInicio;
     private Tipo tipo;
+    private Estado estado;
 
     public Viaje(){
         this.fechaInicio = null;
@@ -48,6 +52,14 @@ public class Viaje {
 
     public void setTipo(Tipo tipo) {
         this.tipo = tipo;
+    }
+
+    public Estado getEstado(){
+        return estado;
+    }
+
+    public void setEstado(Estado estado){
+        this.estado = estado;
     }
 }
 
