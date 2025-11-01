@@ -59,7 +59,6 @@ public class ControladorPrincipal {
 
    // private ObservableList<Camioneta> listaCamionetas = FXCollections.observableArrayList();
 
-    // Datos de ejemplo para la lista
     private Map<String, Integer> objetos = new HashMap<>();
 
     @FXML public void initialize(){
@@ -211,7 +210,7 @@ public class ControladorPrincipal {
     @FXML
     private void actualizarLista() {
         PlanificarViajeController objLista = new PlanificarViajeController();
-        objLista.actualizarListaVisual(listaContainer, tableQuimicos.getItems(), tableElementos != null ? tableElementos.getItems() : null, tableCamionetas.getItems(), tableMaquinas.getItems());
+        objLista.actualizarListaVisual(listaContainer,tableEmpleados.getItems(), tableQuimicos.getItems(), tableElementos != null ? tableElementos.getItems() : null, tableCamionetas.getItems(), tableMaquinas.getItems());
         lblMensajePDF.setText("Lista actualizada correctamente");
     }
 
