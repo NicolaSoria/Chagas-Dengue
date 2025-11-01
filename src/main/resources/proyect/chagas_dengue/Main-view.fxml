@@ -103,7 +103,7 @@
 
                                                             <panes>
 
-                                                                <TitledPane animated="false" text="Empleados">
+                                                                <TitledPane text="Empleados">
                                                                     <content>
                                                                         <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">
                                                                             <Label text="Empleados">
@@ -130,7 +130,7 @@
                                                                 </TitledPane>
 
 
-                                                                <TitledPane animated="false" text="Elementos de seguridad">
+                                                                <TitledPane text="Elementos de seguridad">
                                                                     <content>
                                                                         <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">
                                                                             <Label text="Elementos de seguridad">
@@ -153,7 +153,7 @@
                                                                     </content>
                                                                 </TitledPane>
 
-                                                                <TitledPane animated="false" text="Productos Químicos">
+                                                                <TitledPane text="Productos Químicos">
                                                                     <content>
                                                                         <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">
                                                                             <Label text="Producto(s) químico(s)">
@@ -179,7 +179,7 @@
                                                                     </content>
                                                                 </TitledPane>
 
-                                                                <TitledPane animated="false" expanded="false" text="Camionetas">
+                                                                <TitledPane expanded="false" text="Camionetas">
                                                                     <content>
                                                                         <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">
                                                                             <Label text="Camioneta(s)">
@@ -204,7 +204,7 @@
                                                                     </content>
                                                                 </TitledPane>
 
-                                                                <TitledPane animated="false" expanded="false" prefHeight="343.0" prefWidth="800.0" text="Maquinas">
+                                                                <TitledPane expanded="false" prefHeight="343.0" prefWidth="800.0" text="Maquinas">
                                                                     <content>
                                                                         <VBox alignment="TOP_CENTER" prefHeight="350" spacing="10">
                                                                             <Label text="Máquina(s)">
