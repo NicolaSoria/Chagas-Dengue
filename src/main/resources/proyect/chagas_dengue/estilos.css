@@ -87,3 +87,57 @@
 .ListarCont label {
     -fx-font-size: 16px;
 }
+
+/* Estilo para el Accordion completo */
+.accordion {
+    /* Elimina el borde general del Accordion */
+    -fx-border-color: transparent;
+    -fx-background-color: #2b2b2b; /* O #1e1e1e para un negro más intenso */
+}
+
+/* Estilo para cada TitledPane (el encabezado de cada sección) */
+.titled-pane {
+    /* Fondo del panel (para que coincida con el entorno) */
+    -fx-background-color: transparent;
+    /* Elimina el borde externo de cada panel */
+    -fx-border-color: transparent;
+    -fx-text-fill: white;
+    -fx-padding: 10px 15px; /* 10px arriba/abajo, 15px izquierda/derecha */
+}
+
+/* Estilo para el encabezado de cada TitledPane (donde dice "Empleados", etc.) */
+.titled-pane > .title {
+    /* Color de fondo del encabezado, usando un color oscuro consistente */
+    /* Puedes ajustar este color para que combine perfectamente con tus pestañas */
+    -fx-background-color: #3f3f3f; /* Un gris oscuro similar a las pestañas */
+    /* Elimina el borde gris/blanco predeterminado */
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    /* Cambia el color del texto si es necesario */
+    -fx-text-fill: white;
+
+    /* Elimina el efecto de sombra predeterminado que a veces da un borde */
+    -fx-effect: null;
+}
+
+/* Estilo para el área de contenido dentro de cada TitledPane */
+.titled-pane > .content {
+   
+    -fx-background-color: #2e2e2e;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 10px; /* Relleno interno para que el contenido no pegue al borde */
+}
+
+/* Opcional: Estilo al pasar el ratón por encima del encabezado */
+.titled-pane:hover > .title {
+    -fx-background-color: #555555; /* Un tono un poco más claro al pasar el mouse */
+    -fx-padding: 10px 15px; /* Asegura que el tamaño no cambie al hacer hover */
+}
+
+/* Opcional: Estilo cuando el TitledPane está expandido */
+.titled-pane:expanded > .title {
+    /* Puedes darle un color diferente para indicar que está abierto */
+    -fx-background-color: #007acc; /* Ejemplo: un azul distintivo */
+    -fx-border-color: transparent;
+}
