@@ -55,6 +55,7 @@ public class ControladorPrincipal {
     @FXML private TabPane tabPanePrepViaje;
     @FXML private VBox listaContainer;
     @FXML private Label lblMensajePDF;
+    @FXML private Tab tabConsultar;
 
 
    // private ObservableList<Camioneta> listaCamionetas = FXCollections.observableArrayList();
@@ -70,6 +71,19 @@ public class ControladorPrincipal {
         fechasCont();
         // Asignar la lista observable a la tabla
         //tableCamionetas.setItems(listaCamionetas);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/proyect/chagas_dengue/interfaz/Consultar.fxml"));
+            Parent contenidoConsultar = loader.load();
+
+            // Agregar el contenido al tab
+            tabConsultar.setContent(contenidoConsultar);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Error al cargar Consultar.fxml");
+        }
+
+
     }
 
     private void fechasCont(){
