@@ -104,6 +104,25 @@ public class ViajeDAO implements interfaceDAO<Viaje,Integer>{
         return lista;
     }
 
+    public List<Viaje> listarPendientes(){
+        List<Viaje> lista = new ArrayList<>();
+        String sql = "SELECT * FROM Viajes WHERE estado = 'Pendiente';";
+        try (Statement st = conexion.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                int VCod = rs.getInt("VCod");
+                LocalDate fecha = rs.getDate("fecha").toLocalDate();
+                Viaje.Tipo tipo = Viaje.Tipo.valueOf(rs.getString("tipo"));
+                Viaje.Estado estado = Viaje.Estado.valueOf(rs.getString("estado"));
+                Viaje viaje = new Viaje(VCod, fecha, tipo, estado);
+                lista.add(viaje);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
     public List<Viaje> filtrar(String texto, LocalDate fecha, String estado) {
         List<Viaje> lista = new ArrayList<>();
 

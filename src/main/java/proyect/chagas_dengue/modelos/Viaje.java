@@ -14,6 +14,7 @@ public class Viaje {
     private Tipo tipo;
     private Estado estado;
 
+
     public Viaje(){
         this.fechaInicio = null;
         this.tipo = null;
@@ -28,6 +29,13 @@ public class Viaje {
         this.VCod = vCod;
         this.fechaInicio = fechaInicio;
         this.tipo = tipo;
+    }
+
+    public Viaje(int vCod, LocalDate fechaInicio, Tipo tipo, Estado estado) {
+        this.VCod = vCod;
+        this.fechaInicio = fechaInicio;
+        this.tipo = tipo;
+        this.estado = estado;
     }
 
     public int getVCod() {
