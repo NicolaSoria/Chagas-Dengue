@@ -11,9 +11,6 @@ public class FinalizarViajeController {
         List<Viaje> lista = new ArrayList<>();
         ViajeDAO viajeDAO = new ViajeDAO();
         lista = viajeDAO.listarPendientes();
-        for (Viaje viaje : lista) {
-            System.out.println("Cod: " + viaje.getVCod() + "Estado: " + viaje.getEstado());
-        }
         return lista;
     }
 }

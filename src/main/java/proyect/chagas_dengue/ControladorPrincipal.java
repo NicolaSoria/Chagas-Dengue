@@ -1038,42 +1038,49 @@ public class ControladorPrincipal {
             }
         });
     }
+    // Finalizar Viaje OMG
+    private Label labelSeleccionado = null;
 
-    //Nuevos CU
     private void ontabFinalizar() {
         FinalizarViajeController objFinalizar = new FinalizarViajeController();
-
         List<Viaje> lista = objFinalizar.listarViajes();
 
-        // Limpiamos el contenedor antes de agregar los nuevos labels
         listaFinalizar.getChildren().clear();
 
         if (lista == null || lista.isEmpty()) {
             Label vacio = new Label("No hay viajes para finalizar.");
-            vacio.setStyle("-fx-font-size: 16px; -fx-text-fill: gray; -fx-font-style: italic;");
+            vacio.getStyleClass().add("label-vacio");
             listaFinalizar.getChildren().add(vacio);
             return;
         }
 
-        // Generamos un label por cada viaje
         for (Viaje v : lista) {
             Label label = new Label(
                     "Viaje #" + v.getVCod() +
-                            "| Tipo " + v.getTipo() +
+                            " | Tipo: " + v.getTipo() +
                             " | Fecha: " + v.getFechaInicio() +
                             " | Estado: " + v.getEstado()
             );
-            label.setStyle("-fx-font-size: 14px; -fx-padding: 8px; -fx-background-color: #f4f4f4; -fx-background-radius: 6px;");
+            label.getStyleClass().add("label-viaje");
 
-            /*// Si querés hacerlo clickeable (por ejemplo para ver más detalles)
+            //Funcion selecciona un viaje...
             label.setOnMouseClicked(e -> {
                 System.out.println("Seleccionaste el viaje: " + v.getVCod());
-                // Podés abrir otra ventana o mostrar más info aquí
-            });*/
+
+                // Quitar estilo seleccionado
+                if (labelSeleccionado != null)
+                    labelSeleccionado.getStyleClass().remove("label-viaje-seleccionado");
+
+                // Aplicar nuevo estilo ;) carita fachera facherita
+                label.getStyleClass().add("label-viaje-seleccionado");
+
+                labelSeleccionado = label;
+            });
 
             listaFinalizar.getChildren().add(label);
         }
     }
+
 
 
 
