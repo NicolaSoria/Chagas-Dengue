@@ -2,7 +2,8 @@ package proyect.chagas_dengue.dao;
 
 import proyect.chagas_dengue.conexion.ConexionBD;
 import proyect.chagas_dengue.modelos.ProductoQuimico;
-import proyect.chagas_dengue.modelos.Viaje;
+import proyect.chagas_dengue.modelos.Stock;
+
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -19,21 +20,33 @@ public class ProductoDAO implements interfaceDAO<ProductoQuimico,Integer> {
 
     @Override
     public void insertar(ProductoQuimico objeto) {
-        String sql = "INSERT INTO Productos (nombre,marca,presentacion) VALUES (?,?,?)";
+        String sql = "INSERT INTO Productos (nombre,presentacion) VALUES (?,?)";
 
         try (PreparedStatement ps = conexion.prepareStatement(sql)){
             ps.setString(1,objeto.getNombre());
-//            ps.setString(2,objeto.getMarca());
-            ps.setDouble(3,objeto.getPresentacion());
+            ps.setDouble(2,objeto.getPresentacion());
+            ps.executeUpdate();
 
-            int filas = ps.executeUpdate();
+            try (ResultSet rs = ps.getGeneratedKeys()){
+                if(rs.next()){
+                    int idGen = rs.getInt(1);
+                    objeto.setPCod(idGen);
+                }
+            }
+
+            String sqlSt = "INSERT INTO Stocks (SPCod,total) VALUES (?,0)";
+            try (PreparedStatement psSt = conexion.prepareStatement(sqlSt)){
+                psSt.setInt(1,objeto.getPCod());
+                psSt.executeUpdate();
+            }
+            /*int filas = ps.executeUpdate();
             if (filas > 0){
                 ResultSet rs = ps.getGeneratedKeys();
                 if (rs.next()){
                     int idGen = rs.getInt(1);
                     objeto.setPCod(idGen);
                 }
-            }
+            }*/
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -41,7 +54,7 @@ public class ProductoDAO implements interfaceDAO<ProductoQuimico,Integer> {
 
     @Override
     public ProductoQuimico consultar(Integer id) {
-        String sql = "SELECT * FROM Productos WHERE PCod = ?";
+        /*String sql = "SELECT * FROM Productos WHERE PCod = ?";
         try (PreparedStatement ps = conexion.prepareStatement(sql)){
             ps.setInt(1,id);
             ResultSet rs = ps.executeQuery();
@@ -58,18 +71,46 @@ public class ProductoDAO implements interfaceDAO<ProductoQuimico,Integer> {
         }catch (SQLException e) {
             e.printStackTrace();
         }
+        return null;*/
+        String sql = """
+                SELECT p.PCod, p.nombre, p.presentacion,
+                        COALESCE(s.total),0) AS total
+                FROM Productos p
+                LEFT JOIN Stocks s ON p.PCod = s.SPCod
+                WHERE p.PCod = ?
+                """;
+        try (PreparedStatement ps = conexion.prepareStatement(sql)){
+            ps.setInt(1,id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()){
+                int PCod = rs.getInt("PCod");
+                String nombre = rs.getString("nombre");
+                double presentacion = rs.getDouble("presentacion");
+                int total = rs.getInt("total");
+
+                ProductoQuimico producto = new ProductoQuimico(PCod,nombre,presentacion);
+                Stock stock = new Stock(PCod,producto,total);
+                producto.setStock(stock);
+
+                return producto;
+            }
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
     public void actualizar(ProductoQuimico objeto) {
-        String sql = "UPDATE Productos SET nombre = ?, marca = ?, presentacion = ? WHERE PCod = ?";
+        String sql = "UPDATE Productos SET nombre = ?, presentacion = ? WHERE PCod = ?";
 
         try (PreparedStatement ps = conexion.prepareStatement(sql)){
             ps.setString(1,objeto.getNombre());
 //            ps.setString(2,objeto.getMarca());
-            ps.setDouble(3,objeto.getPresentacion());
-            ps.setInt(4,objeto.getPCod());
+            ps.setDouble(2,objeto.getPresentacion());
+            ps.setInt(3,objeto.getPCod());
             ps.executeUpdate();
         }catch (SQLException e){
             e.printStackTrace();
@@ -91,6 +132,37 @@ public class ProductoDAO implements interfaceDAO<ProductoQuimico,Integer> {
     @Override
     public List<ProductoQuimico> listarTodos() {
         List<ProductoQuimico> lista = new ArrayList<>();
+
+        String sql = """
+                SELECT p.PCod, p.nombre, p.presentacion,
+                        COALESCE(s.total,0) AS total
+                FROM Productos p
+                LEFT JOIN Stocks s ON p.PCod = s.SPCod
+                ORDER BY p.PCod
+                """;
+
+        try (Statement st = conexion.createStatement();
+            ResultSet rs = st.executeQuery(sql)) {
+
+            while (rs.next()){
+                int PCod = rs.getInt("PCod");
+                String nombre = rs.getString("nombre");
+                double presentacion = rs.getDouble("presentacion");
+                int total = rs.getInt("total");
+
+                ProductoQuimico producto = new ProductoQuimico(PCod, nombre, presentacion);
+                Stock stock = new Stock(PCod,producto,total);
+                producto.setStock(stock);
+
+                lista.add(producto);
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return lista;
+        /*List<ProductoQuimico> lista = new ArrayList<>();
         String sql = "SELECT * FROM Productos";
 
         try (Statement st = conexion.createStatement();
@@ -106,6 +178,6 @@ public class ProductoDAO implements interfaceDAO<ProductoQuimico,Integer> {
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return lista;
+        return lista;*/
     }
 }

@@ -175,24 +175,26 @@ public class ControladorPrincipal {
         alert.showAndWait();
     }
 
-    @FXML private void ingresarViaje(){
+    @FXML
+    private void ingresarViaje() {
         LocalDate fechainicio = datePnDestPrepViaje.getValue();
 
         if (fechainicio == null) {
-            mostrarAlerta("Error","Fecha no seleccionada.");
+            mostrarAlerta("Error", "Fecha no seleccionada.");
             return;
         }
 
         Viaje.Tipo tipo;
-        if (radbtnDiaPaneDestPrepViaje.isSelected()){
+        if (radbtnDiaPaneDestPrepViaje.isSelected()) {
             tipo = Viaje.Tipo.Diario;
-        }else if (radbtnBarrPaneDestPrepViaje.isSelected()){
+        } else if (radbtnBarrPaneDestPrepViaje.isSelected()) {
             tipo = Viaje.Tipo.Barrido;
-        }else {
+        } else {
             mostrarAlerta("Error", "Debe seleccionar un tipo de viaje.");
             return;
         }
 
+        // --- ZONAS ---
         Zona dest1 = chBoxDestPnDestPrepViaje.getValue();
         Zona dest2 = chBoxDestPnDestPrepViaje2.getValue();
         Zona dest3 = chBoxDestPnDestPrepViaje3.getValue();
@@ -203,19 +205,14 @@ public class ControladorPrincipal {
         }
 
         Set<Integer> idsDests = new HashSet<>();
-        if (dest1 != null) {
-            idsDests.add(dest1.getZCod());
-        }if (dest2 != null) {
-            if (!idsDests.add(dest2.getZCod())){
-                mostrarAlerta("Error", "Destino repetido en seleccion.");
-                return;
-            }
+        if (dest1 != null) idsDests.add(dest1.getZCod());
+        if (dest2 != null && !idsDests.add(dest2.getZCod())) {
+            mostrarAlerta("Error", "Destino repetido en selección.");
+            return;
         }
-        if (dest3 != null) {
-            if (!idsDests.add(dest3.getZCod())) {
-                mostrarAlerta("Error", "Destino repetido en seleccion.");
-                return;
-            }
+        if (dest3 != null && !idsDests.add(dest3.getZCod())) {
+            mostrarAlerta("Error", "Destino repetido en selección.");
+            return;
         }
 
         ObservableList<Camioneta> camionetas = tableCamionetas.getItems();
@@ -224,32 +221,56 @@ public class ControladorPrincipal {
         ObservableList<ElementoDeSeguridad> elementos = tableElementos.getItems();
 
         if (camionetas.isEmpty() || maquinas.isEmpty() || productos.isEmpty() || elementos.isEmpty()) {
-            mostrarAlerta("Error","Una de las listas de recursos esta vacia.");
+            mostrarAlerta("Error", "Una de las listas de recursos está vacía.");
             return;
         }
 
+        // --- CREAR VIAJE ---
         Viaje nuevo = new Viaje();
         nuevo.setFechaInicio(fechainicio);
         nuevo.setTipo(tipo);
+        nuevo.setEstado(Viaje.Estado.Pendiente);
+        nuevo.setCamionetas(camionetas);
+        nuevo.setMaquinas(maquinas);
 
+        // Convertir zonas seleccionadas a lista de zonas
+        List<Zona> zonas = new ArrayList<>();
+        if (dest1 != null) zonas.add(dest1);
+        if (dest2 != null) zonas.add(dest2);
+        if (dest3 != null) zonas.add(dest3);
+        nuevo.setZonas(zonas);
+
+        // --- CREAR DETALLES CON CANTIDADES FIJAS ---
+        List<Detalle> detalles = new ArrayList<>();
+        for (ProductoQuimico p : productos) {
+            Stock stock = p.getStock();
+            int cantidadTomada = 0;
+
+            switch (p.getPCod()) {
+                case 1 -> cantidadTomada = 2; // producto P
+                case 2 -> cantidadTomada = 3; // producto C
+                case 3 -> cantidadTomada = 1; // producto I
+                default -> cantidadTomada = 1; // por si hay otros
+            }
+
+            Detalle detalle = new Detalle();
+            detalle.setViaje(nuevo);
+            detalle.setStock(stock);
+            detalle.setCantTomada(cantidadTomada);
+            detalle.setCantUsada(0); // todavía no se usó nada
+            detalles.add(detalle);
+        }
+        nuevo.setDetalles(detalles);
+
+        // --- GUARDAR VIAJE ---
         ViajeDAO dao = new ViajeDAO();
         dao.insertar(nuevo);
 
-        DestinoDAO dao2 = new DestinoDAO();
-        for (Integer ZCod : idsDests) {
-            Destino destino = new Destino(nuevo.getVCod(),ZCod);
-            dao2.insertar(destino);
-        }
-
-        UsanDAO dao3 = new UsanDAO();
-        for (Camioneta c : camionetas) {
-            dao3.insertar(new Usan(nuevo.getVCod(), c.getCCod()));
-        }
-
         clearZonas();
         consultarController.recargarViajes();
-
+        mostrarAlerta("Éxito", "Viaje ingresado correctamente.");
     }
+
 
     @FXML
     private void actualizarLista() {
