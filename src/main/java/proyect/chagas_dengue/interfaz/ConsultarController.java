@@ -1,15 +1,30 @@
 package proyect.chagas_dengue.interfaz;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import proyect.chagas_dengue.dao.ViajeDAO;
-import proyect.chagas_dengue.modelos.Viaje;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import proyect.chagas_dengue.dao.*;
+import proyect.chagas_dengue.modelos.*;
+
+import java.awt.*;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import javafx.geometry.Insets;
+
 
 public class ConsultarController {
 
@@ -54,6 +69,8 @@ public class ConsultarController {
         // Configurar botón detalle
         btnDetalle.disableProperty().bind(tableViajes.getSelectionModel().selectedItemProperty().isNull());
 
+        btnDetalle.setOnAction(e -> mostrarDetalles());
+
 
     }
 
@@ -86,5 +103,115 @@ public class ConsultarController {
     public void recargarViajes() {
         viajes.setAll(new ViajeDAO().filtrar(null, null, null));
     }
+    
+
+private void mostrarDetalles() {
+    Viaje viaje = tableViajes.getSelectionModel().getSelectedItem();
+    if (viaje == null) return;
+
+    Stage popup = new Stage();
+    popup.setTitle("Detalles del viaje #" + viaje.getVCod());
+    popup.initModality(Modality.APPLICATION_MODAL);
+
+    // Contenedor principal
+    VBox root = new VBox(15);
+    root.setPadding(new Insets(20));
+    root.setStyle("-fx-background-color: #2b2b2b;");
+
+    // --- Título principal ---
+    Label lblTitulo = new Label("Detalles del Viaje");
+    lblTitulo.setStyle("""
+        -fx-font-size: 20px;
+        -fx-font-weight: bold;
+        -fx-text-fill: #ffffff;
+    """);
+
+    Separator sep1 = new Separator();
+
+    // --- Información general del viaje ---
+    GridPane infoViaje = new GridPane();
+    infoViaje.setHgap(10);
+    infoViaje.setVgap(8);
+
+    infoViaje.add(new Label("Código:"), 0, 0);
+    infoViaje.add(new Label(String.valueOf(viaje.getVCod())), 1, 0);
+
+    infoViaje.add(new Label("Fecha:"), 0, 1);
+    infoViaje.add(new Label(String.valueOf(viaje.getFechaInicio())), 1, 1);
+
+    infoViaje.add(new Label("Tipo:"), 0, 2);
+    infoViaje.add(new Label(String.valueOf(viaje.getTipo())), 1, 2);
+
+    infoViaje.add(new Label("Estado:"), 0, 3);
+    infoViaje.add(new Label(String.valueOf(viaje.getEstado())), 1, 3);
+
+    infoViaje.add(new Label("Destinos:"), 0, 4);
+    infoViaje.add(new Label(String.valueOf(viaje.getDestinosTexto())), 1, 4);
+
+    infoViaje.getChildren().forEach(node -> {
+        if (node instanceof Label lbl) {
+            lbl.setStyle("-fx-text-fill: #e0e0e0; -fx-font-size: 14px;");
+        }
+    });
+
+    // --- Sección de recursos asociados ---
+    Separator sep2 = new Separator();
+    Label lblRecursos = new Label("Recursos asignados:");
+    lblRecursos.setStyle("""
+        -fx-font-size: 16px;
+        -fx-font-weight: bold;
+        -fx-text-fill: #ffffff;
+    """);
+
+    VBox recursosBox = new VBox(6);
+
+    try {
+        CamionetaDAO camDao = new CamionetaDAO();
+        List<Camioneta> camList = camDao.listarPorViaje(viaje.getVCod());
+
+        Label lblCamionetas = new Label("Camionetas: " + formatearLista(camList));
+        lblCamionetas.setStyle("-fx-text-fill: #e0e0e0;");
+
+        recursosBox.getChildren().add(lblCamionetas);
+
+    } catch (Exception ex) {
+        Label lblError = new Label("Error al cargar recursos: " + ex.getMessage());
+        lblError.setStyle("-fx-text-fill: #ff6b6b;");
+        recursosBox.getChildren().add(lblError);
+    }
+
+    // --- Botón de cierre ---
+    Button btnCerrar = new Button("Cerrar");
+    btnCerrar.setStyle("""
+        -fx-background-color: #007acc;
+        -fx-text-fill: white;
+        -fx-font-weight: bold;
+        -fx-padding: 6px 12px;
+        -fx-background-radius: 6px;
+    """);
+    btnCerrar.setOnAction(e -> popup.close());
+
+    HBox footer = new HBox(btnCerrar);
+    footer.setAlignment(Pos.CENTER_RIGHT);
+
+    // --- Estructura final ---
+    root.getChildren().addAll(lblTitulo, sep1, infoViaje, sep2, lblRecursos, recursosBox, footer);
+
+    Scene scene = new Scene(root, 480, 420);
+    popup.setScene(scene);
+    popup.showAndWait();
+}
+
+
+
+
+
+    private String formatearLista(List<?> lista) {
+        if (lista == null || lista.isEmpty()) return "—";
+        return lista.stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
+    }
+
 
 }

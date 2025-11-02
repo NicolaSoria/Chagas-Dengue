@@ -61,6 +61,23 @@ public class CamionetaDAO {
         return lista;
     }
 
+    public List<Camioneta> listarPorViaje(int vCod) {
+        List<Camioneta> lista = new ArrayList<>();
+        String sql = "SELECT c.* FROM Usan u JOIN Camionetas c ON u.CCod = c.CCod WHERE u.VCod = ?";
+        try (Connection conn = ConexionBD.getInstancia().getConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, vCod);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                lista.add(new Camioneta(rs.getString("patente"), rs.getString("estado"),rs.getInt("CCod") ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
+
 
 
 }
