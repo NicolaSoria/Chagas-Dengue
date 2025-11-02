@@ -40,7 +40,7 @@ public class ElementoSeguridadDAO {
             if (i < tipos.length - 1) inClause.append(",");
         }
 
-        String sql = "SELECT e.ESCod, e.TESCod, e.descripcion, e.estado " +
+        String sql = "SELECT e.ESCod, e.TESCod, e.descripcion " +
                 "FROM Elementos e " +
                 "WHERE e.TESCod IN (" + inClause + ")";
 
@@ -54,8 +54,8 @@ public class ElementoSeguridadDAO {
                 lista.add(new ElementoDeSeguridad(
                         rs.getInt("ESCod"),
                         rs.getInt("TESCod"),
-                        rs.getString("descripcion"),
-                        rs.getString("estado")
+                        rs.getString("descripcion")
+//                        rs.getString("estado")
                 ));
             }
         }

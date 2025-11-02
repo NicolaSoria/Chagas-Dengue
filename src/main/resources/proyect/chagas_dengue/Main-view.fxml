@@ -284,6 +284,8 @@
                     <!-- Consultar Viaje-->
                     <Tab fx:id="tabConsultar" styleClass="consultar-tab" text="Consultar">
                         <StackPane style="-fx-background-color: white;">
+<!--                            <fx:include source="Consultar.fxml" fx:id="consultarController" />-->
+
 
                         </StackPane>
                     </Tab>

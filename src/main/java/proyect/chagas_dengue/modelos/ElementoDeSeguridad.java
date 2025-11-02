@@ -4,23 +4,23 @@ public class ElementoDeSeguridad {
     private int ESCod;
     private int TESCod;
     private String descripcion;
-    private String estado;
+//    private String estado;
 
-    public ElementoDeSeguridad(int ESCod, int TESCod, String descripcion, String estado) {
+    public ElementoDeSeguridad(int ESCod, int TESCod, String descripcion) {
         this.ESCod = ESCod;
         this.TESCod = TESCod;
         this.descripcion = descripcion;
-        this.estado = estado;
+//        this.estado = estado;
     }
 
     public int getESCod() { return ESCod; }
     public int getTESCod() { return TESCod; }
     public String getDescripcion() { return descripcion; }
-    public String getEstado() { return estado; }
+//    public String getEstado() { return estado; }
 
     @Override
     public String toString() {
-        return descripcion + " (" + estado + ")";
+        return descripcion ;
     }
 }
 
