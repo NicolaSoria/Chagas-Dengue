@@ -268,7 +268,7 @@
                     </Tab>
                     <!-- Finalizar Viaje-->
                     <Tab fx:id="tabFin" styleClass="finalizar-tab" text="Finalizar">
-                    <Tab styleClass="finalizar-tab" text="Finalizar">
+<!--                    <Tab styleClass="finalizar-tab" text="Finalizar">-->
                         <StackPane style="-fx-background-color: white;">
                             <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20;">
                                 <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #363535;" text="Lista de Recursos del Viaje" />
@@ -283,8 +283,8 @@
                     </Tab>
 
                     <!-- Consultar Viaje-->
-                    <Tab styleClass="consultar-tab" text="Consultar">
-                        <StackPane style="-fx-background-color: white;">
+<!--                    <Tab styleClass="consultar-tab" text="Consultar">-->
+<!--                        <StackPane style="-fx-background-color: white;">-->
                     <Tab fx:id="tabConsultar" styleClass="consultar-tab" text="Consultar">
                         <StackPane style="-fx-background-color: white;">
 <!--                            <fx:include source="Consultar.fxml" fx:id="consultarController" />-->

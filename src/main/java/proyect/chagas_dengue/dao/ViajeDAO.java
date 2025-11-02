@@ -123,68 +123,68 @@ public class ViajeDAO implements interfaceDAO<Viaje,Integer>{
         return lista;
     }
 
-    public List<Viaje> filtrar(String texto, LocalDate fecha, String estado) {
-        List<Viaje> lista = new ArrayList<>();
 //    public List<Viaje> filtrar(String texto, LocalDate fecha, String estado) {
 //        List<Viaje> lista = new ArrayList<>();
-//
-//        StringBuilder sql = new StringBuilder("        SELECT v.VCod, v.fecha, v.tipo, v.estado,\n" +
-//                "                GROUP_CONCAT(z.nombre SEPARATOR ', ') AS destinos\n" +
-//                "        FROM Viajes v\n" +
-//                "        LEFT JOIN Destinos d ON v.VCod = d.VCod\n" +
-//                "        LEFT JOIN Zonas z ON d.ZCod = z.ZCod\n" +
-//                "        WHERE 1=1\n" +
-//                "        \"\"\"");
-//
-//
-//
-////        SELECT * FROM Viajes WHERE 1=1
-//
-//
-//                // Filtros dinámicos
-//                if (texto != null && !texto.isEmpty()) {
-//                    sql.append(" AND (VCod LIKE ? OR VCod IN (SELECT VCod FROM destinos d JOIN zonas z ON d.ZCod = z.ZCod WHERE z.nombre LIKE ?))");
-//                }
-//                if (fecha != null) {
-//                    sql.append(" AND fecha = ?");
-//                }
-//                if (estado != null && !estado.isEmpty()) {
-//                    sql.append(" AND estado = ?");
-//                }
-//
-//                try (Connection conn = ConexionBD.getInstancia().getConexion();
-//                     PreparedStatement ps = conn.prepareStatement(sql.toString())) {
-//
-//                    int index = 1;
-//
-//                    if (texto != null && !texto.isEmpty()) {
-//                        ps.setString(index++, "%" + texto + "%");
-//                        ps.setString(index++, "%" + texto + "%");
-//                    }
-//                    if (fecha != null) {
-//                        ps.setDate(index++, java.sql.Date.valueOf(fecha));
-//                    }
-//                    if (estado != null && !estado.isEmpty()) {
-//                        ps.setString(index++, estado);
-//                    }
-//
-//                    ResultSet rs = ps.executeQuery();
-//                    while (rs.next()) {
-//                        Viaje v = new Viaje();
-//                        v.setVCod(rs.getInt("VCod"));
-//                        v.setFechaInicio(rs.getDate("fecha").toLocalDate());
-//                        v.setTipo(Viaje.Tipo.valueOf(rs.getString("tipo")));
-//                        v.setEstado(Viaje.Estado.valueOf(rs.getString("estado")));
-//                        v.setDestinosTexto(rs.getString("destinosTexto"));
-//                        lista.add(v);
-//                    }
-//
-//                } catch (SQLException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                return lista;
-//            }
+////    public List<Viaje> filtrar(String texto, LocalDate fecha, String estado) {
+////        List<Viaje> lista = new ArrayList<>();
+////
+////        StringBuilder sql = new StringBuilder("        SELECT v.VCod, v.fecha, v.tipo, v.estado,\n" +
+////                "                GROUP_CONCAT(z.nombre SEPARATOR ', ') AS destinos\n" +
+////                "        FROM Viajes v\n" +
+////                "        LEFT JOIN Destinos d ON v.VCod = d.VCod\n" +
+////                "        LEFT JOIN Zonas z ON d.ZCod = z.ZCod\n" +
+////                "        WHERE 1=1\n" +
+////                "        \"\"\"");
+////
+////
+////
+//////        SELECT * FROM Viajes WHERE 1=1
+////
+////
+////                // Filtros dinámicos
+////                if (texto != null && !texto.isEmpty()) {
+////                    sql.append(" AND (VCod LIKE ? OR VCod IN (SELECT VCod FROM destinos d JOIN zonas z ON d.ZCod = z.ZCod WHERE z.nombre LIKE ?))");
+////                }
+////                if (fecha != null) {
+////                    sql.append(" AND fecha = ?");
+////                }
+////                if (estado != null && !estado.isEmpty()) {
+////                    sql.append(" AND estado = ?");
+////                }
+////
+////                try (Connection conn = ConexionBD.getInstancia().getConexion();
+////                     PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+////
+////                    int index = 1;
+////
+////                    if (texto != null && !texto.isEmpty()) {
+////                        ps.setString(index++, "%" + texto + "%");
+////                        ps.setString(index++, "%" + texto + "%");
+////                    }
+////                    if (fecha != null) {
+////                        ps.setDate(index++, java.sql.Date.valueOf(fecha));
+////                    }
+////                    if (estado != null && !estado.isEmpty()) {
+////                        ps.setString(index++, estado);
+////                    }
+////
+////                    ResultSet rs = ps.executeQuery();
+////                    while (rs.next()) {
+////                        Viaje v = new Viaje();
+////                        v.setVCod(rs.getInt("VCod"));
+////                        v.setFechaInicio(rs.getDate("fecha").toLocalDate());
+////                        v.setTipo(Viaje.Tipo.valueOf(rs.getString("tipo")));
+////                        v.setEstado(Viaje.Estado.valueOf(rs.getString("estado")));
+////                        v.setDestinosTexto(rs.getString("destinosTexto"));
+////                        lista.add(v);
+////                    }
+////
+////                } catch (SQLException e) {
+////                    e.printStackTrace();
+////                }
+////
+////                return lista;
+////            }
 
 
 public List<Viaje> filtrar(String texto, LocalDate fecha, String estado) {
