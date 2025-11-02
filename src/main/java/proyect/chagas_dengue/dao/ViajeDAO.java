@@ -1,7 +1,7 @@
 package proyect.chagas_dengue.dao;
 
 import proyect.chagas_dengue.conexion.ConexionBD;
-import proyect.chagas_dengue.modelos.Viaje;
+import proyect.chagas_dengue.modelos.*;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -15,8 +15,149 @@ public class ViajeDAO implements interfaceDAO<Viaje,Integer>{
     public ViajeDAO(){this.conexion = ConexionBD.getInstancia().getConexion();}
 
     @Override
-    public void insertar(Viaje objeto) {
-        String sql = "INSERT INTO Viajes (fecha,tipo) VALUES (?,?)";
+    public void insertar(Viaje viaje) {
+        String sqlViaje = "INSERT INTO Viajes (fecha, tipo, estado) VALUES (?, ?, ?)";
+        String sqlDestino = "INSERT INTO Destinos (VCod, ZCod) VALUES (?, ?)";
+        String sqlUsan = "INSERT INTO Usan (VCod, CCod) VALUES (?, ?)";
+        String sqlMaquinas = "INSERT INTO Transporta (VCod, MCod) VALUES (?, ?)";
+        String sqlDetalle = "INSERT INTO Detalle (DVCod, DSPCod, cantTomada, cantUsada) VALUES (?, ?, ?, ?)";
+        String sqlStockUpdate = "UPDATE Stocks SET total = total - ? WHERE SPCod = ?";
+
+        try {
+            conexion.setAutoCommit(false); // iniciar transacción
+
+            PreparedStatement psViaje = conexion.prepareStatement(sqlViaje, Statement.RETURN_GENERATED_KEYS);
+            psViaje.setDate(1, java.sql.Date.valueOf(viaje.getFechaInicio()));
+            psViaje.setString(2, viaje.getTipo().name());
+            psViaje.setString(3, viaje.getEstado().name());
+            psViaje.executeUpdate();
+
+            ResultSet rs = psViaje.getGeneratedKeys();
+            if (rs.next()) {
+                viaje.setVCod(rs.getInt(1)); // asignar ID generado
+            }
+
+            if (viaje.getZonas() != null && !viaje.getZonas().isEmpty()) {
+                try (PreparedStatement psDestino = conexion.prepareStatement(sqlDestino)) {
+                    for (Zona z : viaje.getZonas()) {
+                        psDestino.setInt(1, viaje.getVCod());
+                        psDestino.setInt(2, z.getZCod());
+                        psDestino.addBatch();
+                    }
+                    psDestino.executeBatch();
+                }
+            }
+
+            if (viaje.getCamionetas() != null && !viaje.getCamionetas().isEmpty()) {
+                try (PreparedStatement psUsan = conexion.prepareStatement(sqlUsan)) {
+                    for (Camioneta c : viaje.getCamionetas()) {
+                        psUsan.setInt(1, viaje.getVCod());
+                        psUsan.setInt(2, c.getCCod());
+                        psUsan.addBatch();
+                    }
+                    psUsan.executeBatch();
+                }
+            }
+
+            if (viaje.getMaquinas() != null && !viaje.getMaquinas().isEmpty()) {
+                try (PreparedStatement psMaquinas = conexion.prepareStatement(sqlMaquinas)) {
+                    for (Maquina m : viaje.getMaquinas()) {
+                        psMaquinas.setInt(1, viaje.getVCod());
+                        psMaquinas.setInt(2, m.getMCod());
+                        psMaquinas.addBatch();
+                    }
+                    psMaquinas.executeBatch();
+                }
+            }
+
+            if (viaje.getDetalles() != null && !viaje.getDetalles().isEmpty()) {
+                try (PreparedStatement psDet = conexion.prepareStatement(sqlDetalle);
+                     PreparedStatement psStock = conexion.prepareStatement(sqlStockUpdate)) {
+
+                    for (Detalle det : viaje.getDetalles()) {
+                        int spCod = det.getStock().getSPCod();
+                        int cantTomada = det.getCantTomada();
+
+                        // Insertar detalle
+                        psDet.setInt(1, viaje.getVCod());
+                        psDet.setInt(2, spCod);
+                        psDet.setInt(3, cantTomada);
+                        psDet.setInt(4, det.getCantUsada()); // normalmente 0 al inicio
+                        psDet.addBatch();
+
+                        // Actualizar stock
+                        psStock.setInt(1, cantTomada);
+                        psStock.setInt(2, spCod);
+                        psStock.addBatch();
+                    }
+
+                    psDet.executeBatch();
+                    psStock.executeBatch();
+                }
+            }
+
+            conexion.commit(); //es correcto
+            conexion.setAutoCommit(true);
+
+        } catch (SQLException e) {
+            try {
+                conexion.rollback(); // revertir si  falla
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    /*public void insertar(Viaje viaje) {
+
+        try{
+            String sqlViaje = "INSERT INTO Viajes (fechainicio, tipo, estado) VALUES (?, ?, ?)";
+            PreparedStatement psViaje = conexion.prepareStatement(sqlViaje, Statement.RETURN_GENERATED_KEYS);
+            psViaje.setDate(1, java.sql.Date.valueOf(viaje.getFechaInicio()));
+            psViaje.setString(2, viaje.getTipo().name());
+            psViaje.setString(3, viaje.getEstado().name());
+            psViaje.executeUpdate();
+
+            ResultSet rs = psViaje.getGeneratedKeys();
+            if (rs.next()) {
+                viaje.setVCod(rs.getInt(1)); // asigna el ID generado
+            }
+
+            if (viaje.getZonas() != null) {
+                String sqlDestino = "INSERT INTO Destinos (VCod, ZCod) VALUES (?, ?)";
+                PreparedStatement psDestino = conexion.prepareStatement(sqlDestino);
+                for (Zona z : viaje.getZonas()) {
+                    psDestino.setInt(1, viaje.getVCod());
+                    psDestino.setInt(2, z.getZCod());
+                    psDestino.addBatch();
+                }
+                psDestino.executeBatch();
+            }
+
+            if (viaje.getCamionetas() != null) {
+                String sqlUsan = "INSERT INTO Usan (VCod, CCod) VALUES (?, ?)";
+                PreparedStatement psUsan = conexion.prepareStatement(sqlUsan);
+                for (Camioneta c : viaje.getCamionetas()) {
+                    psUsan.setInt(1, viaje.getVCod());
+                    psUsan.setInt(2, c.getCCod());
+                    psUsan.addBatch();
+                }
+                psUsan.executeBatch();
+            }
+
+            if (viaje.getMaquinas() != null) {
+                String sqlMaquinas = "INSERT INTO Transporta (vCod, mCod) VALUES (?, ?)";
+                PreparedStatement psMaquinas = conexion.prepareStatement(sqlMaquinas);
+                for (Maquina m : viaje.getMaquinas()) {
+                    psMaquinas.setInt(1, viaje.getVCod());
+                    psMaquinas.setInt(2, m.getMCod());
+                    psMaquinas.addBatch();
+                }
+                psMaquinas.executeBatch();
+            }
+
+        /*String sql = "INSERT INTO Viajes (fecha,tipo) VALUES (?,?)";
 
         try (PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             ps.setDate(1,java.sql.Date.valueOf(objeto.getFechaInicio()));
@@ -33,7 +174,7 @@ public class ViajeDAO implements interfaceDAO<Viaje,Integer>{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     @Override
     public Viaje consultar(Integer id) {
@@ -77,6 +218,50 @@ public class ViajeDAO implements interfaceDAO<Viaje,Integer>{
 
         try (PreparedStatement ps = conexion.prepareStatement(sql)){
             ps.setInt(1,id);
+            ps.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void insertarDest(int VCod, int ZCod) {
+        String sql = "INSERT INTO Destinos (VCod, ZCod) VALUES (?,?)";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)){
+            ps.setInt(1,VCod);
+            ps.setInt(2,ZCod);
+            ps.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void insertarUsan(int VCod, int CCod) {
+        String sql = "INSERT INTO Usan (VCod, CCod) VALUES (?,?)";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)){
+            ps.setInt(1,VCod);
+            ps.setInt(2,CCod);
+            ps.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void insertTra(int VCod, int MCod) {
+        String sql = "INSERT INTO Transporta (VCod, MCod) VALUES (?,?)";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)){
+            ps.setInt(1,VCod);
+            ps.setInt(2,MCod);
+            ps.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void insertRlz(int VCod, int ECod) {
+        String sql = "INSERT INTO Realizan (VCod, ECod) VALUES (?,?)";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)){
+            ps.setInt(1,VCod);
+            ps.setInt(2,ECod);
             ps.executeUpdate();
         }catch (SQLException e){
             e.printStackTrace();

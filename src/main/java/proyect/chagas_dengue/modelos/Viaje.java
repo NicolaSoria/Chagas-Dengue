@@ -1,6 +1,7 @@
 package proyect.chagas_dengue.modelos;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Viaje {
     public enum Tipo{
@@ -14,6 +15,11 @@ public class Viaje {
     private Tipo tipo;
     private Estado estado;
     private String destinosTexto;
+    private List<Zona> zonas;
+    private List<Camioneta> camionetas;
+    private List<Maquina> maquinas;
+    private List<Empleado> empleados;
+    private List<Detalle> detalles;
 
 
     public Viaje(){
@@ -71,13 +77,31 @@ public class Viaje {
         this.estado = estado;
     }
 
-    public String getDestinosTexto() {
-        return destinosTexto;
-    }
+    public List<Zona> getZonas() {return zonas;}
+
+    public void setZonas(List<Zona> zonas) {this.zonas = zonas;}
+
+    public String getDestinosTexto(){return destinosTexto;}
 
     public void setDestinosTexto(String destinosTexto) {
         this.destinosTexto = destinosTexto;
     }
+
+    public List<Camioneta> getCamionetas() { return camionetas;}
+
+    public void setCamionetas(List<Camioneta> camionetas) {this.camionetas = camionetas;}
+
+    public List<Maquina> getMaquinas() {return maquinas;}
+
+    public void setMaquinas(List<Maquina> maquinas) {this.maquinas = maquinas;}
+
+    public List<Empleado> getEmpleados() {return empleados;}
+
+    public void setEmpleados(List<Empleado> empleados) {this.empleados = empleados;}
+
+    public List<Detalle> getDetalles() {return detalles;}
+
+    public void setDetalles(List<Detalle> detalles) {this.detalles = detalles;}
 }
 
 
