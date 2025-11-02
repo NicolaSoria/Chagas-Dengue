@@ -13,6 +13,7 @@ public class Viaje {
     private LocalDate fechaInicio;
     private Tipo tipo;
     private Estado estado;
+    private String destinosTexto;
 
 
     public Viaje(){
@@ -68,6 +69,14 @@ public class Viaje {
 
     public void setEstado(Estado estado){
         this.estado = estado;
+    }
+
+    public String getDestinosTexto() {
+        return destinosTexto;
+    }
+
+    public void setDestinosTexto(String destinosTexto) {
+        this.destinosTexto = destinosTexto;
     }
 }
 

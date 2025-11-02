@@ -31,6 +31,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import proyect.chagas_dengue.conexion.ConexionBD;
 import proyect.chagas_dengue.dao.*;
+import proyect.chagas_dengue.interfaz.ConsultarController;
 import proyect.chagas_dengue.interfaz.PlanificarViajeController;
 import proyect.chagas_dengue.interfaz.SeleccionarController;
 import proyect.chagas_dengue.modelos.*;
@@ -59,11 +60,16 @@ public class ControladorPrincipal {
     @FXML private VBox listaFinalizar;
     @FXML private Button btnCancelar;
     @FXML private Tab tabPanificar;
+    @FXML private Tab tabConsultar;
+    @FXML private ConsultarController consultarController;
 
     //este contador se usar para hacer aparecer el boton de cancelar
     private  int cancelarBtnCont = 0;
 
    // private ObservableList<Camioneta> listaCamionetas = FXCollections.observableArrayList();
+
+    // private ObservableList<Camioneta> listaCamionetas = FXCollections.observableArrayList();
+
     private Map<String, Integer> objetos = new HashMap<>();
 
     @FXML public void initialize(){
@@ -91,6 +97,21 @@ public class ControladorPrincipal {
         fechasCont();
         // Asignar la lista observable a la tabla
         //tableCamionetas.setItems(listaCamionetas);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/proyect/chagas_dengue/interfaz/Consultar.fxml"));
+            Parent contenidoConsultar = loader.load();
+
+            consultarController = loader.getController();
+
+            // Agregar el contenido al tab
+            tabConsultar.setContent(contenidoConsultar);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Error al cargar Consultar.fxml");
+        }
+
+
     }
 
     private void fechasCont(){
@@ -226,6 +247,8 @@ public class ControladorPrincipal {
         }
 
         clearZonas();
+        consultarController.recargarViajes();
+
     }
 
     @FXML
@@ -644,7 +667,7 @@ public class ControladorPrincipal {
                     productos,
                     p -> {
                         ProductoQuimico prod = (ProductoQuimico)p;
-                        return prod.getNombre() + " | Marca: " + prod.getMarca();
+                        return prod.getNombre() ;
                     },
                     false
             );
@@ -978,14 +1001,9 @@ public class ControladorPrincipal {
                 //Obtener la lista de elementos según el tipo de viaje
                 List<ElementoDeSeguridad> lista = dao.listarPorTipoViaje(tipoViaje);
 
-                // 🔎 Filtramos los elementos que no estén deteriorados
-                List<ElementoDeSeguridad> filtrados = lista.stream()
-                        .filter(e -> e.getEstado().equalsIgnoreCase("Nuevo")
-                                || e.getEstado().equalsIgnoreCase("Usado"))
-                        .toList();
 
                 //Cargar la lista en la tabla
-                tableElementos.getItems().setAll(filtrados);
+                tableElementos.getItems().setAll(lista);
 
                 System.out.println("Se cargaron los elementos de seguridad para el viaje " + tipoViaje);
 

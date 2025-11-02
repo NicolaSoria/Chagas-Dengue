@@ -23,7 +23,7 @@ public class ProductoDAO implements interfaceDAO<ProductoQuimico,Integer> {
 
         try (PreparedStatement ps = conexion.prepareStatement(sql)){
             ps.setString(1,objeto.getNombre());
-            ps.setString(2,objeto.getMarca());
+//            ps.setString(2,objeto.getMarca());
             ps.setDouble(3,objeto.getPresentacion());
 
             int filas = ps.executeUpdate();
@@ -50,7 +50,7 @@ public class ProductoDAO implements interfaceDAO<ProductoQuimico,Integer> {
                 ProductoQuimico producto = new ProductoQuimico(
                         rs.getInt("PCod"),
                         rs.getString("nombre"),
-                        rs.getString("marca"),
+//                        rs.getString("marca"),
                         rs.getDouble("presentacion")
                 );
                 return producto;
@@ -67,7 +67,7 @@ public class ProductoDAO implements interfaceDAO<ProductoQuimico,Integer> {
 
         try (PreparedStatement ps = conexion.prepareStatement(sql)){
             ps.setString(1,objeto.getNombre());
-            ps.setString(2,objeto.getMarca());
+//            ps.setString(2,objeto.getMarca());
             ps.setDouble(3,objeto.getPresentacion());
             ps.setInt(4,objeto.getPCod());
             ps.executeUpdate();
@@ -98,9 +98,9 @@ public class ProductoDAO implements interfaceDAO<ProductoQuimico,Integer> {
             while (rs.next()){
                 int PCod = rs.getInt("PCod");
                 String nombre = rs.getString("nombre");
-                String marca = rs.getString("marca");
+//                String marca = rs.getString("marca");
                 Double presentacion = rs.getDouble("presentacion");
-                ProductoQuimico producto = new ProductoQuimico(PCod,nombre,marca,presentacion);
+                ProductoQuimico producto = new ProductoQuimico(PCod,nombre,presentacion);
                 lista.add(producto);
             }
         }catch (SQLException e){

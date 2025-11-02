@@ -2,10 +2,12 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
+
+<?import javafx.scene.text.Font?>
 <BorderPane stylesheets="@estilos.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyect.chagas_dengue.ControladorPrincipal">
 
         <center>
@@ -266,6 +268,7 @@
                     </Tab>
                     <!-- Finalizar Viaje-->
                     <Tab fx:id="tabFin" styleClass="finalizar-tab" text="Finalizar">
+                    <Tab styleClass="finalizar-tab" text="Finalizar">
                         <StackPane style="-fx-background-color: white;">
                             <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20;">
                                 <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #363535;" text="Lista de Recursos del Viaje" />
@@ -282,6 +285,10 @@
                     <!-- Consultar Viaje-->
                     <Tab styleClass="consultar-tab" text="Consultar">
                         <StackPane style="-fx-background-color: white;">
+                    <Tab fx:id="tabConsultar" styleClass="consultar-tab" text="Consultar">
+                        <StackPane style="-fx-background-color: white;">
+<!--                            <fx:include source="Consultar.fxml" fx:id="consultarController" />-->
+
 
                         </StackPane>
                     </Tab>

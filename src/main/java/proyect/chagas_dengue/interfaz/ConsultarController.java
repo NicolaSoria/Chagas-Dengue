@@ -8,13 +8,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import proyect.chagas_dengue.dao.ViajeDAO;
 import proyect.chagas_dengue.modelos.Viaje;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 public class ConsultarController {
 
     @FXML private TextField txtBuscador;
     @FXML private DatePicker dpFechaFiltro;
-    @FXML private ComboBox<String> cbEstadoFiltro;
+    @FXML private ComboBox<Viaje.Estado> cbEstadoFiltro;
     @FXML private TableView<Viaje> tableViajes;
     @FXML private TableColumn<Viaje, Integer> colCodigo;
     @FXML private TableColumn<Viaje, String> colDestino;
@@ -28,15 +29,22 @@ public class ConsultarController {
     public void initialize() {
         // Configurar columnas
         colCodigo.setCellValueFactory(new PropertyValueFactory<>("VCod"));
-        colDestino.setCellValueFactory(new PropertyValueFactory<>("destino"));
         colFecha.setCellValueFactory(new PropertyValueFactory<>("fechaInicio"));
         colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
+        colDestino.setCellValueFactory(new PropertyValueFactory<>("destinosTexto"));
 
+        // Cargar ComboBox de estados
+        cbEstadoFiltro.getItems().add(null);
+        cbEstadoFiltro.getItems().addAll(Viaje.Estado.values());
+        cbEstadoFiltro.setPromptText("Seleccionar estado...");
+
+
+        viajes.setAll(new ViajeDAO().filtrar(null, null, null)); //fix para mostrar correctamente todo al inicio
 
         tableViajes.setItems(viajes);
 
         // Cargar lista inicial
-        cargarViajes();
+//        cargarViajes();
 
         // Evento de búsqueda
         txtBuscador.textProperty().addListener((obs, old, newVal) -> filtrar());
@@ -45,21 +53,25 @@ public class ConsultarController {
 
         // Configurar botón detalle
         btnDetalle.disableProperty().bind(tableViajes.getSelectionModel().selectedItemProperty().isNull());
+
+
     }
 
-    private void cargarViajes() {
-        ViajeDAO dao = new ViajeDAO();
-        List<Viaje> lista = dao.listarTodos(); // suponiendo que tenés este método
-        viajes.setAll(lista);
-    }
+//    private void cargarViajes() {
+//        ViajeDAO dao = new ViajeDAO();
+//        List<Viaje> lista = dao.listarTodos(); // suponiendo que tenés este método
+//        viajes.setAll(lista);
+//    }
 
     private void filtrar() {
         // ejemplo básico de filtrado (ajustalo a tu lógica)
         String texto = txtBuscador.getText() != null ? txtBuscador.getText().toLowerCase() : "";
         LocalDate fecha = dpFechaFiltro.getValue();
-        String estado = cbEstadoFiltro.getValue();
+       // String estado = cbEstadoFiltro.getValue();
+        String estado = cbEstadoFiltro.getValue() != null ? cbEstadoFiltro.getValue().toString() : null;
 
-        viajes.setAll(new ViajeDAO().filtrar(texto, fecha, estado)); // podés implementar esto
+
+        viajes.setAll(new ViajeDAO().filtrar(texto, fecha, estado));
     }
 
     @FXML
@@ -70,4 +82,9 @@ public class ConsultarController {
             // abrir popup o cargar otro panel con detalles
         }
     }
+
+    public void recargarViajes() {
+        viajes.setAll(new ViajeDAO().filtrar(null, null, null));
+    }
+
 }
