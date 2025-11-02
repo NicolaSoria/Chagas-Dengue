@@ -4,6 +4,31 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Viaje {
+    public void setCamionetasTexto(String camionetas) {
+    }
+
+    public void setEmpleadosTexto(String empleados) {
+    }
+
+    public void setMaquinasTexto(String maquinas) {
+    }
+
+    public void setProductosTexto(String productos) {
+    }
+
+    public void setElementosTexto(String elementos) {
+    }
+
+    public String getCamionetasTexto() { return camionetasTexto;}
+
+    public String getEmpleadosTexto() { return empleadosTexto;}
+
+    public String getMaquinasTexto() { return maquinasTexto;}
+
+    public String getProductosTexto() { return productosTexto;}
+
+    public String getElementosTexto() { return elementosTexto;}
+
     public enum Tipo{
         Diario,Barrido
     }
@@ -15,11 +40,22 @@ public class Viaje {
     private Tipo tipo;
     private Estado estado;
     private String destinosTexto;
+<<<<<<< Updated upstream
     private List<Zona> zonas;
     private List<Camioneta> camionetas;
     private List<Maquina> maquinas;
     private List<Empleado> empleados;
     private List<Detalle> detalles;
+=======
+    private String camionetasTexto;
+    private String empleadosTexto;
+    private String maquinasTexto;
+    private String productosTexto;
+    private String elementosTexto;
+
+// Getters y setters para cada uno
+
+>>>>>>> Stashed changes
 
 
     public Viaje(){

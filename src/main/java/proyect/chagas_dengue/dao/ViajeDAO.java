@@ -454,6 +454,67 @@ public List<Viaje> filtrar(String texto, LocalDate fecha, String estado) {
     return lista;
 }
 
+    public Viaje obtenerViajeConRecursos(int vCod) {
+        Viaje viaje = null;
+
+        String sql = """
+        SELECT v.VCod, v.fecha, v.tipo, v.estado,
+               GROUP_CONCAT(DISTINCT c.patente SEPARATOR ', ') AS camionetas,
+               GROUP_CONCAT(DISTINCT e.nombre SEPARATOR ', ') AS empleados,
+               GROUP_CONCAT(DISTINCT m.modelo SEPARATOR ', ') AS maquinas,
+               GROUP_CONCAT(DISTINCT p.nombre SEPARATOR ', ') AS productos
+/*              GROUP_CONCAT(DISTINCT es.descripcion SEPARATOR ', ') AS elementos */
+        FROM Viajes v
+        LEFT JOIN destinos des ON v.VCod = des.VCod
+        LEFT JOIN zonas z ON des.ZCod = z.ZCod
+        LEFT JOIN Usan u ON v.VCod = u.VCod
+        LEFT JOIN Camionetas c ON u.CCod = c.CCod
+        LEFT JOIN Realizan r ON v.VCod = r.VCod
+        LEFT JOIN Empleados e ON r.ECod = e.ECod
+        LEFT JOIN transporta vm ON v.VCod = vm.VCod
+        LEFT JOIN Maquinas m ON vm.MCod = m.MCod
+        
+ /*       LEFT JOIN detalle vp ON v.VCod = vp.VCod
+        LEFT JOIN Productos p ON vp.PCod = p.PCod   */
+        
+        LEFT JOIN detalle d ON v.VCod = d.DVCod
+        LEFT JOIN productos p ON d.DSPCod = p.PCod
+        
+/*        LEFT JOIN Viaje_Elemento ve ON v.VCod = ve.VCod */
+/*        LEFT JOIN ElementosSeguridad es ON ve.ESCod = es.ESCod */
+        WHERE v.VCod = ?
+        GROUP BY v.VCod;
+    """;
+
+        try (Connection conn = ConexionBD.getInstancia().getConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, vCod);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                viaje = new Viaje();
+                viaje.setVCod(rs.getInt("VCod"));
+                viaje.setFechaInicio(rs.getDate("fecha").toLocalDate());
+                viaje.setTipo(Viaje.Tipo.valueOf(rs.getString("tipo")));
+                viaje.setEstado(Viaje.Estado.valueOf(rs.getString("estado")));
+
+                // Guardamos los recursos como texto concatenado
+                viaje.setCamionetasTexto(rs.getString("camionetas"));
+                viaje.setEmpleadosTexto(rs.getString("empleados"));
+                viaje.setMaquinasTexto(rs.getString("maquinas"));
+                viaje.setProductosTexto(rs.getString("productos"));
+//                viaje.setElementosTexto(rs.getString("elementos"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return viaje;
+    }
+
+
 }
 
 

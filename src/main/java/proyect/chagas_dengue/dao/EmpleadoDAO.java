@@ -27,6 +27,38 @@ public class EmpleadoDAO {
         }
         return lista;
     }
+
+    public List<Empleado> listarPorViaje(int vCod) {
+        List<Empleado> lista = new ArrayList<>();
+        String sql = """
+        SELECT e.*
+        FROM Empleados e
+        JOIN Viaje_Empleado ve ON e.ECod = ve.ECod
+        WHERE ve.VCod = ?
+    """;
+
+        try (Connection conn = ConexionBD.getInstancia().getConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, vCod);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Empleado e = new Empleado();
+                e.setECod(rs.getInt("ECod"));
+                e.setNombre(rs.getString("nombre"));
+                e.setDni(rs.getInt("dni"));
+                e.setDireccion(rs.getString("direccion"));
+                e.setTelefono(rs.getString("telefono"));
+                lista.add(e);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return lista;
+    }
+
 }
 
 

@@ -1,6 +1,9 @@
 package proyect.chagas_dengue.modelos;
 
 public class Manual extends Maquina{
+    public Manual() {
+        super();
+    }
 
     /*public enum cargaltsM{
         Ocho("8"),

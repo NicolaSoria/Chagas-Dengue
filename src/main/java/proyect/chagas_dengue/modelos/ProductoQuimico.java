@@ -6,6 +6,10 @@ public class ProductoQuimico {
     private double presentacion; // cantidad, litros, etc.
     private Stock stock;
 
+    public ProductoQuimico(){
+
+    }
+
     public ProductoQuimico(int PCod, String nombre, double presentacion){
         this.PCod = PCod;
         this.nombre = nombre;

@@ -6,6 +6,9 @@ public class ElementoDeSeguridad {
     private String descripcion;
 //    private String estado;
 
+    public ElementoDeSeguridad() {
+    }
+
     public ElementoDeSeguridad(int ESCod, int TESCod, String descripcion) {
         this.ESCod = ESCod;
         this.TESCod = TESCod;
@@ -21,6 +24,15 @@ public class ElementoDeSeguridad {
     @Override
     public String toString() {
         return descripcion ;
+    }
+
+    public void setESCod(int esCod) {
+    }
+
+    public void setDescripcion(String descripcion) {
+    }
+
+    public void setEstado(String estado) {
     }
 }
 

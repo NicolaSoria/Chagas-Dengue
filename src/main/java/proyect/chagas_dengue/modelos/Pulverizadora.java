@@ -1,6 +1,9 @@
 package proyect.chagas_dengue.modelos;
 
 public class Pulverizadora extends Maquina{
+    public Pulverizadora() {
+
+    }
 
     /*public enum cargaltsP{
         Trece("13"),
@@ -19,6 +22,8 @@ public class Pulverizadora extends Maquina{
     }
 
     private cargaltsP cargalts;
+
+
 
     public Pulverizadora(String marca,String modelo, Pulverizadora.cargaltsP cargalts){
         super(marca,modelo,TipoM.Pulverizadora);

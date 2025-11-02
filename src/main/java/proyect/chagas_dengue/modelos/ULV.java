@@ -8,4 +8,8 @@ public class ULV extends Maquina{
     public ULV(String marca, String modelo){
         super(marca,modelo,TipoM.ULV);
     }
+
+    public ULV() {
+
+    }
 }

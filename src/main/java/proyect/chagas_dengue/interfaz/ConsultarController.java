@@ -103,104 +103,106 @@ public class ConsultarController {
     public void recargarViajes() {
         viajes.setAll(new ViajeDAO().filtrar(null, null, null));
     }
-    
 
-private void mostrarDetalles() {
-    Viaje viaje = tableViajes.getSelectionModel().getSelectedItem();
-    if (viaje == null) return;
 
-    Stage popup = new Stage();
-    popup.setTitle("Detalles del viaje #" + viaje.getVCod());
-    popup.initModality(Modality.APPLICATION_MODAL);
+    private void mostrarDetalles() {
+        Viaje viajeSeleccionado = tableViajes.getSelectionModel().getSelectedItem();
+        if (viajeSeleccionado == null) return;
 
-    // Contenedor principal
-    VBox root = new VBox(15);
-    root.setPadding(new Insets(20));
-    root.setStyle("-fx-background-color: #2b2b2b;");
+        // Obtenemos los datos completos del viaje (incluyendo recursos)
+        ViajeDAO dao = new ViajeDAO();
+        Viaje viaje = dao.obtenerViajeConRecursos(viajeSeleccionado.getVCod());
+        if (viaje == null) return;
 
-    // --- Título principal ---
-    Label lblTitulo = new Label("Detalles del Viaje");
-    lblTitulo.setStyle("""
+        Stage popup = new Stage();
+        popup.setTitle("Detalles del viaje #" + viaje.getVCod());
+        popup.initModality(Modality.APPLICATION_MODAL);
+
+        VBox root = new VBox(18);
+        root.setPadding(new Insets(20));
+        root.setStyle("-fx-background-color: #1e1e1e; -fx-border-color: #3a3a3a; -fx-border-radius: 8px;");
+
+        // Título
+        Label lblTitulo = new Label("Detalles del Viaje");
+        lblTitulo.setStyle("""
         -fx-font-size: 20px;
         -fx-font-weight: bold;
         -fx-text-fill: #ffffff;
     """);
 
-    Separator sep1 = new Separator();
+        Separator sep1 = new Separator();
 
-    // --- Información general del viaje ---
-    GridPane infoViaje = new GridPane();
-    infoViaje.setHgap(10);
-    infoViaje.setVgap(8);
+        // Información principal del viaje
+        GridPane info = new GridPane();
+        info.setHgap(12);
+        info.setVgap(8);
+        info.setPadding(new Insets(5, 0, 10, 0));
 
-    infoViaje.add(new Label("Código:"), 0, 0);
-    infoViaje.add(new Label(String.valueOf(viaje.getVCod())), 1, 0);
+        addInfoRow(info, 0, "Código:", String.valueOf(viaje.getVCod()));
+        addInfoRow(info, 1, "Fecha:", String.valueOf(viaje.getFechaInicio()));
+        addInfoRow(info, 2, "Tipo:", String.valueOf(viaje.getTipo()));
+        addInfoRow(info, 3, "Estado:", String.valueOf(viaje.getEstado()));
+        addInfoRow(info, 4, "Destinos:", viaje.getDestinosTexto());
 
-    infoViaje.add(new Label("Fecha:"), 0, 1);
-    infoViaje.add(new Label(String.valueOf(viaje.getFechaInicio())), 1, 1);
+        Separator sep2 = new Separator();
 
-    infoViaje.add(new Label("Tipo:"), 0, 2);
-    infoViaje.add(new Label(String.valueOf(viaje.getTipo())), 1, 2);
-
-    infoViaje.add(new Label("Estado:"), 0, 3);
-    infoViaje.add(new Label(String.valueOf(viaje.getEstado())), 1, 3);
-
-    infoViaje.add(new Label("Destinos:"), 0, 4);
-    infoViaje.add(new Label(String.valueOf(viaje.getDestinosTexto())), 1, 4);
-
-    infoViaje.getChildren().forEach(node -> {
-        if (node instanceof Label lbl) {
-            lbl.setStyle("-fx-text-fill: #e0e0e0; -fx-font-size: 14px;");
-        }
-    });
-
-    // --- Sección de recursos asociados ---
-    Separator sep2 = new Separator();
-    Label lblRecursos = new Label("Recursos asignados:");
-    lblRecursos.setStyle("""
+        Label lblRecursos = new Label("Recursos asignados");
+        lblRecursos.setStyle("""
         -fx-font-size: 16px;
         -fx-font-weight: bold;
         -fx-text-fill: #ffffff;
     """);
 
-    VBox recursosBox = new VBox(6);
+        // Recursos (cada uno en su propio bloque si tiene datos)
+        VBox recursosBox = new VBox(6);
+        recursosBox.setPadding(new Insets(5, 0, 0, 0));
 
-    try {
-        CamionetaDAO camDao = new CamionetaDAO();
-        List<Camioneta> camList = camDao.listarPorViaje(viaje.getVCod());
+        agregarRecurso(recursosBox, "Camionetas", viaje.getCamionetasTexto());
+        agregarRecurso(recursosBox, "Empleados", viaje.getEmpleadosTexto());
+        agregarRecurso(recursosBox, "Máquinas", viaje.getMaquinasTexto());
+        agregarRecurso(recursosBox, "Productos Químicos", viaje.getProductosTexto());
+//        agregarRecurso(recursosBox, "Elementos de Seguridad", viaje.getElementosTexto());
 
-        Label lblCamionetas = new Label("Camionetas: " + formatearLista(camList));
-        lblCamionetas.setStyle("-fx-text-fill: #e0e0e0;");
-
-        recursosBox.getChildren().add(lblCamionetas);
-
-    } catch (Exception ex) {
-        Label lblError = new Label("Error al cargar recursos: " + ex.getMessage());
-        lblError.setStyle("-fx-text-fill: #ff6b6b;");
-        recursosBox.getChildren().add(lblError);
-    }
-
-    // --- Botón de cierre ---
-    Button btnCerrar = new Button("Cerrar");
-    btnCerrar.setStyle("""
+        // Botón cerrar
+        Button btnCerrar = new Button("Cerrar");
+        btnCerrar.setStyle("""
         -fx-background-color: #007acc;
         -fx-text-fill: white;
         -fx-font-weight: bold;
         -fx-padding: 6px 12px;
         -fx-background-radius: 6px;
     """);
-    btnCerrar.setOnAction(e -> popup.close());
+        btnCerrar.setOnAction(e -> popup.close());
 
-    HBox footer = new HBox(btnCerrar);
-    footer.setAlignment(Pos.CENTER_RIGHT);
+        HBox footer = new HBox(btnCerrar);
+        footer.setAlignment(Pos.CENTER_RIGHT);
+        footer.setPadding(new Insets(10, 0, 0, 0));
 
-    // --- Estructura final ---
-    root.getChildren().addAll(lblTitulo, sep1, infoViaje, sep2, lblRecursos, recursosBox, footer);
+        root.getChildren().addAll(lblTitulo, sep1, info, sep2, lblRecursos, recursosBox, footer);
 
-    Scene scene = new Scene(root, 480, 420);
-    popup.setScene(scene);
-    popup.showAndWait();
-}
+        Scene scene = new Scene(root, 520, 460);
+        popup.setScene(scene);
+        popup.showAndWait();
+    }
+
+// --- Métodos auxiliares ---
+
+    private void addInfoRow(GridPane grid, int row, String label, String value) {
+        Label lbl = new Label(label);
+        lbl.setStyle("-fx-text-fill: #cccccc; -fx-font-weight: bold;");
+        Label val = new Label(value != null ? value : "-");
+        val.setStyle("-fx-text-fill: #e0e0e0;");
+        grid.add(lbl, 0, row);
+        grid.add(val, 1, row);
+    }
+
+    private void agregarRecurso(VBox box, String titulo, String contenido) {
+        if (contenido == null || contenido.isEmpty()) return;
+        Label lbl = new Label(titulo + ": " + contenido);
+        lbl.setStyle("-fx-text-fill: #d0d0d0; -fx-font-size: 13px;");
+        box.getChildren().add(lbl);
+    }
+
 
 
 

@@ -180,4 +180,35 @@ public class ProductoDAO implements interfaceDAO<ProductoQuimico,Integer> {
         }
         return lista;*/
     }
+
+    public List<ProductoQuimico> listarPorViaje(int vCod) {
+        List<ProductoQuimico> lista = new ArrayList<>();
+        String sql = """
+        SELECT p.*
+        FROM ProductosQuimicos p
+        JOIN Viaje_ProductoQuimico vp ON p.PCod = vp.PCod
+        WHERE vp.VCod = ?
+    """;
+
+        try (Connection conn = ConexionBD.getInstancia().getConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, vCod);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                ProductoQuimico p = new ProductoQuimico();
+                p.setPCod(rs.getInt("PCod"));
+                p.setNombre(rs.getString("nombre"));
+                p.setPresentacion(rs.getDouble("presentacion"));
+
+                lista.add(p);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return lista;
+    }
+
 }

@@ -1,6 +1,12 @@
 package proyect.chagas_dengue.modelos;
 
 public abstract class Maquina {
+
+
+    public Maquina() {
+
+    }
+
     public enum TipoM{
         Manual,ULV, Pulverizadora
     }
