@@ -161,3 +161,32 @@
 .label-viaje-seleccionado {
     -fx-background-color: #b3d9ff;
 }
+
+/* === Botón Cancelar === */
+.btn-cancelar {
+    -fx-background-color: #e74c3c;       /* rojo suave */
+    -fx-text-fill: white;                /* texto blanco */
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 18px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+}
+
+/* Al pasar el mouse */
+.btn-cancelar:hover {
+    -fx-background-color: #c0392b;       /* rojo más oscuro */
+}
+
+/* Al hacer clic */
+.btn-cancelar:pressed {
+    -fx-background-color: #a93226;
+}
+
+/* Cuando el botón está deshabilitado */
+.btn-cancelar:disabled {
+    -fx-opacity: 0.6;
+    -fx-cursor: default;
+}
