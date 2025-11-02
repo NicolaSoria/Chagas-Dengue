@@ -56,16 +56,39 @@ public class ControladorPrincipal {
     @FXML private TabPane tabPanePrepViaje;
     @FXML private VBox listaContainer;
     @FXML private Label lblMensajePDF;
+    @FXML private Tab tabFin;
+    @FXML private VBox listaFinalizar;
+    @FXML private Button btnCancelar;
+    @FXML private Tab tabPanificar;
     @FXML private Tab tabConsultar;
     @FXML private ConsultarController consultarController;
 
+    //este contador se usar para hacer aparecer el boton de cancelar
+    private  int cancelarBtnCont = 0;
 
+   // private ObservableList<Camioneta> listaCamionetas = FXCollections.observableArrayList();
 
     // private ObservableList<Camioneta> listaCamionetas = FXCollections.observableArrayList();
 
     private Map<String, Integer> objetos = new HashMap<>();
 
     @FXML public void initialize(){
+        tabFin.setOnSelectionChanged(event -> {
+            if (tabFin.isSelected()) {
+                ontabFinalizar();
+            }
+        });
+        // Escuchar cambios de pestaña
+        mainTabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
+            if (newTab == tabPanificar) {
+                btnCancelar.setVisible(true);
+            } else {
+                btnCancelar.setVisible(false);
+            }
+        });
+
+        // Ocultar por defecto al iniciar
+        btnCancelar.setVisible(false);
         actualizarLista();
         mostrarPaneIncio();
         configurarColumnas();
@@ -1048,5 +1071,51 @@ public class ControladorPrincipal {
             }
         });
     }
+    // Finalizar Viaje OMG
+    private Label labelSeleccionado = null;
+
+    private void ontabFinalizar() {
+        FinalizarViajeController objFinalizar = new FinalizarViajeController();
+        List<Viaje> lista = objFinalizar.listarViajes();
+
+        listaFinalizar.getChildren().clear();
+
+        if (lista == null || lista.isEmpty()) {
+            Label vacio = new Label("No hay viajes para finalizar.");
+            vacio.getStyleClass().add("label-vacio");
+            listaFinalizar.getChildren().add(vacio);
+            return;
+        }
+
+        for (Viaje v : lista) {
+            Label label = new Label(
+                    "Viaje #" + v.getVCod() +
+                            " | Tipo: " + v.getTipo() +
+                            " | Fecha: " + v.getFechaInicio() +
+                            " | Estado: " + v.getEstado()
+            );
+            label.getStyleClass().add("label-viaje");
+
+            //Funcion selecciona un viaje...
+            label.setOnMouseClicked(e -> {
+                System.out.println("Seleccionaste el viaje: " + v.getVCod());
+
+                // Quitar estilo seleccionado
+                if (labelSeleccionado != null)
+                    labelSeleccionado.getStyleClass().remove("label-viaje-seleccionado");
+
+                // Aplicar nuevo estilo ;) carita fachera facherita
+                label.getStyleClass().add("label-viaje-seleccionado");
+
+                labelSeleccionado = label;
+            });
+
+            listaFinalizar.getChildren().add(label);
+        }
+    }
+
+
+
+
 }
 

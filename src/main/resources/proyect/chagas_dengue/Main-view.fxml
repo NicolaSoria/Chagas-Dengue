@@ -23,7 +23,7 @@
                             </VBox>
                         </StackPane>
                     </Tab>
-                    <Tab styleClass="viaje-tab" text="Planificar">
+                    <Tab fx:id="tabPanificar" styleClass="viaje-tab" text="Planificar">
                         <VBox>
                             <TabPane fx:id="tabPanePrepViaje" styleClass="custom-subtab-pane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
 
@@ -267,6 +267,7 @@
                         </VBox>
                     </Tab>
                     <!-- Finalizar Viaje-->
+                    <Tab fx:id="tabFin" styleClass="finalizar-tab" text="Finalizar">
                     <Tab styleClass="finalizar-tab" text="Finalizar">
                         <StackPane style="-fx-background-color: white;">
                             <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20;">
@@ -282,6 +283,8 @@
                     </Tab>
 
                     <!-- Consultar Viaje-->
+                    <Tab styleClass="consultar-tab" text="Consultar">
+                        <StackPane style="-fx-background-color: white;">
                     <Tab fx:id="tabConsultar" styleClass="consultar-tab" text="Consultar">
                         <StackPane style="-fx-background-color: white;">
 <!--                            <fx:include source="Consultar.fxml" fx:id="consultarController" />-->
@@ -297,7 +300,7 @@
 
         <bottom>
             <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER_RIGHT">
-                <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#onCancelar" text="Cancelar" />
+                <Button fx:id="btnCancelar" text="Cancelar" onAction="#onCancelar" styleClass="btn-cancelar" />
                 <padding>
                     <Insets bottom="10.0" right="10.0" top="10.0" />
                 </padding>
