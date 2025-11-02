@@ -21,7 +21,7 @@
                             </VBox>
                         </StackPane>
                     </Tab>
-                    <Tab styleClass="viaje-tab" text="Planificar">
+                    <Tab fx:id="tabPanificar" styleClass="viaje-tab" text="Planificar">
                         <VBox>
                             <TabPane fx:id="tabPanePrepViaje" styleClass="custom-subtab-pane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
 

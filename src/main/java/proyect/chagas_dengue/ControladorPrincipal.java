@@ -57,9 +57,13 @@ public class ControladorPrincipal {
     @FXML private Label lblMensajePDF;
     @FXML private Tab tabFin;
     @FXML private VBox listaFinalizar;
+    @FXML private Button btnCancelar;
+    @FXML private Tab tabPanificar;
+
+    //este contador se usar para hacer aparecer el boton de cancelar
+    private  int cancelarBtnCont = 0;
 
    // private ObservableList<Camioneta> listaCamionetas = FXCollections.observableArrayList();
-
     private Map<String, Integer> objetos = new HashMap<>();
 
     @FXML public void initialize(){
@@ -68,6 +72,17 @@ public class ControladorPrincipal {
                 ontabFinalizar();
             }
         });
+        // Escuchar cambios de pestaña
+        mainTabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
+            if (newTab == tabPanificar) {
+                btnCancelar.setVisible(true);
+            } else {
+                btnCancelar.setVisible(false);
+            }
+        });
+
+        // Ocultar por defecto al iniciar
+        btnCancelar.setVisible(false);
         actualizarLista();
         mostrarPaneIncio();
         configurarColumnas();
