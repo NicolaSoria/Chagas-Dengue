@@ -22,27 +22,66 @@ public class ControladorLogin {
     private void onIngresar() {
         String usuario = txtUsuario.getText().trim();
         String contraseña = txtContraseña.getText().trim();
-        PasswordHash contra = new PasswordHash();
 
-        // Validar campos vacíos
         if (usuario.isEmpty() || contraseña.isEmpty()) {
             lblMensaje.setText("Por favor, complete todos los campos");
             return;
         }
 
-        // Autenticacion
         if (autenticarUsuario(usuario, contraseña)) {
             try {
-                // Login exitoso
                 Main.mostrarPantallaPrincipal();
             } catch (IOException e) {
                 mostrarError("Error al cargar la aplicación: " + e.getMessage());
             }
         } else {
             lblMensaje.setText("Usuario o contraseña incorrectos");
-            // Limpiar campo de contraseña
             txtContraseña.clear();
         }
+    }
+
+    @FXML
+    private void onRegistrar() {
+        String usuario = txtUsuario.getText().trim();
+        String contraseña = txtContraseña.getText().trim();
+
+        if (usuario.isEmpty() || contraseña.isEmpty()) {
+            lblMensaje.setText("Por favor, complete todos los campos");
+            return;
+        }
+
+        if (registrarUsuario(usuario, contraseña)) {
+            lblMensaje.setStyle("-fx-text-fill: #28a745;");
+            lblMensaje.setText("Usuario registrado correctamente");
+            txtUsuario.clear();
+            txtContraseña.clear();
+        } else {
+            lblMensaje.setStyle("-fx-text-fill: #dc3545;");
+            lblMensaje.setText("El usuario ya existe o no se pudo registrar");
+        }
+    }
+
+    private boolean registrarUsuario(String nombre, String password) {
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        PasswordHash passwordHash = new PasswordHash();
+
+        // Verificar si ya existe el usuario
+        if (usuarioDAO.Autentucacion(nombre) != null) {
+            System.out.println("El usuario ya existe");
+            return false;
+        }
+
+        // Crear nuevo usuario
+        if(validarContraseña(password)) {
+            Usuario nuevo = new Usuario();
+            nuevo.setNombre(nombre);
+            nuevo.setPassword(passwordHash.hashPassword(password));
+            System.out.println("Contra: " + nuevo.getPassword());
+            // Insertar en la BD
+            System.out.println("Hoalaa");
+            return usuarioDAO.insertarUsuario(nuevo);
+        }
+        return false;
     }
 
     /**
@@ -72,12 +111,35 @@ public class ControladorLogin {
         return esValido;
     }
 
-
     private void mostrarError(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+
+    public  boolean validarContraseña(String contraseña) {
+        if (contraseña == null || contraseña.length() < 8) {
+            System.out.println("asdasfa");
+            return false;
+        }
+
+        for (char c : contraseña.toCharArray()) {
+            int ascii = (int) c;
+            for (int i = 65; i <= 90; i++) {
+                if (i == ascii) {
+                    return true;
+                }
+            }
+        }
+        String simbolosEspeciales = "!@#$%^&*()_+-=[]{};':\"|,.<>/?123456789";
+        for (char c : contraseña.toCharArray()) {
+            if (simbolosEspeciales.indexOf(c) != -1) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

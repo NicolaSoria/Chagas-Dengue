@@ -32,4 +32,17 @@ public class UsuarioDAO {
         }
         return null;
     }
+
+    public boolean insertarUsuario(Usuario usuario) {
+        String sql = "INSERT INTO usuarios (username, password_hash) VALUES (?, ?)";
+        try (Connection conn = ConexionBD.getConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, usuario.getNombre());
+            stmt.setString(2, usuario.getPassword());
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("Error al registrar usuario: " + e.getMessage());
+            return false;
+        }
+    }
 }

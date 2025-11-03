@@ -29,6 +29,9 @@
         <Button fx:id="btnIngresar" text="Ingresar" onAction="#onIngresar"
                 style="-fx-pref-width: 250px; -fx-pref-height: 35px; -fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold;" />
 
+        <Button fx:id="btnRegistrar" text="Registrar nuevo usuario" onAction="#onRegistrar"
+                style="-fx-pref-width: 250px; -fx-pref-height: 35px; -fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold;" />
+
         <Label fx:id="lblMensaje" style="-fx-text-fill: #dc3545; -fx-font-size: 12px;" text="" />
 
     </VBox>
