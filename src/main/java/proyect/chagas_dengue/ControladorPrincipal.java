@@ -2,6 +2,8 @@ package proyect.chagas_dengue;
 
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -10,9 +12,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.util.converter.IntegerStringConverter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -35,8 +39,6 @@ import proyect.chagas_dengue.interfaz.ConsultarController;
 import proyect.chagas_dengue.interfaz.PlanificarViajeController;
 import proyect.chagas_dengue.interfaz.SeleccionarController;
 import proyect.chagas_dengue.modelos.*;
-
-import java.awt.event.ActionEvent;
 
 public class ControladorPrincipal {
 
@@ -110,6 +112,8 @@ public class ControladorPrincipal {
             e.printStackTrace();
             System.err.println("Error al cargar Consultar.fxml");
         }
+
+        tablaDets.setPlaceholder(new Label("Viaje no seleccionado"));
 
 
     }
@@ -217,10 +221,11 @@ public class ControladorPrincipal {
 
         ObservableList<Camioneta> camionetas = tableCamionetas.getItems();
         ObservableList<Maquina> maquinas = tableMaquinas.getItems();
+        ObservableList<Empleado> empleados = tableEmpleados.getItems();
         ObservableList<ProductoQuimico> productos = tableQuimicos.getItems();
         ObservableList<ElementoDeSeguridad> elementos = tableElementos.getItems();
 
-        if (camionetas.isEmpty() || maquinas.isEmpty() || productos.isEmpty() || elementos.isEmpty()) {
+        if (camionetas.isEmpty() || maquinas.isEmpty() || empleados.isEmpty() || productos.isEmpty() || elementos.isEmpty()) {
             mostrarAlerta("Error", "Una de las listas de recursos está vacía.");
             return;
         }
@@ -232,6 +237,7 @@ public class ControladorPrincipal {
         nuevo.setEstado(Viaje.Estado.Pendiente);
         nuevo.setCamionetas(camionetas);
         nuevo.setMaquinas(maquinas);
+        nuevo.setEmpleados(empleados);
 
         // Convertir zonas seleccionadas a lista de zonas
         List<Zona> zonas = new ArrayList<>();
@@ -257,7 +263,7 @@ public class ControladorPrincipal {
             detalle.setViaje(nuevo);
             detalle.setStock(stock);
             detalle.setCantTomada(cantidadTomada);
-            detalle.setCantUsada(0); // todavía no se usó nada
+            detalle.setCantUsada(0); // todavía no se uso nada
             detalles.add(detalle);
         }
         nuevo.setDetalles(detalles);
@@ -1092,8 +1098,50 @@ public class ControladorPrincipal {
             }
         });
     }
+
+    @FXML TableView<Detalle> tablaDets = new TableView<>();
+
+    private void cargarDetalles(Viaje viaje) {
+        ViajeDAO dao = new ViajeDAO();
+        List<Detalle> detalles = dao.listarDetPorViaje(viaje.getVCod());
+        tablaDets.setItems(FXCollections.observableArrayList(detalles));
+        tablaDets.setEditable(true);
+
+        TableColumn<Detalle, String> colProd = new TableColumn<>("Producto");
+        colProd.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getStock().getProducto().getNombre()));
+
+        TableColumn<Detalle, Integer> colCantTomada = new TableColumn<>("Cantidad tomada");
+        colCantTomada.setCellValueFactory(cellData ->
+                new SimpleIntegerProperty(cellData.getValue().getCantTomada()).asObject());
+
+        TableColumn<Detalle, Integer> colCantUsada = new TableColumn<>("Cantidad usada");
+        colCantUsada.setCellValueFactory(cellData ->
+                new SimpleIntegerProperty(cellData.getValue().getCantUsada()).asObject());
+
+        colCantUsada.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+
+        colCantUsada.setOnEditCommit(event -> {
+            Detalle detalle = event.getRowValue();
+            int valor = event.getNewValue();
+            if (valor >= 0 && valor <= detalle.getCantTomada()){
+                detalle.setCantUsada(valor);
+            } else {
+                detalle.setCantUsada(event.getOldValue());
+                Alert alerta = new Alert(Alert.AlertType.WARNING);
+                alerta.setTitle("Valor invalido");
+                alerta.setHeaderText(null);
+                alerta.setContentText("Cantidad negativa o mayor a tomada.");
+                alerta.showAndWait();
+                tablaDets.refresh();
+            }
+        });
+
+        tablaDets.getColumns().setAll(colProd,colCantTomada,colCantUsada);
+    }
     // Finalizar Viaje OMG
-    private Label labelSeleccionado = null;
+            private Viaje viajeSeleccionado;
+            private Label labelSeleccionado = null;
 
     private void ontabFinalizar() {
         FinalizarViajeController objFinalizar = new FinalizarViajeController();
@@ -1129,10 +1177,56 @@ public class ControladorPrincipal {
                 label.getStyleClass().add("label-viaje-seleccionado");
 
                 labelSeleccionado = label;
+                viajeSeleccionado = v;
+                cargarDetalles(viajeSeleccionado);
             });
 
             listaFinalizar.getChildren().add(label);
         }
+    }
+
+    @FXML private void onFinalizar(){
+        if (viajeSeleccionado == null) {
+            mostrarAlerta("Advertencia","Sin seleccion: Debe seleccionar un viaje");
+            return;
+        }
+
+        for (Detalle d : tablaDets.getItems()){
+            if (d.getCantUsada() > d.getCantTomada()) {
+                mostrarAlerta("Error","Las cantidades usadas no pueden ser mayores a las cantidades tomadas");
+                return;
+            }
+        }
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Confirmar finalizacion");
+        confirm.setHeaderText(null);
+        confirm.setContentText("¿Seguro que desea finalizar el viaje #:" + viajeSeleccionado.getVCod());
+
+        Optional<ButtonType> result = confirm.showAndWait();
+        if (result.isEmpty() || result.get() != ButtonType.OK)
+            return;
+
+        ViajeDAO dao = new ViajeDAO();
+
+        for (Detalle d : tablaDets.getItems()) {
+            int dif = d.getCantTomada() - d.getCantUsada();
+            Stock stock = d.getStock();
+            stock.setTotal(stock.getTotal() + dif);
+            dao.actualizarCantU(viajeSeleccionado,d);
+            dao.actualizarStock(viajeSeleccionado,stock);
+        }
+
+        viajeSeleccionado.setEstado(Viaje.Estado.Finalizado);
+
+        dao.actualizar(viajeSeleccionado);
+
+        tablaDets.getItems().clear();
+
+        mostrarAlerta("Exito","El viaje ha sido finalizado con exito.");
+
+        ontabFinalizar();
+
     }
 
 
