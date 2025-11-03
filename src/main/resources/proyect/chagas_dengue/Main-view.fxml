@@ -295,7 +295,7 @@
                                     </VBox>
                                 </ScrollPane>
                      <TableView fx:id="tablaDets" prefHeight="200.0" prefWidth="200.0" />
-                     <Button mnemonicParsing="false" text="Finalizar viaje">
+                     <Button mnemonicParsing="false" onAction="#onFinalizar" text="Finalizar viaje">
                         <font>
                            <Font size="18.0" />
                         </font>
