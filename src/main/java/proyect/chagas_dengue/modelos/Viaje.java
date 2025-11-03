@@ -40,13 +40,13 @@ public class Viaje {
     private Tipo tipo;
     private Estado estado;
     private String destinosTexto;
-<<<<<<< Updated upstream
+
     private List<Zona> zonas;
     private List<Camioneta> camionetas;
     private List<Maquina> maquinas;
     private List<Empleado> empleados;
     private List<Detalle> detalles;
-=======
+
     private String camionetasTexto;
     private String empleadosTexto;
     private String maquinasTexto;
@@ -55,7 +55,6 @@ public class Viaje {
 
 // Getters y setters para cada uno
 
->>>>>>> Stashed changes
 
 
     public Viaje(){

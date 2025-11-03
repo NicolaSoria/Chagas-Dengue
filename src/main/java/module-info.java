@@ -4,6 +4,7 @@ module proyect.chagas_dengue {
     requires java.desktop;
     requires java.sql;
     requires org.apache.pdfbox;
+    requires jbcrypt;
     //requires proyect.chagas_dengue;
 
 

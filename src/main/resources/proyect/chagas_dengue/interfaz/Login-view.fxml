@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox alignment="CENTER" spacing="20" style="-fx-background-color: #f8f9fa; -fx-padding: 40;"
+      xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="proyect.chagas_dengue.interfaz.ControladorLogin">
+
+    <Label text="Sistema Chagas/Dengue" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+
+    <VBox alignment="CENTER" spacing="15" style="-fx-background-color: white; -fx-padding: 30; -fx-border-color: #dee2e6; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5;">
+
+        <Label text="Inicio de Sesión" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #363535;" />
+
+        <VBox spacing="5">
+            <Label text="Usuario:" style="-fx-font-size: 14px; -fx-text-fill: #363535;" />
+            <TextField fx:id="txtUsuario" promptText="Ingrese su usuario" style="-fx-pref-width: 250px; -fx-pref-height: 35px;" />
+        </VBox>
+
+        <VBox spacing="5">
+            <Label text="Contraseña:" style="-fx-font-size: 14px; -fx-text-fill: #363535;" />
+            <PasswordField fx:id="txtContraseña" promptText="Ingrese su contraseña" style="-fx-pref-width: 250px; -fx-pref-height: 35px;" />
+        </VBox>
+
+        <Button fx:id="btnIngresar" text="Ingresar" onAction="#onIngresar"
+                style="-fx-pref-width: 250px; -fx-pref-height: 35px; -fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold;" />
+
+        <Label fx:id="lblMensaje" style="-fx-text-fill: #dc3545; -fx-font-size: 12px;" text="" />
+
+    </VBox>
+
+</VBox>
