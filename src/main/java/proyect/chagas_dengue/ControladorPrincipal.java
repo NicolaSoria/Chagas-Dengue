@@ -80,7 +80,7 @@ public class ControladorPrincipal {
                 ontabFinalizar();
             }
         });
-        // Escuchar cambios de pestaña
+        // Escuchar cambios de pestaña boton cancelar
         mainTabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
             if (newTab == tabPanificar) {
                 btnCancelar.setVisible(true);
@@ -1229,8 +1229,31 @@ public class ControladorPrincipal {
 
     }
 
+    @FXML
+    private void onGenerarClick() {
+        if (viajeSeleccionado == null) {
+            // Mostrar mensaje de error o alerta
+            mostrarAlerta("Error", "Por favor seleccione un viaje primero.");
+            return;
+        }
+        List<Zona> Zonas = new ArrayList<>();
+        List<Empleado> Empleados = new ArrayList<>();
+        Zonas = viajeSeleccionado.getZonas();
+        Empleados = viajeSeleccionado.getEmpleados();
+        int id = viajeSeleccionado.getVCod();
 
+        System.out.println("Id: " + id);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/proyect/chagas_dengue/interfaz/GenerarView.fxml"));
+            Parent root = loader.load();
 
+            Stage stage = new Stage();
+            stage.setTitle("Generar Reporte");
+            stage.setScene(new Scene(root));
+            stage.show();
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
-

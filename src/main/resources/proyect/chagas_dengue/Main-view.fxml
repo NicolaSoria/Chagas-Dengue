@@ -284,22 +284,28 @@
                     </Tab>
                     <!-- Finalizar Viaje-->
                     <Tab fx:id="tabFin" styleClass="finalizar-tab" text="Finalizar">
-<!--                    <Tab styleClass="finalizar-tab" text="Finalizar">-->
                         <StackPane style="-fx-background-color: white;">
                             <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20;">
                                 <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #363535;" text="Lista de Viajes Pendientes" />
-
                                 <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="AS_NEEDED">
-                                    <VBox fx:id="listaFinalizar" spacing="8" styleClass="ListarCont">
-                                        <!-- Los labels se generarán automáticamente desde el controlador -->
-                                    </VBox>
+                                    <VBox fx:id="listaFinalizar" spacing="8" styleClass="ListarCont" />
                                 </ScrollPane>
-                     <TableView fx:id="tablaDets" prefHeight="200.0" prefWidth="200.0" />
-                     <Button mnemonicParsing="false" onAction="#onFinalizar" text="Finalizar viaje">
-                        <font>
-                           <Font size="18.0" />
-                        </font>
-                     </Button>
+                                <TableView fx:id="tablaDets" prefHeight="200.0" prefWidth="200.0" />
+
+                                <!-- 🔹 Contenedor HBox para los botones -->
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Button mnemonicParsing="false" text="Finalizar viaje">
+                                        <font>
+                                            <Font size="18.0" />
+                                        </font>
+                                    </Button>
+                                    <!-- 🔹 Botón Generar ahora al lado -->
+                                    <Button fx:id="btnGenerar" mnemonicParsing="false" text="Generar" onAction="#onGenerarClick">
+                                        <font>
+                                            <Font size="18.0" />
+                                        </font>
+                                    </Button>
+                                </HBox>
                             </VBox>
                         </StackPane>
                     </Tab>

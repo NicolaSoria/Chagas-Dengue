@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.Separator?>
+
+<VBox alignment="TOP_CENTER" spacing="15" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="proyect.chagas_dengue.interfaz.GenerarController"
+      style="-fx-padding: 30; -fx-background-color: #f4f4f4;">
+
+    <Label text="Pantalla de Generación de Reporte"
+           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+
+    <Separator />
+
+    <VBox spacing="10" style="-fx-border-color: #008080; -fx-border-width: 1; -fx-padding: 15; -fx-background-color: #e0ffff;" maxWidth="500">
+
+        <Label text="Evaluación de Riesgo de Mosquitos"
+               style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #008080;" />
+
+        <CheckBox fx:id="zonasReproduccionCheckBox"
+                  text="Se encontraron zonas donde se pueden reproducir mosquitos (Ej: agua estancada, neumáticos, etc.)" />
+
+        <Separator />
+
+        <Label text="Detalles u Observaciones (Opcional):" />
+        <TextArea fx:id="observacionesTextArea"
+                  promptText="Ej: Se encontraron dos baldes con agua en el patio trasero y un florero descuidado en el porche. Se procedió a vaciar."
+                  prefRowCount="4" />
+
+    </VBox>
+
+    <Separator />
+
+</VBox>

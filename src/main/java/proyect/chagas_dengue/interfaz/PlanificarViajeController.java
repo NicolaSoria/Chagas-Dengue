@@ -80,13 +80,7 @@ public class PlanificarViajeController {
     }
 
     // === SECCIÓN EMPLEADOS ===
-    private int agregarSeccionEmpleados(
-            VBox listaContainer,
-            String titulo,
-            Map<Integer, Integer> contEmpleados,
-            ObservableList<Empleado> empleados,
-            int contador
-    ) {
+    private int agregarSeccionEmpleados(VBox listaContainer, String titulo, Map<Integer, Integer> contEmpleados, ObservableList<Empleado> empleados, int contador) {
         if (contEmpleados.isEmpty()) return contador;
 
         Label labelTitulo = new Label(titulo + ":");
@@ -95,11 +89,7 @@ public class PlanificarViajeController {
 
         for (Map.Entry<Integer, Integer> entry : contEmpleados.entrySet()) {
             int codigo = entry.getKey();
-            String nombre = empleados.stream()
-                    .filter(e -> e.getECod() == codigo)
-                    .map(Empleado::getNombre)
-                    .findFirst()
-                    .orElse("Empleado código " + codigo);
+            String nombre = empleados.stream().filter(e -> e.getECod() == codigo).map(Empleado::getNombre).findFirst().orElse("Empleado código " + codigo);
 
             Label label = new Label(String.format("   %d. %s x%d", contador++, nombre, entry.getValue()));
             label.setStyle("-fx-font-size: 14px; -fx-padding: 2px 5px;");
@@ -109,13 +99,7 @@ public class PlanificarViajeController {
     }
 
     // === SECCIÓN PRODUCTOS QUÍMICOS ===
-    private int agregarSeccionProductos(
-            VBox listaContainer,
-            String titulo,
-            Map<Integer, Integer> contProductos,
-            ObservableList<ProductoQuimico> productos,
-            int contador
-    ) {
+    private int agregarSeccionProductos(VBox listaContainer,String titulo,Map<Integer, Integer> contProductos,ObservableList<ProductoQuimico> productos,int contador) {
         if (contProductos.isEmpty()) return contador;
 
         Label labelTitulo = new Label(titulo + ":");
@@ -124,11 +108,7 @@ public class PlanificarViajeController {
 
         for (Map.Entry<Integer, Integer> entry : contProductos.entrySet()) {
             int codigo = entry.getKey();
-            String nombre = productos.stream()
-                    .filter(p -> p.getPCod() == codigo)
-                    .map(ProductoQuimico::getNombre)
-                    .findFirst()
-                    .orElse("Código " + codigo);
+            String nombre = productos.stream().filter(p -> p.getPCod() == codigo).map(ProductoQuimico::getNombre).findFirst().orElse("Código " + codigo);
 
             Label label = new Label(String.format("   %d. %s x%d", contador++, nombre, entry.getValue()));
             label.setStyle("-fx-font-size: 14px; -fx-padding: 2px 5px;");
