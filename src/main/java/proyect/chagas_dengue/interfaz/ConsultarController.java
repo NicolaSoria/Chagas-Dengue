@@ -76,7 +76,7 @@ public class ConsultarController {
 
 //    private void cargarViajes() {
 //        ViajeDAO dao = new ViajeDAO();
-//        List<Viaje> lista = dao.listarTodos(); // suponiendo que tenés este método
+//        List<Viaje> lista = dao.listarTodos(); // suponiendo que tenés este metodo
 //        viajes.setAll(lista);
 //    }
 
@@ -132,7 +132,7 @@ public class ConsultarController {
 
         Separator sep1 = new Separator();
 
-        // Información principal del viaje
+        // Informacion principal del viaje
         GridPane info = new GridPane();
         info.setHgap(12);
         info.setVgap(8);
@@ -156,6 +156,16 @@ public class ConsultarController {
         // Recursos (cada uno en su propio bloque si tiene datos)
         VBox recursosBox = new VBox(6);
         recursosBox.setPadding(new Insets(5, 0, 0, 0));
+
+        // Depuracion
+
+        /*System.out.println("VIAJE #" + viaje.getVCod());
+        System.out.println("Camionetas: " + viaje.getCamionetasTexto());
+        System.out.println("Empleados: " + viaje.getEmpleadosTexto());
+        System.out.println("Máquinas: " + viaje.getMaquinasTexto());
+        System.out.println("Productos: " + viaje.getProductosTexto());*/
+
+        //Fin depuracion
 
         agregarRecurso(recursosBox, "Camionetas", viaje.getCamionetasTexto());
         agregarRecurso(recursosBox, "Empleados", viaje.getEmpleadosTexto());
@@ -187,6 +197,7 @@ public class ConsultarController {
 
 // --- Métodos auxiliares ---
 
+
     private void addInfoRow(GridPane grid, int row, String label, String value) {
         Label lbl = new Label(label);
         lbl.setStyle("-fx-text-fill: #cccccc; -fx-font-weight: bold;");
@@ -195,6 +206,8 @@ public class ConsultarController {
         grid.add(lbl, 0, row);
         grid.add(val, 1, row);
     }
+
+
 
     private void agregarRecurso(VBox box, String titulo, String contenido) {
         if (contenido == null || contenido.isEmpty()) return;

@@ -459,6 +459,7 @@ public List<Viaje> filtrar(String texto, LocalDate fecha, String estado) {
 
         String sql = """
         SELECT v.VCod, v.fecha, v.tipo, v.estado,
+               GROUP_CONCAT(DISTINCT z.nombre SEPARATOR ', ') AS zonas,
                GROUP_CONCAT(DISTINCT c.patente SEPARATOR ', ') AS camionetas,
                GROUP_CONCAT(DISTINCT e.nombre SEPARATOR ', ') AS empleados,
                GROUP_CONCAT(DISTINCT m.modelo SEPARATOR ', ') AS maquinas,
@@ -498,6 +499,7 @@ public List<Viaje> filtrar(String texto, LocalDate fecha, String estado) {
                 viaje.setFechaInicio(rs.getDate("fecha").toLocalDate());
                 viaje.setTipo(Viaje.Tipo.valueOf(rs.getString("tipo")));
                 viaje.setEstado(Viaje.Estado.valueOf(rs.getString("estado")));
+                viaje.setDestinosTexto(rs.getString("zonas"));
 
                 // Guardamos los recursos como texto concatenado
                 viaje.setCamionetasTexto(rs.getString("camionetas"));
