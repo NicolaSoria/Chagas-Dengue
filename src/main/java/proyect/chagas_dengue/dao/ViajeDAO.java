@@ -20,6 +20,7 @@ public class ViajeDAO implements interfaceDAO<Viaje,Integer>{
         String sqlDestino = "INSERT INTO Destinos (VCod, ZCod) VALUES (?, ?)";
         String sqlUsan = "INSERT INTO Usan (VCod, CCod) VALUES (?, ?)";
         String sqlMaquinas = "INSERT INTO Transporta (VCod, MCod) VALUES (?, ?)";
+        String sqlEmpleados = "INSERT INTO Realizan (ECod, VCod) VALUES (?. ?)";
         String sqlDetalle = "INSERT INTO Detalle (DVCod, DSPCod, cantTomada, cantUsada) VALUES (?, ?, ?, ?)";
         String sqlStockUpdate = "UPDATE Stocks SET total = total - ? WHERE SPCod = ?";
 
@@ -67,6 +68,17 @@ public class ViajeDAO implements interfaceDAO<Viaje,Integer>{
                         psMaquinas.addBatch();
                     }
                     psMaquinas.executeBatch();
+                }
+            }
+
+            if (viaje.getEmpleados() != null && !viaje.getEmpleados().isEmpty()) {
+                try (PreparedStatement psEmpleados = conexion.prepareStatement(sqlEmpleados)) {
+                    for (Empleado e : viaje.getEmpleados()) {
+                        psEmpleados.setInt(1,e.getECod());
+                        psEmpleados.setInt(2, viaje.getVCod());
+                        psEmpleados.addBatch();
+                    }
+                    psEmpleados.executeBatch();
                 }
             }
 
@@ -200,14 +212,36 @@ public class ViajeDAO implements interfaceDAO<Viaje,Integer>{
 
     @Override
     public void actualizar(Viaje objeto) {
-        String sql = "UPDATE Viajes SET fecha = ?, tipo = ? WHERE VCod = ?";
+        String sql = "UPDATE Viajes SET estado = ? WHERE VCod = ?";
 
         try (PreparedStatement ps = conexion.prepareStatement(sql)){
-            ps.setDate(1,java.sql.Date.valueOf(objeto.getFechaInicio()));
-            ps.setString(2,objeto.getTipo().name());
-            ps.setInt(3,objeto.getVCod());
+            ps.setString(1,objeto.getEstado().name());
+            ps.setInt(2,objeto.getVCod());
             ps.executeUpdate();
         }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void actualizarCantU(Viaje objeto, Detalle detalle) {
+        String sql = "UPDATE Detalle SET cantUsada = ? WHERE DCod = ? AND DVCod = ?";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)){
+            ps.setInt(1, detalle.getCantUsada());
+            ps.setInt(2, detalle.getDCod());
+            ps.setInt(3, objeto.getVCod());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void actualizarStock(Viaje objeto, Stock stock) {
+        String sql = "UPDATE Stock SET total = ? WHERE SPCod = ?";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)){
+            ps.setInt(1,stock.getTotal());
+            ps.setInt(2,stock.getSPCod());
+            ps.executeUpdate();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -224,7 +258,7 @@ public class ViajeDAO implements interfaceDAO<Viaje,Integer>{
         }
     }
 
-    public void insertarDest(int VCod, int ZCod) {
+    /*public void insertarDest(int VCod, int ZCod) {
         String sql = "INSERT INTO Destinos (VCod, ZCod) VALUES (?,?)";
         try (PreparedStatement ps = conexion.prepareStatement(sql)){
             ps.setInt(1,VCod);
@@ -266,7 +300,7 @@ public class ViajeDAO implements interfaceDAO<Viaje,Integer>{
         }catch (SQLException e){
             e.printStackTrace();
         }
-    }
+    }*/
 
     @Override
     public List<Viaje> listarTodos() {
@@ -306,6 +340,39 @@ public class ViajeDAO implements interfaceDAO<Viaje,Integer>{
             e.printStackTrace();
         }
         return lista;
+    }
+
+    public List<Detalle> listarDetPorViaje(int VCod){
+        List<Detalle> detalles = new ArrayList<>();
+        String sql = "SELECT d.DCod, d.cantTomada, d.cantUsada, s.SPCod, s.total, p.nombre " +
+                "FROM Detalle d " +
+                "JOIN Stocks s ON d.DSPCod = s.SPCod " +
+                "JOIN Productos p ON s.SPCod = p.PCod " +
+                "WHERE d.DVCod = ?";
+
+        try (PreparedStatement ps = conexion.prepareStatement(sql)){
+            ps.setInt(1,VCod);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Stock stock = new Stock();
+                stock.setSPCod(rs.getInt("SPCod"));
+                stock.setTotal(rs.getInt("total"));
+                ProductoQuimico producto = new ProductoQuimico();
+                producto.setNombre(rs.getString("nombre"));
+                stock.setProducto(producto);
+
+                Detalle d = new Detalle();
+                d.setDCod(rs.getInt("DCod"));
+                d.setCantTomada(rs.getInt("cantTomada"));
+                d.setCantUsada(rs.getInt("cantUsada"));
+                d.setStock(stock);
+
+                detalles.add(d);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return detalles;
     }
 
 //    public List<Viaje> filtrar(String texto, LocalDate fecha, String estado) {
