@@ -236,7 +236,7 @@ public class ViajeDAO implements interfaceDAO<Viaje,Integer>{
     }
 
     public void actualizarStock(Viaje objeto, Stock stock) {
-        String sql = "UPDATE Stock SET total = ? WHERE SPCod = ?";
+        String sql = "UPDATE Stocks SET total = ? WHERE SPCod = ?";
         try (PreparedStatement ps = conexion.prepareStatement(sql)){
             ps.setInt(1,stock.getTotal());
             ps.setInt(2,stock.getSPCod());

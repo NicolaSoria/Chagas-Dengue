@@ -1247,11 +1247,9 @@ public class ControladorPrincipal {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/proyect/chagas_dengue/interfaz/GenerarView.fxml"));
             Parent root = loader.load();
 
-            // 🔹 Obtener el controlador
-            GenerarController generarController = loader.getController();
+            GenerarController controller = loader.getController();
+            controller.inicializarZonas(viajeSeleccionado);
 
-            // 🔹 Pasar el objeto viajeSeleccionado
-            generarController.setViaje(viajeSeleccionado);
 
             Stage stage = new Stage();
             stage.setTitle("Generar Reporte");
