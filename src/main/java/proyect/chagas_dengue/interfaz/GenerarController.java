@@ -195,7 +195,7 @@ public class GenerarController {
             String zonasTexto = viaje.getDestinosTexto();
 
             if (zonasTexto != null && !zonasTexto.isBlank()) {
-                // Dividir las zonas por coma
+                // Dividir las zonas por coma.
                 String[] zonas = zonasTexto.split(",");
 
                 // Crear arreglo paralelo con las observaciones recibidas
