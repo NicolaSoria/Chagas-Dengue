@@ -1,110 +1,54 @@
 package proyect.chagas_dengue.interfaz;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import proyect.chagas_dengue.dao.ViajeDAO;
-import proyect.chagas_dengue.modelos.Empleado;
-import proyect.chagas_dengue.modelos.Viaje;
+import javafx.scene.control.Alert;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import proyect.chagas_dengue.modelos.Zona;
+import proyect.chagas_dengue.dao.ViajeDAO;
+import proyect.chagas_dengue.modelos.Viaje;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 public class GenerarController {
 
-    @FXML private CheckBox zona1ReproduccionCheckBox;
-    @FXML private TextArea zona1ObservacionesTextArea;
-    @FXML private CheckBox zona2ReproduccionCheckBox;
-    @FXML private TextArea zona2ObservacionesTextArea;
-    @FXML private CheckBox zona3ReproduccionCheckBox;
-    @FXML private TextArea zona3ObservacionesTextArea;
-    @FXML private Button guardarButton;
-    @FXML private VBox zona1Box, zona2Box, zona3Box;
-    @FXML private Label zona1Label, zona2Label, zona3Label;
-
-    private Viaje viaje;
-
-    public void inicializarZonas(Viaje viaje) {
-        // Obtener texto con los nombres de las zonas
-        ViajeDAO viajeDAO = new ViajeDAO();
-        Viaje v1 = viajeDAO.obtenerViajeConRecursos(viaje.getVCod());
-        String zonasTexto = v1.getDestinosTexto(); // Ej: "Zona Norte, Zona Sur"
-        if (zonasTexto == null) {
-            // No hay zonas, ocultar todo
-            zona1Box.setVisible(false);
-            zona2Box.setVisible(false);
-            zona3Box.setVisible(false);
-            return;
-        }
-
-        String[] zonas = zonasTexto.split(",");
-
-        // Configurar Zona 1
-        if (zonas.length >= 1 && !zonas[0].trim().isEmpty()) {
-            zona1Label.setText(zonas[0].trim());
-        } else zona1Box.setVisible(false);
-
-        // Configurar Zona 2
-        if (zonas.length >= 2 && !zonas[1].trim().isEmpty()) {
-            zona2Label.setText(zonas[1].trim());
-        } else zona2Box.setVisible(false);
-
-        // Configurar Zona 3
-        if (zonas.length >= 3 && !zonas[2].trim().isEmpty()) {
-            zona3Label.setText(zonas[2].trim());
-        } else zona3Box.setVisible(false);
-    }
-
-    public void setViaje(Viaje viaje) {
-        this.viaje = viaje;
-    }
-
-    @FXML
-    public void guardarReporte() {
+    public void generarReporte(Viaje viaje) {
         if (viaje == null) {
-            System.out.println("Error: viaje es null.");
+            mostrarAlerta("Error", "El viaje es nulo, no se puede generar el informe.", Alert.AlertType.ERROR);
             return;
         }
 
+        // Obtener datos completos del viaje (con tareas incluidas)
         ViajeDAO viajeDAO = new ViajeDAO();
-        Viaje v1 = viajeDAO.obtenerViajeConRecursos(viaje.getVCod());
-
-        String obs1 = zona1ReproduccionCheckBox.isSelected() ? zona1ObservacionesTextArea.getText() : null;
-        String obs2 = zona2ReproduccionCheckBox.isSelected() ? zona2ObservacionesTextArea.getText() : null;
-        String obs3 = zona3ReproduccionCheckBox.isSelected() ? zona3ObservacionesTextArea.getText() : null;
+        Viaje v1 = viajeDAO.obtenerViajeConRecursosYTareas(viaje.getVCod());
 
         // Elegir dónde guardar el PDF
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Guardar Reporte del Viaje");
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Archivos PDF", "*.pdf")
-        );
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos PDF", "*.pdf"));
         fileChooser.setInitialFileName("reporte_viaje_" + v1.getVCod() + ".pdf");
-        File file = fileChooser.showSaveDialog(null);
 
-        if (file != null) {
-            try {
-                generarPDFConPDFBox(file, v1, obs1, obs2, obs3);
-                System.out.println("PDF generado exitosamente en: " + file.getAbsolutePath());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        File archivoDestino = fileChooser.showSaveDialog(null);
+        if (archivoDestino == null) {
+            return; // Usuario canceló
+        }
+
+        try {
+            generarPDFConPDFBox(archivoDestino, v1);
+            mostrarAlerta("Éxito", "PDF generado exitosamente en:\n" + archivoDestino.getAbsolutePath(), Alert.AlertType.INFORMATION);
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta("Error", "No se pudo generar el PDF: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
-    // ======================== PDF GENERATOR ========================
-    private void generarPDFConPDFBox(File file, Viaje viaje, String obs1, String obs2, String obs3) throws IOException {
+    // ============================================
+    //        GENERADOR DE PDF (PDFBOX)
+    // ============================================
+    private void generarPDFConPDFBox(File file, Viaje viaje) throws IOException {
         try (PDDocument document = new PDDocument()) {
             PDPage page = new PDPage();
             document.addPage(page);
@@ -125,7 +69,9 @@ public class GenerarController {
 
             // === Fecha y tipo ===
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            String fechaStr = viaje.getFechaInicio() != null ? viaje.getFechaInicio().format(formatter) : "Sin fecha";
+            String fechaStr = viaje.getFechaInicio() != null
+                    ? viaje.getFechaInicio().format(formatter)
+                    : "Sin fecha";
 
             content.setFont(PDType1Font.HELVETICA, 12);
             content.beginText();
@@ -143,7 +89,6 @@ public class GenerarController {
             yPosition -= lineHeight * 2;
 
             // === Empleados ===
-            String empleadosTexto = viaje.getEmpleadosTexto(); // 🔹 Usamos el String del viaje
             content.setFont(PDType1Font.HELVETICA_BOLD, 14);
             content.beginText();
             content.newLineAtOffset(margin, yPosition);
@@ -152,79 +97,98 @@ public class GenerarController {
             yPosition -= lineHeight;
 
             content.setFont(PDType1Font.HELVETICA, 12);
-
-            if (empleadosTexto != null && !empleadosTexto.isBlank()) {
-                String[] empleadosArray = empleadosTexto.split(",");
-
-                for (String emp : empleadosArray) {
-                    if (yPosition < 100) { // Crear nueva página si falta espacio
-                        content.close();
-                        PDPage newPage = new PDPage();
-                        document.addPage(newPage);
-                        content = new PDPageContentStream(document, newPage);
-                        yPosition = 750;
-                    }
-
-                    content.beginText();
-                    content.newLineAtOffset(margin + 20, yPosition);
-                    content.showText("- " + emp.trim());
-                    content.endText();
-                    yPosition -= lineHeight;
-                }
-            } else {
-                content.beginText();
-                content.newLineAtOffset(margin + 20, yPosition);
-                content.showText("No hay empleados registrados.");
-                content.endText();
-                yPosition -= lineHeight;
-            }
-
+            yPosition = agregarListaTexto(content, document, viaje.getEmpleadosTexto(), margin + 20, yPosition, lineHeight);
             yPosition -= lineHeight;
 
-
-            // === Observaciones ===
+            // === Zonas ===
             content.setFont(PDType1Font.HELVETICA_BOLD, 14);
             content.beginText();
             content.newLineAtOffset(margin, yPosition);
-            content.showText("Observaciones:");
+            content.showText("Zonas visitadas:");
             content.endText();
             yPosition -= lineHeight;
 
             content.setFont(PDType1Font.HELVETICA, 12);
+            yPosition = agregarListaTexto(content, document, viaje.getDestinosTexto(), margin + 20, yPosition, lineHeight);
+            yPosition -= lineHeight;
 
-            String zonasTexto = viaje.getDestinosTexto();
+            // === Camionetas ===
+            content.setFont(PDType1Font.HELVETICA_BOLD, 14);
+            content.beginText();
+            content.newLineAtOffset(margin, yPosition);
+            content.showText("Camionetas utilizadas:");
+            content.endText();
+            yPosition -= lineHeight;
 
-            if (zonasTexto != null && !zonasTexto.isBlank()) {
-                // Dividir las zonas por coma.
-                String[] zonas = zonasTexto.split(",");
+            content.setFont(PDType1Font.HELVETICA, 12);
+            yPosition = agregarListaTexto(content, document, viaje.getCamionetasTexto(), margin + 20, yPosition, lineHeight);
+            yPosition -= lineHeight;
 
-                // Crear arreglo paralelo con las observaciones recibidas
-                String[] observaciones = {obs1, obs2, obs3};
+            // === Productos ===
+            content.setFont(PDType1Font.HELVETICA_BOLD, 14);
+            content.beginText();
+            content.newLineAtOffset(margin, yPosition);
+            content.showText("Productos utilizados:");
+            content.endText();
+            yPosition -= lineHeight;
 
-                for (int i = 0; i < zonas.length; i++) {
-                    String zona = zonas[i].trim();
-                    String observacion = (i < observaciones.length) ? observaciones[i] : null;
+            content.setFont(PDType1Font.HELVETICA, 12);
+            yPosition = agregarListaTexto(content, document, viaje.getProductosTexto(), margin + 20, yPosition, lineHeight);
+            yPosition -= lineHeight;
 
-                    if (zona != null && !zona.isBlank()) {
-                        content.beginText();
-                        content.newLineAtOffset(margin + 20, yPosition);
-                        content.showText(zona + ": " + (observacion != null && !observacion.isBlank()
-                                ? observacion
-                                : "Sin observaciones."));
-                        content.endText();
-                        yPosition -= lineHeight;
-                    }
-                }
-            } else {
-                content.beginText();
-                content.newLineAtOffset(margin + 20, yPosition);
-                content.showText("No se registraron zonas ni observaciones.");
-                content.endText();
-                yPosition -= lineHeight;
-            }
+            // === Tareas (nuevo bloque) ===
+            content.setFont(PDType1Font.HELVETICA_BOLD, 14);
+            content.beginText();
+            content.newLineAtOffset(margin, yPosition);
+            content.showText("Tareas realizadas:");
+            content.endText();
+            yPosition -= lineHeight;
+
+            content.setFont(PDType1Font.HELVETICA, 12);
+            yPosition = agregarListaTexto(content, document, viaje.getRegistrosTexto(), margin + 20, yPosition, lineHeight);
 
             content.close();
             document.save(file);
         }
+    }
+
+    // ============================================
+    //          FUNCIONES AUXILIARES
+    // ============================================
+    private float agregarListaTexto(PDPageContentStream content, PDDocument document,
+                                    String texto, float x, float y, float lineHeight) throws IOException {
+        if (texto == null || texto.isBlank()) {
+            content.beginText();
+            content.newLineAtOffset(x, y);
+            content.showText("No hay datos registrados.");
+            content.endText();
+            return y - lineHeight;
+        }
+
+        String[] elementos = texto.split(",");
+        for (String elemento : elementos) {
+            if (y < 100) { // Crear nueva página si no hay espacio
+                content.close();
+                PDPage newPage = new PDPage();
+                document.addPage(newPage);
+                content = new PDPageContentStream(document, newPage);
+                y = 750;
+            }
+
+            content.beginText();
+            content.newLineAtOffset(x, y);
+            content.showText("- " + elemento.trim());
+            content.endText();
+            y -= lineHeight;
+        }
+        return y;
+    }
+
+    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
+        Alert alerta = new Alert(tipo);
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
+        alerta.showAndWait();
     }
 }

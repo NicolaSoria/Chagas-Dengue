@@ -41,6 +41,9 @@ import proyect.chagas_dengue.interfaz.GenerarController;
 import proyect.chagas_dengue.interfaz.PlanificarViajeController;
 import proyect.chagas_dengue.interfaz.SeleccionarController;
 import proyect.chagas_dengue.modelos.*;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
 
 public class ControladorPrincipal {
 
@@ -1421,28 +1424,15 @@ public class ControladorPrincipal {
             return;
         }
 
-        ViajeDAO dao = new ViajeDAO();
-        Viaje v1 = dao.obtenerViajeConRecursos(viajeSeleccionado.getVCod());
+        ViajeDAO viajeDAO = new ViajeDAO();
 
-        System.out.println("Empleados texto: " + v1.getEmpleadosTexto());
-
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/proyect/chagas_dengue/interfaz/GenerarView.fxml"));
-            Parent root = loader.load();
-
-            GenerarController controller = loader.getController();
-            controller.inicializarZonas(viajeSeleccionado);
-
-
-            Stage stage = new Stage();
-            stage.setTitle("Generar Reporte");
-            stage.setScene(new Scene(root));
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        // Opción 1: Si quieres el viaje completo con tareas como texto
+        Viaje viaje = viajeDAO.obtenerViajeConRecursosYTareas(viajeSeleccionado.getVCod());
+        if (viaje != null) {
+            System.out.println("Tareas del viaje: " + viaje.getRegistrosTexto());
         }
-    }
 
+        GenerarController generar = new GenerarController();
+        generar.generarReporte(viajeSeleccionado);
+    }
 }
