@@ -14,15 +14,15 @@
         <Label styleClass="titulo" text="Consulta de Viajes" />
         <Separator />
         <HBox alignment="CENTER_LEFT" spacing="10.0">
-            <Label text="Buscar por Destino/Código:" />
+            <Label text="Buscar por Destino/Código:" textFill="WHITE" />
             <TextField fx:id="txtBuscador" prefWidth="200.0" promptText="Ingrese texto de búsqueda..." />
 
             <Separator orientation="VERTICAL" />
 
-            <Label text="Filtrar por Fecha:" />
+            <Label text="Filtrar por Fecha:" textFill="WHITE" />
             <DatePicker fx:id="dpFechaFiltro" promptText="Seleccione fecha" />
 
-            <Label text="Estado:" />
+            <Label text="Estado:" textFill="WHITE" />
             <ComboBox fx:id="cbEstadoFiltro" prefWidth="150.0" promptText="Seleccione estado" />
         </HBox>
         <Separator />
