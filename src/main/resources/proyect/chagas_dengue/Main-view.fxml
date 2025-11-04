@@ -294,7 +294,7 @@
 
                                 <!-- 🔹 Contenedor HBox para los botones -->
                                 <HBox spacing="10" alignment="CENTER_LEFT">
-                                    <Button mnemonicParsing="false" text="Finalizar viaje" onAction="#onFinalizar">
+                                    <Button mnemonicParsing="false" text="Finalizar viaje">
                                         <font>
                                             <Font size="18.0" />
                                         </font>

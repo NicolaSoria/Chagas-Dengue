@@ -228,5 +228,18 @@ public class ConsultarController {
                 .collect(Collectors.joining(", "));
     }
 
+    public void actualizarListaViajes() {
+        try {
+            ViajeDAO dao = new ViajeDAO();
+            List<Viaje> lista = dao.filtrar(null, null, null);
+            viajes.setAll(lista);
+            tableViajes.setItems(viajes);
+            System.out.println("DEBUG: lista de viajes actualizada (" + lista.size() + " registros).");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error al actualizar la lista de viajes.");
+        }
+    }
+
 
 }

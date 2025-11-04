@@ -109,6 +109,15 @@ public class ControladorPrincipal {
             // Agregar el contenido al tab
             tabConsultar.setContent(contenidoConsultar);
 
+            tabConsultar.setOnSelectionChanged(event -> {
+                if (tabConsultar.isSelected()) {
+                    consultarController.actualizarListaViajes(); // 🔁 Actualiza la tabla solo al abrir la pestaña
+                    System.out.println("DEBUG: pestaña CONSULTAR seleccionada → recargando lista de viajes");
+                }
+            });
+
+
+
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Error al cargar Consultar.fxml");
@@ -274,7 +283,7 @@ public class ControladorPrincipal {
         dao.insertar(nuevo);
 
         clearZonas();
-        consultarController.recargarViajes();
+        //consultarController.recargarViajes();
         mostrarAlerta("Éxito", "Viaje ingresado correctamente.");
     }
 
@@ -667,6 +676,20 @@ public class ControladorPrincipal {
 
           //      listaCamionetas.add(seleccionado); // agregar a la lista observable
 
+                boolean yaExiste = tableCamionetas.getItems().stream()
+                        .anyMatch(p -> p.getCCod() == seleccionado.getCCod());
+
+                if (yaExiste) {
+                    // Mostrar alerta si está repetido
+                    Alert alerta = new Alert(Alert.AlertType.WARNING);
+                    alerta.setTitle("Camioneta duplicada");
+                    alerta.setHeaderText(null);
+                    alerta.setContentText("La camioneta con patente \"" + seleccionado.getPatente() + "\" ya fue agregada.");
+                    alerta.showAndWait();
+                    return;
+                }
+
+
                tableCamionetas.getItems().add(seleccionado);
                 System.out.println("Camioneta seleccionada: " + seleccionado.getPatente());
             }
@@ -710,6 +733,20 @@ public class ControladorPrincipal {
             Object seleccionadoObj = controller.getSeleccionado();
             if (seleccionadoObj != null) {
                 ProductoQuimico seleccionado = (ProductoQuimico) seleccionadoObj;
+
+                boolean yaExiste = tableQuimicos.getItems().stream()
+                        .anyMatch(p -> p.getPCod() == seleccionado.getPCod());
+
+                if (yaExiste) {
+                    // Mostrar alerta si está repetido
+                    Alert alerta = new Alert(Alert.AlertType.WARNING);
+                    alerta.setTitle("Producto duplicado");
+                    alerta.setHeaderText(null);
+                    alerta.setContentText("El producto \"" + seleccionado.getNombre() + "\" ya fue agregado.");
+                    alerta.showAndWait();
+                    return;
+                }
+
                 tableQuimicos.getItems().add(seleccionado);
                 System.out.println("Producto seleccionado: " + seleccionado.getNombre());
             }
@@ -752,6 +789,20 @@ public class ControladorPrincipal {
             Object seleccionadoObj = controller.getSeleccionado();
             if (seleccionadoObj != null) {
                 Maquina seleccionado = (Maquina) seleccionadoObj;
+
+                boolean yaExiste = tableMaquinas.getItems().stream()
+                        .anyMatch(p -> p.getMCod() == seleccionado.getMCod());
+
+                if (yaExiste) {
+                    // Mostrar alerta si está repetido
+                    Alert alerta = new Alert(Alert.AlertType.WARNING);
+                    alerta.setTitle("Máquina duplicada");
+                    alerta.setHeaderText(null);
+                    alerta.setContentText("La máquina \"" + seleccionado.getMarca() + " " + seleccionado.getModelo() + "\" ya fue agregada.");
+                    alerta.showAndWait();
+                    return;
+                }
+
                 tableMaquinas.getItems().add(seleccionado);
                 System.out.println("Máquina seleccionada: " + seleccionado.getMarca() + " " + seleccionado.getModelo());
             }
@@ -794,6 +845,20 @@ public class ControladorPrincipal {
             Object seleccionadoObj = controller.getSeleccionado();
             if (seleccionadoObj != null) {
                 Empleado seleccionado = (Empleado) seleccionadoObj;
+
+                boolean yaExiste = tableEmpleados.getItems().stream()
+                        .anyMatch(p -> p.getECod() == seleccionado.getECod());
+
+                if (yaExiste) {
+                    // Mostrar alerta si está repetido
+                    Alert alerta = new Alert(Alert.AlertType.WARNING);
+                    alerta.setTitle("Empleado duplicado");
+                    alerta.setHeaderText(null);
+                    alerta.setContentText("El empleado \"" + seleccionado.getNombre() + "\" ya fue agregado.");
+                    alerta.showAndWait();
+                    return;
+                }
+
                 tableEmpleados.getItems().add(seleccionado);
             }
 
