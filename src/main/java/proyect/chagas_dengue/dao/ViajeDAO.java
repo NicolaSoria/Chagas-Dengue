@@ -20,7 +20,7 @@ public class ViajeDAO implements interfaceDAO<Viaje,Integer>{
         String sqlDestino = "INSERT INTO Destinos (VCod, ZCod) VALUES (?, ?)";
         String sqlUsan = "INSERT INTO Usan (VCod, CCod) VALUES (?, ?)";
         String sqlMaquinas = "INSERT INTO Transporta (VCod, MCod) VALUES (?, ?)";
-        String sqlEmpleados = "INSERT INTO Realizan (ECod, VCod) VALUES (?. ?)";
+        String sqlEmpleados = "INSERT INTO Realizan (ECod, VCod) VALUES (?, ?)";
         String sqlDetalle = "INSERT INTO Detalle (DVCod, DSPCod, cantTomada, cantUsada) VALUES (?, ?, ?, ?)";
         String sqlStockUpdate = "UPDATE Stocks SET total = total - ? WHERE SPCod = ?";
 
