@@ -22,6 +22,7 @@ public class ViajeDAO implements interfaceDAO<Viaje,Integer>{
         String sqlMaquinas = "INSERT INTO Transporta (VCod, MCod) VALUES (?, ?)";
         String sqlEmpleados = "INSERT INTO Realizan (ECod, VCod) VALUES (?, ?)";
         String sqlDetalle = "INSERT INTO Detalle (DVCod, DSPCod, cantTomada, cantUsada) VALUES (?, ?, ?, ?)";
+        String sqlRegistro = "INSERT INTO Registro (ZCod, TCod, VCod, observacion) VALUES (?, ?, ?, ?)";
         String sqlStockUpdate = "UPDATE Stocks SET total = total - ? WHERE SPCod = ?";
 
         try {
@@ -105,6 +106,19 @@ public class ViajeDAO implements interfaceDAO<Viaje,Integer>{
 
                     psDet.executeBatch();
                     psStock.executeBatch();
+                }
+            }
+
+            if (viaje.getRegistros() != null && !viaje.getRegistros().isEmpty()) {
+                try (PreparedStatement psReg = conexion.prepareStatement(sqlRegistro)) {
+                    for (Registro r : viaje.getRegistros()) {
+                        psReg.setInt(1,r.getZona().getZCod());
+                        psReg.setInt(2,r.getTarea().getTCod());
+                        psReg.setInt(3,r.getViaje().getVCod());
+                        psReg.setNull(4, java.sql.Types.VARCHAR);
+                        psReg.addBatch();
+                    }
+                    psReg.executeBatch();
                 }
             }
 
