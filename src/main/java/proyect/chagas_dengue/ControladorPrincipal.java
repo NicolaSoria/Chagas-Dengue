@@ -736,7 +736,7 @@ public class ControladorPrincipal {
         //Elementos de seguridad
 
         colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
-        colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
+//        colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
         //Empleados
 
@@ -1270,6 +1270,7 @@ public class ControladorPrincipal {
                 if (tableElementos != null) tableElementos.getItems().clear();
                 if (tableCamionetas != null) tableCamionetas.getItems().clear();
                 if (tableMaquinas != null) tableMaquinas.getItems().clear();
+                if (tableEmpleados != null) tableEmpleados.getItems().clear();
 
                 chBoxDestPnDestPrepViaje.setDisable(false);
                 chBoxDestPnDestPrepViaje2.setDisable(false);

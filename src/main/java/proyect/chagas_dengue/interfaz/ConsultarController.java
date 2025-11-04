@@ -235,6 +235,14 @@ public class ConsultarController {
             viajes.setAll(lista);
             tableViajes.setItems(viajes);
             System.out.println("DEBUG: lista de viajes actualizada (" + lista.size() + " registros).");
+
+            if (lista.isEmpty()) {
+                Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+                alerta.setTitle("Sin viajes cargados");
+                alerta.setHeaderText(null);
+                alerta.setContentText("No hay viajes registrados en el sistema.");
+                alerta.showAndWait();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Error al actualizar la lista de viajes.");
