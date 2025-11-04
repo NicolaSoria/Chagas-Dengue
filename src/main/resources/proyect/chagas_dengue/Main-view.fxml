@@ -24,7 +24,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane stylesheets="@estilos.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyect.chagas_dengue.ControladorPrincipal">
+<BorderPane stylesheets="@estilos.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyect.chagas_dengue.ControladorPrincipal">
 
         <center>
             <TabPane fx:id="mainTabPane" styleClass="custom-tab-pane" tabClosingPolicy="UNAVAILABLE">
@@ -293,14 +293,14 @@
                                 <TableView fx:id="tablaDets" prefHeight="200.0" prefWidth="200.0" />
 
                                 <!-- 🔹 Contenedor HBox para los botones -->
-                                <HBox alignment="CENTER_LEFT" spacing="10">
-                                    <Button mnemonicParsing="false" onAction="#onFinalizar" text="Finalizar viaje">
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Button mnemonicParsing="false" text="Finalizar viaje">
                                         <font>
                                             <Font size="18.0" />
                                         </font>
                                     </Button>
                                     <!-- 🔹 Botón Generar ahora al lado -->
-                                    <Button fx:id="btnGenerar" mnemonicParsing="false" onAction="#onGenerarClick" text="Generar">
+                                    <Button fx:id="btnGenerar" mnemonicParsing="false" text="Generar" onAction="#onGenerarClick">
                                         <font>
                                             <Font size="18.0" />
                                         </font>

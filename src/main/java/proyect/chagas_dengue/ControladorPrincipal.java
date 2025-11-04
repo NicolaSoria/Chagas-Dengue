@@ -36,6 +36,7 @@ import javafx.stage.Stage;
 import proyect.chagas_dengue.conexion.ConexionBD;
 import proyect.chagas_dengue.dao.*;
 import proyect.chagas_dengue.interfaz.ConsultarController;
+import proyect.chagas_dengue.interfaz.GenerarController;
 import proyect.chagas_dengue.interfaz.PlanificarViajeController;
 import proyect.chagas_dengue.interfaz.SeleccionarController;
 import proyect.chagas_dengue.modelos.*;
@@ -1297,20 +1298,23 @@ public class ControladorPrincipal {
     @FXML
     private void onGenerarClick() {
         if (viajeSeleccionado == null) {
-            // Mostrar mensaje de error o alerta
             mostrarAlerta("Error", "Por favor seleccione un viaje primero.");
             return;
         }
-        List<Zona> Zonas = new ArrayList<>();
-        List<Empleado> Empleados = new ArrayList<>();
-        Zonas = viajeSeleccionado.getZonas();
-        Empleados = viajeSeleccionado.getEmpleados();
-        int id = viajeSeleccionado.getVCod();
 
-        System.out.println("Id: " + id);
+        ViajeDAO dao = new ViajeDAO();
+        Viaje v1 = dao.obtenerViajeConRecursos(viajeSeleccionado.getVCod());
+
+        System.out.println("Empleados texto: " + v1.getEmpleadosTexto());
+
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/proyect/chagas_dengue/interfaz/GenerarView.fxml"));
             Parent root = loader.load();
+
+            GenerarController controller = loader.getController();
+            controller.inicializarZonas(viajeSeleccionado);
+
 
             Stage stage = new Stage();
             stage.setTitle("Generar Reporte");
@@ -1321,4 +1325,5 @@ public class ControladorPrincipal {
             e.printStackTrace();
         }
     }
+
 }

@@ -5,34 +5,78 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Button?>
+<?import javafx.geometry.Insets?>
 
-<VBox alignment="TOP_CENTER" spacing="15" xmlns="http://javafx.com/javafx"
+<VBox alignment="TOP_CENTER" spacing="20" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="proyect.chagas_dengue.interfaz.GenerarController"
-      style="-fx-padding: 30; -fx-background-color: #f4f4f4;">
+      style="-fx-padding: 30; -fx-background-color: white;">
 
-    <Label text="Pantalla de Generación de Reporte"
-           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+    <!-- Título principal -->
+    <Label text="Generación de Reporte"
+           styleClass="content-label"
+           style="-fx-padding: 0 0 10 0;" />
 
-    <Separator />
+    <Separator style="-fx-background-color: #575757; -fx-padding: 0 0 10 0;" />
 
-    <VBox spacing="10" style="-fx-border-color: #008080; -fx-border-width: 1; -fx-padding: 15; -fx-background-color: #e0ffff;" maxWidth="500">
+    <!-- Subtítulo -->
+    <Label text="Registro por Zonas de Relevamiento"
+           style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #454343; -fx-padding: 0 0 10 0;" />
 
-        <Label text="Evaluación de Riesgo de Mosquitos"
-               style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #008080;" />
+    <!-- Zona 1 -->
+    <VBox fx:id="zona1Box" spacing="10" styleClass="ListarCont" maxWidth="600">
+        <Label fx:id="zona1Label" text="Zona 1" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #454343;" />
 
-        <CheckBox fx:id="zonasReproduccionCheckBox"
-                  text="Se encontraron zonas donde se pueden reproducir mosquitos (Ej: agua estancada, neumáticos, etc.)" />
+        <CheckBox fx:id="zona1ReproduccionCheckBox"
+                  text="Se encontraron lugares donde puedan haber mosquitos en la Zona 1"
+                  style="-fx-text-fill: #363535; -fx-font-size: 14px;" />
 
-        <Separator />
-
-        <Label text="Detalles u Observaciones (Opcional):" />
-        <TextArea fx:id="observacionesTextArea"
-                  promptText="Ej: Se encontraron dos baldes con agua en el patio trasero y un florero descuidado en el porche. Se procedió a vaciar."
-                  prefRowCount="4" />
-
+        <Label text="Observaciones para Zona 1 (Opcional):"
+               style="-fx-font-size: 14px; -fx-text-fill: #454343; -fx-font-weight: bold;" />
+        <TextArea fx:id="zona1ObservacionesTextArea"
+                  promptText="Detalles específicos encontrados en la Zona 1."
+                  prefRowCount="3"
+                  style="-fx-border-color: #ced4da; -fx-border-radius: 3px; -fx-padding: 5px;" />
     </VBox>
 
-    <Separator />
+    <!-- Zona 2 -->
+    <VBox fx:id="zona2Box" spacing="10" styleClass="ListarCont" maxWidth="600">
+        <Label fx:id="zona2Label" text="Zona 2" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #454343;" />
+
+        <CheckBox fx:id="zona2ReproduccionCheckBox"
+                  text="Se encontraron lugares donde puedan haber mosquitos en la Zona 2"
+                  style="-fx-text-fill: #363535; -fx-font-size: 14px;" />
+
+        <Label text="Observaciones para Zona 2 (Opcional):"
+               style="-fx-font-size: 14px; -fx-text-fill: #454343; -fx-font-weight: bold;" />
+        <TextArea fx:id="zona2ObservacionesTextArea"
+                  promptText="Detalles específicos encontrados en la Zona 2."
+                  prefRowCount="3"
+                  style="-fx-border-color: #ced4da; -fx-border-radius: 3px; -fx-padding: 5px;" />
+    </VBox>
+
+    <!-- Zona 3 -->
+    <VBox fx:id="zona3Box" spacing="10" styleClass="ListarCont" maxWidth="600">
+        <Label fx:id="zona3Label" text="Zona 3" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #454343;" />
+
+        <CheckBox fx:id="zona3ReproduccionCheckBox"
+                  text="Se encontraron lugares donde puedan haber mosquitos en la Zona 3"
+                  style="-fx-text-fill: #363535; -fx-font-size: 14px;" />
+
+        <Label text="Observaciones para Zona 3 (Opcional):"
+               style="-fx-font-size: 14px; -fx-text-fill: #454343; -fx-font-weight: bold;" />
+        <TextArea fx:id="zona3ObservacionesTextArea"
+                  promptText="Detalles específicos encontrados en la Zona 3."
+                  prefRowCount="3"
+                  style="-fx-border-color: #ced4da; -fx-border-radius: 3px; -fx-padding: 5px;" />
+    </VBox>
+
+    <!-- Botón Generar -->
+    <Button fx:id="guardarButton"
+            text="Generar Reporte"
+            onAction="#guardarReporte"
+            styleClass="Btngenerar"
+            style="-fx-font-size: 16px; -fx-padding: 12 30; -fx-background-color: #2E2E2E; -fx-text-fill: white;" />
 
 </VBox>
