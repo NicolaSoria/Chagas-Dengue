@@ -21,10 +21,12 @@ public class Viaje {
     private List<Maquina> maquinas;
     private List<Empleado> empleados;
     private List<Detalle> detalles;
+    private List<Registro> registros;
     private String camionetasTexto;
     private String empleadosTexto;
     private String maquinasTexto;
     private String productosTexto;
+    private String registrosTexto;
 
 // Getters y setters para cada uno
 
@@ -110,6 +112,10 @@ public class Viaje {
 
     public void setDetalles(List<Detalle> detalles) {this.detalles = detalles;}
 
+    public List<Registro> getRegistros() {return registros; }
+
+    public void setRegistros(List<Registro> registros) {this.registros = registros;}
+
     public void setCamionetasTexto(String camionetas) { this.camionetasTexto = camionetas; }
 
     public void setEmpleadosTexto(String empleados) { this.empleadosTexto = empleados; }
@@ -118,6 +124,8 @@ public class Viaje {
 
     public void setProductosTexto(String productos) { this.productosTexto = productos; }
 
+    public void setRegistrosTexto(String registros) { this.registrosTexto = registros; }
+
     public String getCamionetasTexto() { return camionetasTexto;}
 
     public String getEmpleadosTexto() { return empleadosTexto;}
@@ -125,6 +133,8 @@ public class Viaje {
     public String getMaquinasTexto() { return maquinasTexto;}
 
     public String getProductosTexto() { return productosTexto;}
+
+    public String getRegistrosTexto() {return registrosTexto; }
 }
 
 

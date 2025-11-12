@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,9 +37,13 @@ import javafx.stage.Stage;
 import proyect.chagas_dengue.conexion.ConexionBD;
 import proyect.chagas_dengue.dao.*;
 import proyect.chagas_dengue.interfaz.ConsultarController;
+import proyect.chagas_dengue.interfaz.GenerarController;
 import proyect.chagas_dengue.interfaz.PlanificarViajeController;
 import proyect.chagas_dengue.interfaz.SeleccionarController;
 import proyect.chagas_dengue.modelos.*;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
 
 public class ControladorPrincipal {
 
@@ -54,12 +59,19 @@ public class ControladorPrincipal {
     @FXML private Tab tabDestPrepViaje;
     @FXML private Tab tabElmsPrepViaje;
     @FXML private ChoiceBox<Zona> chBoxDestPnDestPrepViaje;
+    @FXML private ChoiceBox<Tarea> chBoxDest1Tr1;
+    @FXML private ChoiceBox<Tarea> chBoxDest1Tr2;
+    @FXML private ChoiceBox<Tarea> chBoxDest2Tr1;
+    @FXML private ChoiceBox<Tarea> chBoxDest2Tr2;
+    @FXML private ChoiceBox<Tarea> chBoxDest3Tr1;
+    @FXML private ChoiceBox<Tarea> chBoxDest3Tr2;
     @FXML private DatePicker datePnDestPrepViaje;
     @FXML private TabPane tabPanePrepViaje;
     @FXML private VBox listaContainer;
     @FXML private Label lblMensajePDF;
     @FXML private Tab tabFin;
     @FXML private VBox listaFinalizar;
+    //@FXML private ListView<Tarea> tablaTareas;
     @FXML private Button btnCancelar;
     @FXML private Tab tabPanificar;
     @FXML private Tab tabConsultar;
@@ -96,6 +108,15 @@ public class ControladorPrincipal {
         configurarColumnas();
 //        cargarDatos();
         cargarZonas();
+        cargarTareas2();
+        //cargarTareas();
+        //configurarEvents(chBoxDestPnDestPrepViaje,tablaTareas);
+        //configurarEvents(chBoxDestPnDestPrepViaje2,tablaTareas);
+        //configurarEvents(chBoxDestPnDestPrepViaje3, tablaTareas);
+        configurarTareasPorDestino(chBoxDestPnDestPrepViaje, chBoxDest1Tr1, chBoxDest1Tr2);
+        configurarTareasPorDestino(chBoxDestPnDestPrepViaje2, chBoxDest2Tr1, chBoxDest2Tr2);
+        configurarTareasPorDestino(chBoxDestPnDestPrepViaje3, chBoxDest3Tr1, chBoxDest3Tr2);
+
         fechasCont();
         // Asignar la lista observable a la tabla
         //tableCamionetas.setItems(listaCamionetas);
@@ -148,13 +169,71 @@ public class ControladorPrincipal {
         chBoxDestPnDestPrepViaje3.getItems().setAll(zonas);
     }
 
+    @FXML private void cargarTareas2(){
+        TareaDAO tareaDAO = new TareaDAO();
+        List<Tarea> tareas = tareaDAO.listarTodos();
+        chBoxDest1Tr1.getItems().setAll(tareas);
+        chBoxDest1Tr2.getItems().setAll(tareas);
+        chBoxDest2Tr1.getItems().setAll(tareas);
+        chBoxDest2Tr2.getItems().setAll(tareas);
+        chBoxDest3Tr1.getItems().setAll(tareas);
+        chBoxDest3Tr2.getItems().setAll(tareas);
+    }
+
+    /*@FXML private void cargarTareas(){
+        TareaDAO tareaDAO = new TareaDAO();
+        List<Tarea> tareas = tareaDAO.listarTodos();
+        ObservableList<Tarea> tareasObs = FXCollections.observableArrayList(tareas);
+        tablaTareas.setItems(tareasObs);
+        tablaTareas.setDisable(true);
+        tablaTareas.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        tablaTareas.getSelectionModel().getSelectedItems().addListener((ListChangeListener<Tarea>) change -> {
+            if(tablaTareas.getSelectionModel().getSelectedItems().size() > 3) {
+                Tarea last = tablaTareas.getSelectionModel().getSelectedItems().get(tablaTareas.getSelectionModel().getSelectedItems().size() - 1);
+                tablaTareas.getSelectionModel().clearSelection(tablaTareas.getItems().indexOf(last));
+                mostrarAlerta("Advertencia","Solo se puede seleccionar 3 tareas.");
+            }
+        });
+    }*/
+
+    /*private void configurarEvents(ChoiceBox<Zona> dest, ListView<Tarea> list) {
+        dest.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if(newVal != null) {
+                list.setDisable(false);
+                list.getSelectionModel().clearSelection();
+            }
+        });
+    }*/
+
+    private void configurarTareasPorDestino(ChoiceBox<Zona> destino, ChoiceBox<Tarea> t1, ChoiceBox<Tarea> t2) {
+        destino.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            boolean habilitado = newVal != null;
+            t1.setDisable(!habilitado);
+            t2.setDisable(!habilitado);
+
+            if (!habilitado) {
+                t1.setValue(null);
+                t2.setValue(null);
+            }
+        });
+    }
+
+
     @FXML private void clearZonas(){
         chBoxDestPnDestPrepViaje.setValue(null);
         chBoxDestPnDestPrepViaje2.setValue(null);
         chBoxDestPnDestPrepViaje3.setValue(null);
+        chBoxDest1Tr1.setValue(null);
+        chBoxDest1Tr2.setValue(null);
+        chBoxDest2Tr1.setValue(null);
+        chBoxDest2Tr2.setValue(null);
+        chBoxDest3Tr1.setValue(null);
+        chBoxDest3Tr1.setValue(null);
         tipoViajeOpcs.selectToggle(null);
         datePnDestPrepViaje.setValue(null);
 
+        if (tableEmpleados != null) tableEmpleados.getItems().clear();
         if (tableQuimicos != null) tableQuimicos.getItems().clear();
         if (tableElementos != null) tableElementos.getItems().clear();
         if (tableCamionetas != null) tableCamionetas.getItems().clear();
@@ -163,6 +242,13 @@ public class ControladorPrincipal {
         chBoxDestPnDestPrepViaje.setDisable(false);
         chBoxDestPnDestPrepViaje2.setDisable(false);
         chBoxDestPnDestPrepViaje3.setDisable(false);
+
+        chBoxDest1Tr1.setDisable(false);
+        chBoxDest1Tr2.setDisable(false);
+        chBoxDest2Tr1.setDisable(false);
+        chBoxDest2Tr2.setDisable(false);
+        chBoxDest3Tr1.setDisable(false);
+        chBoxDest3Tr2.setDisable(false);
 
         radbtnBarrPaneDestPrepViaje.setDisable(false);
         radbtnDiaPaneDestPrepViaje.setDisable(false);
@@ -228,6 +314,27 @@ public class ControladorPrincipal {
             return;
         }
 
+        Tarea t1 = chBoxDest1Tr1.getValue();
+        Tarea t2 = chBoxDest1Tr2.getValue();
+        Tarea t3 = chBoxDest2Tr1.getValue();
+        Tarea t4 = chBoxDest2Tr2.getValue();
+        Tarea t5 = chBoxDest3Tr1.getValue();
+        Tarea t6 = chBoxDest3Tr2.getValue();
+
+        if(dest1 != null && t1 == null && t2 == null) {
+            mostrarAlerta("Error","Debe seleccionar al menos una tarea para el destino 1.");
+        }
+
+        if(dest2 != null && t3 == null && t4 == null) {
+            mostrarAlerta("Error","Debe seleccionar al menos una tarea para el destino 2.");
+        }
+
+        if(dest3 != null && t5 == null && t6 == null) {
+            mostrarAlerta("Error","Debe seleccionar al menos una tarea para el destino 3.");
+        }
+
+
+
         ObservableList<Camioneta> camionetas = tableCamionetas.getItems();
         ObservableList<Maquina> maquinas = tableMaquinas.getItems();
         ObservableList<Empleado> empleados = tableEmpleados.getItems();
@@ -276,6 +383,22 @@ public class ControladorPrincipal {
             detalles.add(detalle);
         }
         nuevo.setDetalles(detalles);
+
+        List<Registro> registros = new ArrayList<>();
+        if (dest1 != null) {
+            if (t1 != null) registros.add(new Registro(nuevo, dest1, t1));
+            if (t2 != null) registros.add(new Registro(nuevo, dest1, t2));
+        }
+        if (dest2 != null) {
+            if (t3 != null) registros.add(new Registro(nuevo, dest2, t3));
+            if (t4 != null) registros.add(new Registro(nuevo, dest2, t4));
+        }
+        if (dest3 != null) {
+            if (t5 != null) registros.add(new Registro(nuevo, dest3, t5));
+            if (t6 != null) registros.add(new Registro(nuevo, dest3, t6));
+        }
+
+        nuevo.setRegistros(registros);
 
         // --- GUARDAR VIAJE ---
         ViajeDAO dao = new ViajeDAO();
@@ -613,7 +736,7 @@ public class ControladorPrincipal {
         //Elementos de seguridad
 
         colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
-        colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
+//        colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
         //Empleados
 
@@ -1147,6 +1270,7 @@ public class ControladorPrincipal {
                 if (tableElementos != null) tableElementos.getItems().clear();
                 if (tableCamionetas != null) tableCamionetas.getItems().clear();
                 if (tableMaquinas != null) tableMaquinas.getItems().clear();
+                if (tableEmpleados != null) tableEmpleados.getItems().clear();
 
                 chBoxDestPnDestPrepViaje.setDisable(false);
                 chBoxDestPnDestPrepViaje2.setDisable(false);
@@ -1297,28 +1421,19 @@ public class ControladorPrincipal {
     @FXML
     private void onGenerarClick() {
         if (viajeSeleccionado == null) {
-            // Mostrar mensaje de error o alerta
             mostrarAlerta("Error", "Por favor seleccione un viaje primero.");
             return;
         }
-        List<Zona> Zonas = new ArrayList<>();
-        List<Empleado> Empleados = new ArrayList<>();
-        Zonas = viajeSeleccionado.getZonas();
-        Empleados = viajeSeleccionado.getEmpleados();
-        int id = viajeSeleccionado.getVCod();
 
-        System.out.println("Id: " + id);
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/proyect/chagas_dengue/interfaz/GenerarView.fxml"));
-            Parent root = loader.load();
+        ViajeDAO viajeDAO = new ViajeDAO();
 
-            Stage stage = new Stage();
-            stage.setTitle("Generar Reporte");
-            stage.setScene(new Scene(root));
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        // Opción 1: Si quieres el viaje completo con tareas como texto
+        Viaje viaje = viajeDAO.obtenerViajeConRecursosYTareas(viajeSeleccionado.getVCod());
+        if (viaje != null) {
+            System.out.println("Tareas del viaje: " + viaje.getRegistrosTexto());
         }
+
+        GenerarController generar = new GenerarController();
+        generar.generarReporte(viajeSeleccionado);
     }
 }

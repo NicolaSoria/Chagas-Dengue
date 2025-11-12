@@ -22,6 +22,7 @@ public class ViajeDAO implements interfaceDAO<Viaje,Integer>{
         String sqlMaquinas = "INSERT INTO Transporta (VCod, MCod) VALUES (?, ?)";
         String sqlEmpleados = "INSERT INTO Realizan (ECod, VCod) VALUES (?, ?)";
         String sqlDetalle = "INSERT INTO Detalle (DVCod, DSPCod, cantTomada, cantUsada) VALUES (?, ?, ?, ?)";
+        String sqlRegistro = "INSERT INTO Registro (ZCod, TCod, VCod, observacion) VALUES (?, ?, ?, ?)";
         String sqlStockUpdate = "UPDATE Stocks SET total = total - ? WHERE SPCod = ?";
 
         try {
@@ -105,6 +106,19 @@ public class ViajeDAO implements interfaceDAO<Viaje,Integer>{
 
                     psDet.executeBatch();
                     psStock.executeBatch();
+                }
+            }
+
+            if (viaje.getRegistros() != null && !viaje.getRegistros().isEmpty()) {
+                try (PreparedStatement psReg = conexion.prepareStatement(sqlRegistro)) {
+                    for (Registro r : viaje.getRegistros()) {
+                        psReg.setInt(1,r.getZona().getZCod());
+                        psReg.setInt(2,r.getTarea().getTCod());
+                        psReg.setInt(3,r.getViaje().getVCod());
+                        psReg.setNull(4, java.sql.Types.VARCHAR);
+                        psReg.addBatch();
+                    }
+                    psReg.executeBatch();
                 }
             }
 
@@ -583,7 +597,59 @@ public List<Viaje> filtrar(String texto, LocalDate fecha, String estado) {
         return viaje;
     }
 
+    public Viaje obtenerViajeConRecursosYTareas(int vCod) {
+        Viaje viaje = null;
 
+        String sql = """
+    SELECT v.VCod, v.fecha, v.tipo, v.estado,
+           GROUP_CONCAT(DISTINCT z.nombre SEPARATOR ', ') AS zonas,
+           GROUP_CONCAT(DISTINCT c.patente SEPARATOR ', ') AS camionetas,
+           GROUP_CONCAT(DISTINCT e.nombre SEPARATOR ', ') AS empleados,
+           GROUP_CONCAT(DISTINCT m.modelo SEPARATOR ', ') AS maquinas,
+           GROUP_CONCAT(DISTINCT p.nombre SEPARATOR ', ') AS productos,
+           GROUP_CONCAT(DISTINCT t.tipo SEPARATOR ', ') AS tareas
+    FROM Viajes v
+    LEFT JOIN destinos des ON v.VCod = des.VCod
+    LEFT JOIN zonas z ON des.ZCod = z.ZCod
+    LEFT JOIN Usan u ON v.VCod = u.VCod
+    LEFT JOIN Camionetas c ON u.CCod = c.CCod
+    LEFT JOIN Realizan r ON v.VCod = r.VCod
+    LEFT JOIN Empleados e ON r.ECod = e.ECod
+    LEFT JOIN transporta vm ON v.VCod = vm.VCod
+    LEFT JOIN Maquinas m ON vm.MCod = m.MCod
+    LEFT JOIN detalle d ON v.VCod = d.DVCod
+    LEFT JOIN productos p ON d.DSPCod = p.PCod
+    LEFT JOIN Registro reg ON v.VCod = reg.VCod
+    LEFT JOIN tareas t ON reg.TCod = t.TCod
+    WHERE v.VCod = ?
+    GROUP BY v.VCod;
+    """;
+
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setInt(1, vCod);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                viaje = new Viaje();
+                viaje.setVCod(rs.getInt("VCod"));
+                viaje.setFechaInicio(rs.getDate("fecha").toLocalDate());
+                viaje.setTipo(Viaje.Tipo.valueOf(rs.getString("tipo")));
+                viaje.setEstado(Viaje.Estado.valueOf(rs.getString("estado")));
+                viaje.setDestinosTexto(rs.getString("zonas"));
+                viaje.setCamionetasTexto(rs.getString("camionetas"));
+                viaje.setEmpleadosTexto(rs.getString("empleados"));
+                viaje.setMaquinasTexto(rs.getString("maquinas"));
+                viaje.setProductosTexto(rs.getString("productos"));
+                // Nuevo: texto con las tareas
+                viaje.setRegistrosTexto(rs.getString("tareas")); // Reutilizas este campo
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return viaje;
+    }
 }
 
 
