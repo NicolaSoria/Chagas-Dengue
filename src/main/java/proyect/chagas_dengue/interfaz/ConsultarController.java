@@ -81,7 +81,7 @@ public class ConsultarController {
 //    }
 
     private void filtrar() {
-        // ejemplo básico de filtrado (ajustalo a tu lógica)
+        // ejemplo básico de filtrado
         String texto = txtBuscador.getText() != null ? txtBuscador.getText().toLowerCase() : "";
         LocalDate fecha = dpFechaFiltro.getValue();
        // String estado = cbEstadoFiltro.getValue();

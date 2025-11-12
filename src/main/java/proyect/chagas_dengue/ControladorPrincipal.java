@@ -110,7 +110,7 @@ public class ControladorPrincipal {
 
             tabConsultar.setOnSelectionChanged(event -> {
                 if (tabConsultar.isSelected()) {
-                    consultarController.actualizarListaViajes(); // 🔁 Actualiza la tabla solo al abrir la pestaña
+                    consultarController.actualizarListaViajes(); //  Actualiza la tabla solo al abrir la pestaña
                     System.out.println("DEBUG: pestaña CONSULTAR seleccionada → recargando lista de viajes");
                 }
             });
