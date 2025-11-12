@@ -27,7 +27,7 @@ public class MaquinaDAO implements interfaceDAO<Maquina,Integer>{
         try (PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, objeto.getMarca());
             ps.setString(2, objeto.getModelo());
-            ps.setString(3, objeto.getTipo().name()); // el enum se guarda como string
+            ps.setString(3, objeto.getTipo().name());
 
             int filas = ps.executeUpdate();
             if (filas > 0) {
@@ -167,7 +167,7 @@ public class MaquinaDAO implements interfaceDAO<Maquina,Integer>{
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                String tipo = rs.getString("M_ISA"); // según tu esquema, esta columna indica el tipo
+                String tipo = rs.getString("M_ISA");
                 Maquina m;
 
                 if (tipo.equalsIgnoreCase("Manual")) {
@@ -178,7 +178,7 @@ public class MaquinaDAO implements interfaceDAO<Maquina,Integer>{
                     m = new Pulverizadora();
                 } else {
                     System.out.println("Tipo de máquina desconocido: " + tipo);
-                    continue; // o lanzás una excepción si querés ser estricto
+                    continue;
                 }
 
                 m.setMCod(rs.getInt("MCod"));
