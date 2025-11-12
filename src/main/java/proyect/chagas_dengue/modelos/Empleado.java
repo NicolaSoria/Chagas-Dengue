@@ -7,10 +7,10 @@ public class Empleado {
     private String direccion;
     private String telefono;
 
-    // 🔹 Constructor vacío (requerido por JavaFX y algunos frameworks)
+
     public Empleado() {}
 
-    // 🔹 Constructor con todos los campos (sin ECod, cuando vas a insertar uno nuevo)
+
     public Empleado(String nombre, int dni, String direccion, String telefono) {
         this.nombre = nombre;
         this.dni = dni;
@@ -18,7 +18,7 @@ public class Empleado {
         this.telefono = telefono;
     }
 
-    // 🔹 Constructor completo (cuando ya conocés el ECod, por ejemplo al consultar)
+
     public Empleado(int ECod, String nombre, int dni, String direccion, String telefono) {
         this.ECod = ECod;
         this.nombre = nombre;
@@ -27,7 +27,7 @@ public class Empleado {
         this.telefono = telefono;
     }
 
-    // 🔹 Getters y Setters
+
     public int getECod() {
         return ECod;
     }

@@ -25,7 +25,7 @@ public class PulverizadoraDAO implements interfaceDAO<Pulverizadora, Integer>{
                 PreparedStatement psMaquina = conexion.prepareStatement(sqlMaquina, Statement.RETURN_GENERATED_KEYS);
                 PreparedStatement psPulverizadora = conexion.prepareStatement(sqlPulverizadora)
         ) {
-            // Insertar en Maquinas
+
             psMaquina.setString(1, objeto.getMarca());
             psMaquina.setString(2, objeto.getModelo());
             psMaquina.setString(3, Maquina.TipoM.Pulverizadora.name());

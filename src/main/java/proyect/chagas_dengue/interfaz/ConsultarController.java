@@ -58,8 +58,6 @@ public class ConsultarController {
 
         tableViajes.setItems(viajes);
 
-        // Cargar lista inicial
-//        cargarViajes();
 
         // Evento de búsqueda
         txtBuscador.textProperty().addListener((obs, old, newVal) -> filtrar());
@@ -74,20 +72,12 @@ public class ConsultarController {
 
     }
 
-//    private void cargarViajes() {
-//        ViajeDAO dao = new ViajeDAO();
-//        List<Viaje> lista = dao.listarTodos(); // suponiendo que tenés este metodo
-//        viajes.setAll(lista);
-//    }
 
     private void filtrar() {
-        // ejemplo básico de filtrado
+
         String texto = txtBuscador.getText() != null ? txtBuscador.getText().toLowerCase() : "";
         LocalDate fecha = dpFechaFiltro.getValue();
-       // String estado = cbEstadoFiltro.getValue();
         String estado = cbEstadoFiltro.getValue() != null ? cbEstadoFiltro.getValue().toString() : null;
-
-
         viajes.setAll(new ViajeDAO().filtrar(texto, fecha, estado));
     }
 
@@ -157,21 +147,11 @@ public class ConsultarController {
         VBox recursosBox = new VBox(6);
         recursosBox.setPadding(new Insets(5, 0, 0, 0));
 
-        // Depuracion
-
-        /*System.out.println("VIAJE #" + viaje.getVCod());
-        System.out.println("Camionetas: " + viaje.getCamionetasTexto());
-        System.out.println("Empleados: " + viaje.getEmpleadosTexto());
-        System.out.println("Máquinas: " + viaje.getMaquinasTexto());
-        System.out.println("Productos: " + viaje.getProductosTexto());*/
-
-        //Fin depuracion
 
         agregarRecurso(recursosBox, "Camionetas", viaje.getCamionetasTexto());
         agregarRecurso(recursosBox, "Empleados", viaje.getEmpleadosTexto());
         agregarRecurso(recursosBox, "Máquinas", viaje.getMaquinasTexto());
         agregarRecurso(recursosBox, "Productos Químicos", viaje.getProductosTexto());
-//        agregarRecurso(recursosBox, "Elementos de Seguridad", viaje.getElementosTexto());
 
         // Botón cerrar
         Button btnCerrar = new Button("Cerrar");
@@ -195,9 +175,6 @@ public class ConsultarController {
         popup.showAndWait();
     }
 
-// --- Métodos auxiliares ---
-
-
     private void addInfoRow(GridPane grid, int row, String label, String value) {
         Label lbl = new Label(label);
         lbl.setStyle("-fx-text-fill: #cccccc; -fx-font-weight: bold;");
@@ -207,19 +184,12 @@ public class ConsultarController {
         grid.add(val, 1, row);
     }
 
-
-
     private void agregarRecurso(VBox box, String titulo, String contenido) {
         if (contenido == null || contenido.isEmpty()) return;
         Label lbl = new Label(titulo + ": " + contenido);
         lbl.setStyle("-fx-text-fill: #d0d0d0; -fx-font-size: 13px;");
         box.getChildren().add(lbl);
     }
-
-
-
-
-
 
     private String formatearLista(List<?> lista) {
         if (lista == null || lista.isEmpty()) return "—";

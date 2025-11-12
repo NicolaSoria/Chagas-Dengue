@@ -47,7 +47,6 @@ public class CamionetaDAO {
         try (PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                // Crear objeto Camioneta completo y agregarlo a la lista
                 Camioneta c = new Camioneta(
                         rs.getString("patente"),
                         rs.getString("estado"),

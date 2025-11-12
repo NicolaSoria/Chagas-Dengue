@@ -131,8 +131,7 @@ public class ControladorPrincipal {
 
             tabConsultar.setOnSelectionChanged(event -> {
                 if (tabConsultar.isSelected()) {
-                    consultarController.actualizarListaViajes(); //  Actualiza la tabla solo al abrir la pestaña
-                    System.out.println("DEBUG: pestaña CONSULTAR seleccionada → recargando lista de viajes");
+                    consultarController.actualizarListaViajes();
                 }
             });
 
@@ -674,8 +673,6 @@ public class ControladorPrincipal {
     }
 
 
-//    private Connection conn;
-
     // ========== EMPLEADOS ==========
     @FXML private TableView<Empleado> tableEmpleados;
     @FXML private TableColumn<Empleado, Integer> colEmpleadoDNI;
@@ -791,18 +788,17 @@ public class ControladorPrincipal {
             stage.setScene(new Scene(root));
             stage.showAndWait();
 
-            // Obtener el objeto real
+
             Object seleccionadoObj = controller.getSeleccionado();
             if (seleccionadoObj != null) {
                 Camioneta seleccionado = (Camioneta) seleccionadoObj;
 
-          //      listaCamionetas.add(seleccionado); // agregar a la lista observable
+
 
                 boolean yaExiste = tableCamionetas.getItems().stream()
                         .anyMatch(p -> p.getCCod() == seleccionado.getCCod());
 
                 if (yaExiste) {
-                    // Mostrar alerta si está repetido
                     Alert alerta = new Alert(Alert.AlertType.WARNING);
                     alerta.setTitle("Camioneta duplicada");
                     alerta.setHeaderText(null);
@@ -860,7 +856,6 @@ public class ControladorPrincipal {
                         .anyMatch(p -> p.getPCod() == seleccionado.getPCod());
 
                 if (yaExiste) {
-                    // Mostrar alerta si está repetido
                     Alert alerta = new Alert(Alert.AlertType.WARNING);
                     alerta.setTitle("Producto duplicado");
                     alerta.setHeaderText(null);
@@ -916,7 +911,6 @@ public class ControladorPrincipal {
                         .anyMatch(p -> p.getMCod() == seleccionado.getMCod());
 
                 if (yaExiste) {
-                    // Mostrar alerta si está repetido
                     Alert alerta = new Alert(Alert.AlertType.WARNING);
                     alerta.setTitle("Máquina duplicada");
                     alerta.setHeaderText(null);
@@ -972,7 +966,6 @@ public class ControladorPrincipal {
                         .anyMatch(p -> p.getECod() == seleccionado.getECod());
 
                 if (yaExiste) {
-                    // Mostrar alerta si está repetido
                     Alert alerta = new Alert(Alert.AlertType.WARNING);
                     alerta.setTitle("Empleado duplicado");
                     alerta.setHeaderText(null);
@@ -994,22 +987,12 @@ public class ControladorPrincipal {
 
     @FXML
     private void onGuardar() {
-        // Crear una lista general
         List<Object> listaGeneral = new ArrayList<>();
 
-        // Agregar todos los elementos de cada tabla
         listaGeneral.addAll(tableCamionetas.getItems());
         listaGeneral.addAll(tableQuimicos.getItems());
         listaGeneral.addAll(tableMaquinas.getItems());
         listaGeneral.addAll(tableElementos.getItems());
-
-
-        // Mostrar en consola (para probar)
-        System.out.println("Elementos guardados:");
-        for (Object obj : listaGeneral) {
-            System.out.println(" - " + obj);
-        }
-
         tabPanePrepViaje.getSelectionModel().select(tabDestPrepViaje);
 
     }
@@ -1087,22 +1070,6 @@ public class ControladorPrincipal {
         }
     }
 
-//    @FXML
-//    private void onEditar() {
-//        modoEdicion = !modoEdicion; // alternar entre editar / no editar
-//
-//        if (modoEdicion) {
-//            btnEditar.setText("Cancelar");
-//            agregarColumnaBorrar(tableCamionetas);
-//            agregarColumnaBorrar(tableQuimicos);
-//            agregarColumnaBorrar(tableMaquinas);
-//        } else {
-//            btnEditar.setText("Editar");
-//            quitarColumnaBorrar(tableCamionetas);
-//            quitarColumnaBorrar(tableQuimicos);
-//            quitarColumnaBorrar(tableMaquinas);
-//        }
-//    }
 
     private <T> void agregarColumnaBorrar(TableView<T> tabla) {
         // Evitar duplicar la columna si ya existe
@@ -1128,9 +1095,6 @@ public class ControladorPrincipal {
                         getTableView().getItems().remove(item);
                         System.out.println("Eliminado: " + item);
                     }
-//                    T item = getTableView().getItems().get(getIndex());
-//                    getTableView().getItems().remove(item);
-//                    System.out.println("Eliminado: " + item);
                 });
 
                 btnBorrar.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;");
@@ -1167,15 +1131,6 @@ public class ControladorPrincipal {
 
 
 
-//    public void cargarElementosSeguridad(String tipoViaje) {
-//        try {
-//            ElementoSeguridadDAO dao = new ElementoSeguridadDAO(conn);
-//            tableElementos.getItems().setAll(dao.listarPorTipoViaje(tipoViaje));
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     public void onSiguiente(javafx.event.ActionEvent actionEvent) {
         // Obtener el tipo de viaje
         String tipoViaje = obtenerTipoViajeSeleccionado();
@@ -1206,22 +1161,11 @@ public class ControladorPrincipal {
 
         if (tipoViaje != null) {
             try {
-                //Crear la conexión
-
                 Connection conn = ConexionBD.getConexion();
-
-                //Crear el DAO con esa conexión
                 ElementoSeguridadDAO dao = new ElementoSeguridadDAO(conn);
-
-                //Obtener la lista de elementos según el tipo de viaje
                 List<ElementoDeSeguridad> lista = dao.listarPorTipoViaje(tipoViaje);
-
-
-                //Cargar la lista en la tabla
                 tableElementos.getItems().setAll(lista);
-
                 System.out.println("Se cargaron los elementos de seguridad para el viaje " + tipoViaje);
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1237,13 +1181,12 @@ public class ControladorPrincipal {
 
         radbtnBarrPaneDestPrepViaje.setDisable(true);
         radbtnDiaPaneDestPrepViaje.setDisable(true);
-        // Cambiar al panel de elementos
+
         mostrarPanelElementos();
     }
 
 
     public void onCancelar(javafx.event.ActionEvent actionEvent) {
-        // Advertencia
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Cancelar planificación");
         confirm.setHeaderText("¿Desea cancelar la planificación del viaje?");
@@ -1328,7 +1271,7 @@ public class ControladorPrincipal {
 
         tablaDets.getColumns().setAll(colProd,colCantTomada,colCantUsada);
     }
-    // Finalizar Viaje OMG
+
             private Viaje viajeSeleccionado;
             private Label labelSeleccionado = null;
 
@@ -1424,10 +1367,7 @@ public class ControladorPrincipal {
             mostrarAlerta("Error", "Por favor seleccione un viaje primero.");
             return;
         }
-
         ViajeDAO viajeDAO = new ViajeDAO();
-
-        // Opción 1: Si quieres el viaje completo con tareas como texto
         Viaje viaje = viajeDAO.obtenerViajeConRecursosYTareas(viajeSeleccionado.getVCod());
         if (viaje != null) {
             System.out.println("Tareas del viaje: " + viaje.getRegistrosTexto());
